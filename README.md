@@ -2,6 +2,8 @@
 
 Autorzy:
 
-[Szymon Cichy](https://github.com/szycic)
-[Tomasz Druszcz](https://github.com/tomaszdruszcz)
-[Jan Osmęda]()
+- [Szymon Cichy](https://github.com/szycic)
+  
+- [Tomasz Druszcz](https://github.com/tomaszdruszcz)
+  
+- [Jan Osmęda]()
