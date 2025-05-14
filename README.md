@@ -6,4 +6,4 @@ Autorzy:
   
 - [Tomasz Druszcz](https://github.com/tomaszdruszcz)
   
-- [Jan Osmęda]()
+- [Jan Osmęda](https://github.com/Dzonyyyyy)
