@@ -2,68 +2,87 @@ package org.wildloop;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class StartApp extends JFrame implements ActionListener {
-    JPanel panel1;
+public class StartApp extends JFrame {
 
-    JButton button1;
-    JButton button2;
+    private final CardLayout cardLayout;
+    private final JPanel mainPanel;
 
-    StartApp() {
-        this.setSize(1200, 800);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    public StartApp() {
         this.setTitle("Wild-loop");
+        this.setSize(600, 400);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
+        this.setLocationRelativeTo(null);
 
-        // panels
-        panel1 = new JPanel();
-        panel1.setPreferredSize(new Dimension(330, 800));
-        panel1.setBackground(Color.GREEN);
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
 
-        // starting button
-        button1 = new JButton();
-        button1.setPreferredSize(new Dimension(300, 60));
-        button1.setFocusable(false);
-        button1.setText("Rozpocznij symulacje");
-        button1.addActionListener(this);
+        JPanel menuPanel = createMenuPanel();
+        JPanel settingsPanel = createSettingsPanel();
+        JPanel simulationPanel = createSimulationPanel();
 
-        // exit button
-        button2 = new JButton();
-        button2.setPreferredSize(new Dimension(300, 60));
-        button2.setFocusable(false);
-        button2.setText("Wyjście");
-        button2.addActionListener(this);
+        mainPanel.add(menuPanel, "Menu");
+        mainPanel.add(settingsPanel, "Settings");
+        mainPanel.add(simulationPanel, "Simulation");
 
-        // adds
-        this.add(panel1, BorderLayout.CENTER);
-        panel1.add(button1);
-        panel1.add(button2);
-
-        // center window
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int frameWidth = this.getSize().width;
-        int frameHeight = this.getSize().height;
-        int x = (screenWidth - frameWidth) / 2;
-        int y = (screenHeight - frameHeight) / 2;
-        this.setLocation(x, y);
-
+        this.add(mainPanel);
         this.setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == button1) {
-            this.setVisible(false);
-            //new Frame();
-            System.exit(0);
-        }
-        if(e.getSource() == button2) {
-            System.exit(0);
-        }
+    private JPanel createMenuPanel() {
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
+
+        JButton startButton = new JButton("Start symulacji");
+        JButton settingsButton = new JButton("Ustawienia");
+        JButton exitButton = new JButton("Wyjście");
+
+        startButton.addActionListener(e -> cardLayout.show(mainPanel, "Simulation"));
+        settingsButton.addActionListener(e -> cardLayout.show(mainPanel, "Settings"));
+        exitButton.addActionListener(e -> System.exit(0));
+
+        panel.add(startButton);
+        panel.add(settingsButton);
+        panel.add(exitButton);
+
+        return panel;
+    }
+
+    private JPanel createSettingsPanel() {
+        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+
+        JLabel sizeLabel = new JLabel("Rozmiar świata:");
+        JTextField sizeField = new JTextField("20");
+
+        JLabel preyLabel = new JLabel("Liczba ofiar:");
+        JTextField preyField = new JTextField("10");
+
+        JLabel predatorLabel = new JLabel("Liczba drapieżników:");
+        JTextField predatorField = new JTextField("5");
+
+        JButton backButton = new JButton("Powrót");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
+
+        JButton saveButton = new JButton("Zapisz ustawienia");
+
+        panel.add(sizeLabel);
+        panel.add(sizeField);
+        panel.add(preyLabel);
+        panel.add(preyField);
+        panel.add(predatorLabel);
+        panel.add(predatorField);
+        panel.add(saveButton);
+        panel.add(backButton);
+
+        return panel;
+    }
+
+    private JPanel createSimulationPanel() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Symulacja w toku...");
+        panel.add(label);
+        return panel;
     }
 }
