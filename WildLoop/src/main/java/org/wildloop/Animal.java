@@ -5,12 +5,12 @@ public abstract class Animal {
     protected static final int REPRODUCTION_ENERGY_THRESHOLD = 50;
     protected static final int REPRODUCTION_ENERGY_COST = 30;
 
-    protected World world;
-
     private Position position;
     private int energy;
     private int age;
-    private int maxAge;
+    private final int maxAge;
+
+    protected World world;
 
     public Animal(Position position, int energy, int maxAge) {
         this.position = position;
@@ -20,6 +20,8 @@ public abstract class Animal {
     }
     public Animal(Animal animal) {
         this(animal.position, animal.energy, animal.maxAge);
+        this.world = animal.world;
+        this.age = animal.age;
     }
     public Animal() {
         this(new Position(), 100, 10);
@@ -97,12 +99,18 @@ public abstract class Animal {
     }
 
     public void update() {
+        if (world == null) {
+            return;
+        }
+
         incrementAge();
         move();
         eat();
+
         if (energy >= REPRODUCTION_ENERGY_THRESHOLD) {
             reproduce();
         }
+
         if (energy <= 0 || age >= maxAge) {
             die();
         }
