@@ -9,7 +9,7 @@ public class Position {
         this.y = y;
     }
     public Position(Position pos) {
-        this(pos.x, pos.y);
+        this(pos.getX(), pos.getY());
     }
     public Position() {
         this(0, 0);
@@ -29,7 +29,30 @@ public class Position {
         this.y = y;
     }
 
-    public int distanceTo(Position other) {
-        return Math.abs(x - other.x) + Math.abs(y - other.y);
+    public Direction directionTo(Position target) {
+        int dx = Integer.compare(target.getX() - this.x, 0);
+        int dy = Integer.compare(target.getY() - this.y, 0);
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            return dx > 0 ? Direction.EAST : Direction.WEST;
+        } else {
+            return dy > 0 ? Direction.SOUTH : Direction.NORTH;
+        }
+    }
+    public Direction directionFrom(Position target) {
+        int dx = Integer.compare(this.x - target.getX(), 0);
+        int dy = Integer.compare(this.y - target.getY(), 0);
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            return dx > 0 ? Direction.WEST : Direction.EAST;
+        } else {
+            return dy > 0 ? Direction.NORTH : Direction.SOUTH;
+        }
+    }
+    public int distanceTo(Position target) {
+        return Math.abs(this.x - target.getX()) + Math.abs(this.y - target.getY());
+    }
+    public Position move(Direction direction) {
+        return new Position(this.x + direction.getDx(), this.y + direction.getDy());
     }
 }

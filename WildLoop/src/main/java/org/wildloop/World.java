@@ -31,9 +31,61 @@ public class World {
     public int getTurns() {
         return turns;
     }
+    public int getWidth() {
+        return grid.length;
+    }
+    public int getHeight() {
+        return grid[0].length;
+    }
     
-    public void addAnimal() {}
-    public void removeAnimal() {}
+    public void addAnimal(Animal animal) {
+        if (animal == null) {
+            throw new IllegalArgumentException("Cannot add null animal");
+        }
+
+        Position position = animal.getPosition();
+        if (!isValidPosition(position)) {
+            throw new IllegalArgumentException("Invalid position");
+        }
+        if (!isCellEmpty(position)) {
+            throw new IllegalStateException("Cell is not empty");
+        }
+
+        grid[position.getX()][position.getY()] = animal;
+        animals.add(animal);
+
+        animal.setWorld(this);
+    }
+    public void removeAnimal(Animal animal) {
+        if (animal == null) {
+            throw new IllegalArgumentException("Cannot remove null animal");
+        }
+
+        Position position = animal.getPosition();
+        if (!animals.contains(animal)) {
+            throw new IllegalStateException("Animal is not in the world");
+        }
+        if (!isValidPosition(position) || grid[position.getX()][position.getY()] != animal) {
+            throw new IllegalStateException("Animal position is invalid or grid position mismatch");
+        }
+
+        grid[position.getX()][position.getY()] = null;
+        animals.remove(animal);
+
+        animal.setWorld(null);
+        animal.setPosition(null);
+        animal.setEnergy(-1);
+    }
+
+    public boolean isValidPosition(Position position) {
+        return position.getX() >= 0 && position.getX() < getWidth()
+                && position.getY() >= 0 && position.getY() < getHeight();
+    }
+    public boolean isCellEmpty(Position position) {
+        return isValidPosition(position) && grid[position.getX()][position.getY()] == null;
+    }
+
+
     public void tick() {
         turns++;
     }
