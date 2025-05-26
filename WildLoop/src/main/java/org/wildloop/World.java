@@ -1,5 +1,6 @@
 package org.wildloop;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class World {
@@ -9,13 +10,13 @@ public class World {
     
     public World(int width, int height) {
         this.grid = new Animal[width][height];
-        this.animals = List.of();
+        this.animals = new ArrayList<>();
         this.turns = 0;
     }
     public World(World world) {
         this(world.grid.length, world.grid[0].length);
         this.grid = world.grid.clone();
-        this.animals = List.copyOf(world.animals);
+        this.animals = new ArrayList<>(world.animals);
         this.turns = world.turns;
     }
     public World() {
@@ -87,6 +88,10 @@ public class World {
 
 
     public void tick() {
+        List<Animal> currentAnimals = new ArrayList<>(animals);
+        for (Animal animal : currentAnimals) {
+            animal.update();
+        }
         turns++;
     }
 }

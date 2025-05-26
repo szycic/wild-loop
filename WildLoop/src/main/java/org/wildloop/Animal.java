@@ -55,6 +55,16 @@ public abstract class Animal {
 
     void move() {
         Direction direction = getNextMoveDirection();
+        if (direction != null) {
+            Position newPosition = position.move(direction);
+            if (world.isValidPosition(newPosition) && world.isCellEmpty(newPosition)) {
+                Position oldPosition = position;
+                world.getGrid()[oldPosition.getX()][oldPosition.getY()] = null;
+                world.getGrid()[newPosition.getX()][newPosition.getY()] = this;
+                position = newPosition;
+                energy -= MOVE_ENERGY_COST;
+            }
+        }
     }
     protected abstract Direction getNextMoveDirection();
 
