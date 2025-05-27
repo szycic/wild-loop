@@ -7,10 +7,14 @@ public class StartApp extends JFrame {
 
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
+    private SimulationPanel simulationPanel;
+    private JTextField sizeField;
+    private JTextField preyField;
+    private JTextField predatorField;
 
     public StartApp() {
         this.setTitle("Wild-loop");
-        this.setSize(600, 400);
+        this.setSize(800, 600);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -20,7 +24,7 @@ public class StartApp extends JFrame {
 
         JPanel menuPanel = createMenuPanel();
         JPanel settingsPanel = createSettingsPanel();
-        JPanel simulationPanel = createSimulationPanel();
+        simulationPanel = new SimulationPanel(this);
 
         mainPanel.add(menuPanel, "Menu");
         mainPanel.add(settingsPanel, "Settings");
@@ -38,7 +42,10 @@ public class StartApp extends JFrame {
         JButton settingsButton = new JButton("Ustawienia");
         JButton exitButton = new JButton("Wyjście");
 
-        startButton.addActionListener(e -> cardLayout.show(mainPanel, "Simulation"));
+        startButton.addActionListener(e -> {
+            cardLayout.show(mainPanel, "Simulation");
+            simulationPanel.startSimulation();
+        });
         settingsButton.addActionListener(e -> cardLayout.show(mainPanel, "Settings"));
         exitButton.addActionListener(e -> System.exit(0));
 
@@ -54,18 +61,25 @@ public class StartApp extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
         JLabel sizeLabel = new JLabel("Rozmiar świata:");
-        JTextField sizeField = new JTextField("20");
+        sizeField = new JTextField("20");
 
         JLabel preyLabel = new JLabel("Liczba ofiar:");
-        JTextField preyField = new JTextField("10");
+        preyField = new JTextField("10");
 
         JLabel predatorLabel = new JLabel("Liczba drapieżników:");
-        JTextField predatorField = new JTextField("5");
+        predatorField = new JTextField("5");
 
         JButton backButton = new JButton("Powrót");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
 
         JButton saveButton = new JButton("Zapisz ustawienia");
+        saveButton.addActionListener(e -> {
+            int size = Integer.parseInt(sizeField.getText());
+            int preyCount = Integer.parseInt(preyField.getText());
+            int predatorCount = Integer.parseInt(predatorField.getText());
+            simulationPanel.setSimulationParameters(size, preyCount, predatorCount);
+            JOptionPane.showMessageDialog(this, "Ustawienia zapisane!");
+        });
 
         panel.add(sizeLabel);
         panel.add(sizeField);
@@ -79,10 +93,14 @@ public class StartApp extends JFrame {
         return panel;
     }
 
+    /*
     private JPanel createSimulationPanel() {
         JPanel panel = new JPanel();
-        JLabel label = new JLabel("Symulacja w toku...");
-        panel.add(label);
+        //JLabel label = new JLabel("Symulacja w toku...");
+        //panel.add(label);
         return panel;
+    }*/
+    public void showMenu() {
+        cardLayout.show(mainPanel, "Menu");
     }
 }
