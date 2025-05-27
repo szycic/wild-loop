@@ -93,13 +93,6 @@ public class StartApp extends JFrame {
         return panel;
     }
 
-    /*
-    private JPanel createSimulationPanel() {
-        JPanel panel = new JPanel();
-        //JLabel label = new JLabel("Symulacja w toku...");
-        //panel.add(label);
-        return panel;
-    }*/
     public void showMenu() {
         cardLayout.show(mainPanel, "Menu");
     }
