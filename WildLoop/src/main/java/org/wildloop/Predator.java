@@ -2,16 +2,10 @@ package org.wildloop;
 
 public class Predator extends Animal {
     private static final int HUNT_RANGE = 3;
-    private static final int HUNT_ENERGY_GAIN = 50;
+    private static final int HUNT_ENERGY_GAIN = 10;
 
     public Predator(Position position, int energy, int maxAge) {
         super(position, energy, maxAge);
-    }
-    public Predator(Predator predator) {
-        super(predator);
-    }
-    public Predator() {
-        super();
     }
 
     @Override

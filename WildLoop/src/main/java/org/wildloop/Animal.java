@@ -18,14 +18,6 @@ public abstract class Animal {
         this.maxAge = maxAge;
         this.age = 0;
     }
-    public Animal(Animal animal) {
-        this(animal.position, animal.energy, animal.maxAge);
-        this.world = animal.world;
-        this.age = animal.age;
-    }
-    public Animal() {
-        this(new Position(), 100, 10);
-    }
     
     public Position getPosition() {
         return position;
