@@ -141,7 +141,7 @@ public class SimulationPanel extends JPanel {
                 if (animal == null) {
                     gridLabels[x][y].setText("·");
                 } else if (animal instanceof Predator) {
-                    gridLabels[x][y].setText("P");
+                    gridLabels[x][y].setText("D");
                 } else if (animal instanceof Prey) {
                     gridLabels[x][y].setText("O");
                 }
