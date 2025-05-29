@@ -6,6 +6,12 @@ import java.util.Properties;
 /**
  * Odpowiada za zarządzanie ustawieniami konfiguracyjnymi symulacji.
  * Odczytuje właściwości z pliku konfiguracyjnego {@code simulation.properties}.
+ *
+ * @see StartApp
+ * @see SimulationPanel
+ * @see Animal
+ * @see Prey
+ * @see Predator
  */
 public class SimulationConfig {
     /** Obiekt przechowujący załadowane parametry konfiguracyjne */

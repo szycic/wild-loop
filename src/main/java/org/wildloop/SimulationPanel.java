@@ -15,6 +15,9 @@ import java.util.ArrayList;
  * Zarządza siatką symulacji, wyświetlaniem statystyk i zapewnia interakcję użytkownika
  * poprzez przyciski takie jak pauza i powrót.
  * </p>
+ *
+ * @see StartApp
+ * @see SimulationConfig
  */
 public class SimulationPanel extends JPanel {
     /** Domyślnie rozmiar świata symulacji */

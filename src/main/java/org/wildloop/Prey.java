@@ -3,6 +3,9 @@ package org.wildloop;
 /**
  * Reprezentuje ofiarę w symulacji. Ofiara ucieka przed obiektami klasy Predator
  * w określonym zasięgu i zyskuje energię poprzez pasienie się.
+ *
+ * @see Animal
+ * @see Predator
  */
 public class Prey extends Animal {
     /** Maksymalny zasięg, w którym ofiara może wykryć drapieżnika */

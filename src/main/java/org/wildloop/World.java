@@ -6,6 +6,10 @@ import java.util.List;
 /**
  * Reprezentuje świat symulacji, w którym zwierzęta mogą się poruszać i wchodzić w interakcje.
  * Świat jest zorganizowany jako dwuwymiarowa siatka, gdzie każda komórka może zawierać jedno zwierzę.
+ *
+ * @see Animal
+ * @see Position
+ * @see Direction
  */
 public class World {
     /** Dwuwymiarowa siatka reprezentująca rozmieszczenie zwierząt */

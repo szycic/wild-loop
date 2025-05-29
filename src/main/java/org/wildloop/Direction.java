@@ -4,6 +4,8 @@ package org.wildloop;
  * Reprezentuje kierunki świata i związane z nimi wektory przesunięcia.
  * Każdy kierunek ma przypisane składowe dx i dy określające przesunięcie 
  * na płaszczyźnie 2D przy ruchu w tym kierunku.
+ *
+ * @see Position
  */
 public enum Direction {
     /** Kierunek północny (góra), wektor (0,-1) */

@@ -4,6 +4,9 @@ package org.wildloop;
  * Abstrakcyjna klasa bazowa reprezentująca zwierzę w symulacji.
  * Definiuje podstawowe zachowania i atrybuty wspólne dla wszystkich zwierząt,
  * takie jak poruszanie się, reprodukcja, jedzenie i zarządzanie energią.
+ *
+ * @see Prey
+ * @see Predator
  */
 public abstract class Animal {
     /** Maksymalny poziom energii */

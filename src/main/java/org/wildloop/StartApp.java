@@ -23,6 +23,9 @@ import java.awt.*;
  *     liczba ofiar i liczba drapieżników</li>
  * <li>SimulationPanel: Wyświetla i zarządza symulacją skonfigurowanego środowiska wirtualnego</li>
  * </ul>
+ *
+ * @see SimulationPanel
+ * @see SimulationConfig
  */
 public class StartApp extends JFrame {
     /** Układ kart służący do przełączania między różnymi panelami interfejsu */

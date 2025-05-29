@@ -3,6 +3,9 @@ package org.wildloop;
 /**
  * Reprezentuje drapieżnika w symulacji. Drapieżnik poluje na obiekty klasy Prey
  * w określonym zasięgu i zyskuje energię poprzez ich zjadanie.
+ *
+ * @see Animal
+ * @see Prey
  */
 public class Predator extends Animal {
     /** Maksymalny zasięg, w którym drapieżnik może wykryć ofiarę */

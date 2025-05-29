@@ -4,6 +4,7 @@ package org.wildloop;
  * Reprezentuje niezmienną pozycję w dwuwymiarowej przestrzeni.
  * Zaimplementowana jako record ze względu na większą zwięzłość.
  *
+ * @see Direction
  * @param x współrzędna pozioma pozycji
  * @param y współrzędna pionowa pozycji
  */
