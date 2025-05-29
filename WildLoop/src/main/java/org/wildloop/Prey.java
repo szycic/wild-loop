@@ -1,13 +1,33 @@
 package org.wildloop;
 
+/**
+ * Reprezentuje ofiarę w symulacji. Ofiara ucieka przed obiektami klasy Predator
+ * w określonym zasięgu i zyskuje energię poprzez pasienie się.
+ */
 public class Prey extends Animal {
+    /** Maksymalny zasięg, w którym ofiara może wykryć drapieżnika */
     private static final int FLEE_RANGE = SimulationConfig.getValue("prey.flee.range");
+    /** Ilość energii uzyskiwana przez ofiarę podczas żerowania */
     private static final int GRAZE_ENERGY_GAIN = SimulationConfig.getValue("prey.graze.energy.gain");
 
+    /**
+     * Tworzy nową ofiarę.
+     *
+     * @param position początkowa pozycja ofiary
+     * @param energy początkowa energia ofiary
+     * @param maxAge maksymalny wiek, który może osiągnąć ofiara
+     */
     public Prey(Position position, int energy, int maxAge) {
         super(position, energy, maxAge);
     }
 
+    /**
+     * Określa kierunek następnego ruchu ofiary.
+     * Jeśli w zasięgu {@link #FLEE_RANGE} znajduje się drapieżnik, ofiara ucieka w przeciwnym kierunku.
+     * W przeciwnym razie wybiera losowy kierunek.
+     *
+     * @return kierunek, w którym ofiara powinna się poruszyć
+     */
     @Override
     protected Direction getNextMoveDirection() {
         Predator nearestPredator = findNearestPredator();
@@ -17,6 +37,11 @@ public class Prey extends Animal {
         return Direction.getRandom();
     }
 
+    /**
+     * Znajduje najbliższego drapieżnika w zasięgu wykrywania ofiary.
+     *
+     * @return najbliższy drapieżnik lub {@code null}, jeśli żaden nie znajduje się w zasięgu
+     */
     private Predator findNearestPredator() {
         Predator nearestPredator = null;
         int minDistance = Integer.MAX_VALUE;
@@ -34,11 +59,20 @@ public class Prey extends Animal {
         return nearestPredator;
     }
 
+    /**
+     * Pozwala ofierze paść się, zwiększając jej energię o {@link #GRAZE_ENERGY_GAIN}.
+     */
     @Override
     protected void eat() {
         setEnergy(getEnergy() + GRAZE_ENERGY_GAIN);
     }
 
+    /**
+     * Tworzy nową ofiarę jako potomka.
+     *
+     * @param position pozycja dla nowej ofiary
+     * @return nowy obiekt ofiary z początkową energią równą {@link #REPRODUCTION_ENERGY_COST}
+     */
     @Override
     protected Animal createOffspring(Position position) {
         return new Prey(position, REPRODUCTION_ENERGY_COST, getMaxAge());

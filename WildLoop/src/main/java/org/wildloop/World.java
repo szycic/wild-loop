@@ -110,7 +110,7 @@ public class World {
      * Sprawdza, czy dana pozycja mieści się w granicach świata.
      * 
      * @param position pozycja do sprawdzenia
-     * @return true jeśli pozycja jest prawidłowa, false w przeciwnym razie
+     * @return true, jeśli pozycja jest prawidłowa, false w przeciwnym razie
      */
     public boolean isValidPosition(Position position) {
         return position.x() >= 0 && position.x() < getWidth()
@@ -121,7 +121,7 @@ public class World {
      * Sprawdza, czy komórka na danej pozycji jest pusta.
      * 
      * @param position pozycja do sprawdzenia
-     * @return true jeśli komórka jest pusta, false w przeciwnym razie
+     * @return true, jeśli komórka jest pusta, false w przeciwnym razie
      */
     public boolean isCellEmpty(Position position) {
         return isValidPosition(position) && grid[position.x()][position.y()] == null;

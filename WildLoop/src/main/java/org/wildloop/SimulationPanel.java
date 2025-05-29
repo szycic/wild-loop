@@ -6,24 +6,31 @@ import java.util.ArrayList;
 
 /**
  * <p>
- * Klasa SimulationPanel reprezentuje główny graficzny interfejs użytkownika dla symulacji
- * składającej się ze świata opartego na siatce zamieszkałego przez drapieżniki i ofiary,
+ * Reprezentuje główny graficzny interfejs użytkownika dla symulacji
+ * składającej się ze świata opartego na siatce zamieszkałego przez drapieżniki i ofiary
  * oraz zapewnia kontrolki do zarządzania i wyświetlania stanu symulacji.
  * </p>
  * <p>
- * Ta klasa rozszerza JPanel i jest zaprojektowana do integracji z frameworkiem Swing GUI.
+ * Ta klasa rozszerza {@link JPanel} i jest zaprojektowana do integracji z frameworkiem Swing GUI.
  * Zarządza siatką symulacji, wyświetlaniem statystyk i zapewnia interakcję użytkownika
  * poprzez przyciski takie jak pauza i powrót.
  * </p>
  */
 public class SimulationPanel extends JPanel {
-    private final StartApp startApp; // referencja do głównej aplikacji
-    private World world; // świat symulacji
-    private JLabel[][] gridLabels; // etykiety komórek siatki
-    private final JLabel statsLabel; // etykieta statystyk
-    private Timer timer; // timer kontrolujący prędkość symulacji
-    private final JButton pauseButton; // przycisk pauzy
-    private boolean isPaused = false; // flaga przechowująca stan pauzy
+    /** Referencja do głównej aplikacji, używana do komunikacji między komponentami */
+    private final StartApp startApp;
+    /** Reprezentacja świata symulacji zawierająca logikę i stan środowiska */
+    private World world;
+    /** Tablica etykiet reprezentujących poszczególne komórki siatki świata */
+    private JLabel[][] gridLabels;
+    /** Etykieta wyświetlająca aktualne statystyki symulacji */
+    private final JLabel statsLabel;
+    /** Timer kontrolujący częstotliwość aktualizacji i prędkość symulacji */
+    private Timer timer;
+    /** Przycisk służący do wstrzymywania i wznawiania symulacji */
+    private final JButton pauseButton;
+    /** Flaga wskazująca czy symulacja jest obecnie wstrzymana */
+    private boolean isPaused = false;
 
     /**
      * Konstruktor panelu symulacji dla aplikacji. Ten panel zawiera
@@ -89,7 +96,7 @@ public class SimulationPanel extends JPanel {
      * </p>
      * <p>
      * Jeśli symulacja jest obecnie wstrzymana, metoda wznawia symulację
-     * poprzez uruchomienie timera i aktualizację tekstu przycisku wskazującą
+     * poprzez uruchomienie timera i aktualizację tekstu przycisku wskazującą,
      * że symulacja może zostać ponownie wstrzymana.
      * </p>
      * <p>
@@ -114,7 +121,7 @@ public class SimulationPanel extends JPanel {
      * <p>
      * Metoda sprawdza, czy timer symulacji jest aktywny. Jeśli tak, zatrzymuje timer,
      * aby zapobiec dalszym aktualizacjom symulacji. Dodatkowo upewnia się, że stan
-     * wstrzymania jest ustawiony na false, wskazując że symulacja nie jest już wstrzymana.
+     * wstrzymania jest ustawiony na false, wskazując, że symulacja nie jest już wstrzymana.
      * </p>
      * <p>
      * Metoda jest wywoływana podczas procesu zakończenia lub resetowania symulacji
@@ -133,7 +140,7 @@ public class SimulationPanel extends JPanel {
      * inicjalizację siatki dla interfejsu graficznego oraz wypełnienie symulacji
      * zwierzętami typu ofiara i drapieżnik na podstawie podanych liczb.
      *
-     * @param size          rozmiar kwadratowego świata (np. 10 tworzy siatkę 10x10)
+     * @param size          rozmiar kwadratowego świata (np. 10 tworzy siatkę 10 × 10)
      * @param preyCount     liczba zwierząt typu ofiara do wygenerowania w symulacji
      * @param predatorCount liczba zwierząt typu drapieżnik do wygenerowania w symulacji
      */
@@ -247,9 +254,9 @@ public class SimulationPanel extends JPanel {
      * Metoda iteruje przez każdą komórkę w siatce świata symulacji i aktualizuje graficzne
      * etykiety odpowiadające każdej komórce na podstawie jej aktualnej zawartości. W szczególności:
      * <ul>
-     *     <li>Jeśli komórka jest pusta (null), ustawia tekst etykiety na "·" aby wskazać puste miejsce</li>
-     *     <li>Jeśli komórka zawiera instancję {@code Predator}, ustawia tekst etykiety na "D"</li>
-     *     <li>Jeśli komórka zawiera instancję {@code Prey}, ustawia tekst etykiety na "O"</li>
+     *     <li>Jeśli komórka jest pusta (wartość {@code null}), ustawia tekst etykiety na "·" aby wskazać puste miejsce</li>
+     *     <li>Jeśli komórka zawiera instancję {@link Predator}, ustawia tekst etykiety na "D"</li>
+     *     <li>Jeśli komórka zawiera instancję {@link Prey}, ustawia tekst etykiety na "O"</li>
      * </ul>
      * </p>
      */
@@ -299,10 +306,10 @@ public class SimulationPanel extends JPanel {
      * Metoda próbuje znaleźć niezajętą pozycję w granicach świata.
      * Wykonuje maksymalnie 100 prób znalezienia pustej komórki.
      * Jeśli po 100 próbach nie zostanie znaleziona żadna pusta komórka,
-     * zwraca null.
+     * zwraca {@code null}.
      *
      * @param world świat, w którym należy znaleźć losową pustą pozycję
-     * @return losowo wybrana pusta pozycja w świecie lub null jeśli takiej
+     * @return losowo wybrana pusta pozycja w świecie lub {@code null}, jeśli takiej
      * pozycji nie znaleziono po 100 próbach
      */
     private Position getRandomEmptyPosition(World world) {
@@ -326,18 +333,18 @@ public class SimulationPanel extends JPanel {
      * <p>
      * Funkcjonalność:
      * <ul>
-     * <li>Zatrzymuje timer jeśli jest aktualnie uruchomiony</li>
+     * <li>Zatrzymuje timer, jeśli jest aktualnie uruchomiony</li>
      * <li>Resetuje stan wstrzymania do false</li>
      * <li>Usuwa wszystkie zwierzęta ze świata symulacji i zeruje licznik tur</li>
      * <li>Reinicjalizuje siatkę graficzną reprezentującą obszar symulacji</li>
-     * <li>Aktualizuje statystyki symulacji aby odzwierciedlały zresetowany stan</li>
+     * <li>Aktualizuje statystyki symulacji, aby odzwierciedlały zresetowany stan</li>
      * <li>Przywraca etykietę przycisku pauzy do stanu domyślnego</li>
      * </ul>
      * </p>
      * <p>
      * Warunki wstępne:
      * <ul>
-     * <li>Obiekt 'world', jeśli nie jest null, musi prawidłowo zarządzać swoją listą zwierząt i licznikiem tur</li>
+     * <li>Obiekt 'world', jeśli nie jest {@code null}, musi prawidłowo zarządzać swoją listą zwierząt i licznikiem tur</li>
      * <li>Komponenty siatki graficznej i statystyk muszą pozwalać na reinicjalizację</li>
      * </ul>
      * </p>
@@ -363,7 +370,7 @@ public class SimulationPanel extends JPanel {
         }
 
         initializeGrid(world != null ? world.getWidth() : 20); // inicjalizacja siatki GUI
-        updateStats(); // zaaktualizowanie statystyk
+        updateStats(); // zaktualizowanie statystyk
 
         if (pauseButton != null) {
             pauseButton.setText("Pauza"); // resetowanie przycisku pauzy

@@ -3,16 +3,47 @@ package org.wildloop;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Dziedziczy po {@link JFrame} i służy jako główny kontener interfejsu użytkownika
+ * aplikacji. Wykorzystuje układ kart ({@link CardLayout}) do zarządzania i przełączania między różnymi
+ * panelami interfejsu, takimi jak menu główne, ustawienia i ekrany symulacji.
+ * <p>
+ * Klasa zapewnia następujące funkcjonalności:
+ * <ul>
+ * <li>Początkowa konfiguracja głównego okna aplikacji, w tym rozmiar, tytuł i zachowanie</li>
+ * <li>Zarządzanie głównym układem kart, umożliwiając przełączanie między różnymi widokami</li>
+ * <li>Tworzenie określonych paneli interfejsu (menu, ustawienia i symulacja)</li>
+ * <li>Obsługa interakcji użytkownika, takich jak uruchamianie symulacji, zapisywanie ustawień i wyjście</li>
+ * </ul>
+ * <p>
+ * Aplikacja składa się z trzech głównych paneli:
+ * <ul>
+ * <li>MenuPanel: Zawiera opcje rozpoczęcia symulacji lub wyjścia z aplikacji</li>
+ * <li>SettingsPanel: Pozwala użytkownikowi skonfigurować parametry symulacji, takie jak rozmiar świata,
+ *     liczba ofiar i liczba drapieżników</li>
+ * <li>SimulationPanel: Wyświetla i zarządza symulacją skonfigurowanego środowiska wirtualnego</li>
+ * </ul>
+ */
 public class StartApp extends JFrame {
 
-    private final CardLayout cardLayout; // pole przechowujące układ kart do przełączania paneli
-    private final JPanel mainPanel; // pole przechowujące główny panel kontenerowy
-    private final SimulationPanel simulationPanel; // pole przechowujące panel symulacji
-    private JTextField sizeField; // pole tekstowe do wprowadzenia rozmiaru świata
-    private JTextField preyField; // pole tekstowe do wprowadzenia liczby ofiar
-    private JTextField predatorField; // pole tekstowe do wprowadzenia liczby drapieżników
+    /** Układ kart służący do przełączania między różnymi panelami interfejsu */
+    private final CardLayout cardLayout;
+    /** Główny panel kontenerowy zawierający wszystkie panele aplikacji */
+    private final JPanel mainPanel;
+    /** Panel odpowiedzialny za wyświetlanie i zarządzanie symulacją */
+    private final SimulationPanel simulationPanel;
+    /** Pole tekstowe do wprowadzenia rozmiaru świata symulacji */
+    private JTextField sizeField;
+    /** Pole tekstowe do wprowadzenia początkowej liczby ofiar */
+    private JTextField preyField;
+    /** Pole tekstowe do wprowadzenia początkowej liczby drapieżników */
+    private JTextField predatorField;
 
-    // KONSTRUKTOR głównej klasy
+    /**
+     * Tworzy nowe okno aplikacji i inicjalizuje wszystkie komponenty interfejsu.
+     * Ustawia podstawowe parametry okna takie jak tytuł, rozmiar i zachowanie,
+     * oraz tworzy i konfiguruje wszystkie panele aplikacji.
+     */
     public StartApp() {
         this.setTitle("Wild-loop"); // ustawienie tytułu okna
         this.setSize(800, 600); // ustawienie rozmiaru okna na 800x600px
@@ -35,7 +66,13 @@ public class StartApp extends JFrame {
         this.setVisible(true); // włączenie widoczności okna
     }
 
-    // METODA tworząca panel menu
+    /**
+     * Tworzy panel menu głównego aplikacji.
+     * Panel zawiera przyciski do rozpoczęcia symulacji i wyjścia z aplikacji,
+     * rozmieszczone w układzie pionowym.
+     *
+     * @return utworzony i skonfigurowany panel menu
+     */
     private JPanel createMenuPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10)); // utworzenie panelu z układem siatki 3 wierszy, 1 kolumną i odstępami 10px
         panel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100)); // ustawienie marginesów wewnętrznych panelu (góra, lewo, dół, prawo)
@@ -56,7 +93,13 @@ public class StartApp extends JFrame {
         return panel;
     }
 
-    // METODA tworząca panel ustawień
+    /**
+     * Tworzy panel konfiguracji parametrów symulacji.
+     * Panel zawiera pola do wprowadzenia rozmiaru świata, liczby ofiar i drapieżników,
+     * oraz przyciski do zapisania ustawień i powrotu do menu.
+     *
+     * @return utworzony i skonfigurowany panel ustawień
+     */
     private JPanel createSettingsPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10)); // utworzenie panelu z układem siatki 5x2 i odstępami 10px
         panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // ustawienie marginesów wewnętrznych
@@ -98,7 +141,11 @@ public class StartApp extends JFrame {
         return panel;
     }
 
-    // METODA pokazująca menu
+    /**
+     * Przełącza interfejs z powrotem do menu głównego i resetuje stan symulacji.
+     * Ta metoda jest wywoływana, gdy symulacja się kończy lub użytkownik
+     * chce wrócić do menu głównego.
+     */
     public void showMenu() {
         simulationPanel.resetSimulation(); // zrestartowanie danych naszej symulacji do zera
         cardLayout.show(mainPanel, "Menu"); // przełączenie widoku karty na główne menu
