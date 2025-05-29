@@ -4,6 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * <p>
+ * Klasa SimulationPanel reprezentuje główny graficzny interfejs użytkownika dla symulacji
+ * składającej się ze świata opartego na siatce zamieszkałego przez drapieżniki i ofiary,
+ * oraz zapewnia kontrolki do zarządzania i wyświetlania stanu symulacji.
+ * </p>
+ * <p>
+ * Ta klasa rozszerza JPanel i jest zaprojektowana do integracji z frameworkiem Swing GUI.
+ * Zarządza siatką symulacji, wyświetlaniem statystyk i zapewnia interakcję użytkownika
+ * poprzez przyciski takie jak pauza i powrót.
+ * </p>
+ */
 public class SimulationPanel extends JPanel {
     private final StartApp startApp; // referencja do głównej aplikacji
     private World world; // świat symulacji
@@ -13,7 +25,14 @@ public class SimulationPanel extends JPanel {
     private final JButton pauseButton; // przycisk pauzy
     private boolean isPaused = false; // flaga przechowująca stan pauzy
 
-    // KONSTRUKTOR budujący interfejs
+    /**
+     * Konstruktor panelu symulacji dla aplikacji. Ten panel zawiera
+     * układ siatki reprezentujący obszar symulacji, wyświetlacz statystyk oraz
+     * przyciski kontrolne do wstrzymywania symulacji i powrotu do menu głównego.
+     *
+     * @param startApp główna instancja aplikacji używana do nawigacji powrotnej do
+     *                 menu głównego i kontroli symulacji.
+     */
     public SimulationPanel(StartApp startApp) {
         this.startApp = startApp; // przypisanie przekazanej referencji do pola klasy
         setLayout(new BorderLayout()); // główny układ aplikacji (borderlayout - podział na strefy)
@@ -59,7 +78,24 @@ public class SimulationPanel extends JPanel {
         add(bottomPanel, BorderLayout.SOUTH); // dodanie dolnego panelu do dolnej części głównego panelu
     }
 
-    // METODA przełączająca stan pauzy
+    /**
+     * <p>
+     * Przełącza stan wstrzymania symulacji.
+     * </p>
+     * <p>
+     * Jeśli symulacja aktualnie działa, metoda wstrzymuje symulację
+     * poprzez zatrzymanie timera i zmianę tekstu przycisku pauzy, aby wskazać
+     * że symulacja może zostać wznowiona.
+     * </p>
+     * <p>
+     * Jeśli symulacja jest obecnie wstrzymana, metoda wznawia symulację
+     * poprzez uruchomienie timera i aktualizację tekstu przycisku wskazującą
+     * że symulacja może zostać ponownie wstrzymana.
+     * </p>
+     * <p>
+     * Stan wstrzymania jest śledzony przez pole {@code isPaused}.
+     * </p>
+     */
     private void togglePause() {
         isPaused = !isPaused; // negacja aktualnego stanu pauzy
         if (isPaused) { // sprawdzenie czy isPaused == true, jeśli tak
@@ -71,7 +107,20 @@ public class SimulationPanel extends JPanel {
         }
     }
 
-    // METODA zatrzymująca symulację
+    /**
+     * <p>
+     * Zatrzymuje symulację poprzez zatrzymanie timera i resetowanie stanu wstrzymania.
+     * </p>
+     * <p>
+     * Metoda sprawdza, czy timer symulacji jest aktywny. Jeśli tak, zatrzymuje timer,
+     * aby zapobiec dalszym aktualizacjom symulacji. Dodatkowo upewnia się, że stan
+     * wstrzymania jest ustawiony na false, wskazując że symulacja nie jest już wstrzymana.
+     * </p>
+     * <p>
+     * Metoda jest wywoływana podczas procesu zakończenia lub resetowania symulacji
+     * w celu przywrócenia jej do stanu domyślnego.
+     * </p>
+     */
     private void stopSimulation() {
         if (timer != null) {
             timer.stop(); // jeśli timer istnieje to go zatrzymaj
@@ -79,7 +128,15 @@ public class SimulationPanel extends JPanel {
         isPaused = false; // przywrócenie flagi do domyślnej wartości
     }
 
-    // METODA ustawiająca parametry symulacji
+    /**
+     * Konfiguruje parametry symulacji poprzez ustawienie wymiarów symulowanego świata,
+     * inicjalizację siatki dla interfejsu graficznego oraz wypełnienie symulacji
+     * zwierzętami typu ofiara i drapieżnik na podstawie podanych liczb.
+     *
+     * @param size          rozmiar kwadratowego świata (np. 10 tworzy siatkę 10x10)
+     * @param preyCount     liczba zwierząt typu ofiara do wygenerowania w symulacji
+     * @param predatorCount liczba zwierząt typu drapieżnik do wygenerowania w symulacji
+     */
     public void setSimulationParameters(int size, int preyCount, int predatorCount) {
         this.world = new World(size, size); // tworzenie nowego świata o podanym przez nas rozmiarze
         initializeGrid(size); // inicjalizacja siatki GUI
@@ -101,7 +158,32 @@ public class SimulationPanel extends JPanel {
         }
     }
 
-    // METODA startująca symulację
+    /**
+     * <p>
+     * Uruchamia symulację poprzez inicjalizację lub resetowanie niezbędnych komponentów
+     * i uruchomienie głównej pętli symulacji.
+     * </p>
+     * <p>
+     * Metoda sprawdza, czy świat symulacji jest zainicjalizowany. Jeśli nie,
+     * ustawia domyślne parametry symulacji za pomocą {@link #setSimulationParameters(int, int, int)}.
+     * Upewnia się, że symulacja nie jest wstrzymana poprzez zresetowanie flagi pauzy
+     * i aktualizuje przycisk sterujący, aby wyświetlał "Pauza".
+     * </p>
+     * <p>
+     * Główna pętla symulacji jest zarządzana przez {@link Timer} z
+     * opóźnieniem 500 milisekund. Każde tknięcie timera wykonuje następujące czynności:
+     * <ul>
+     * <li>Rozwija stan symulacji za pomocą {@link World#tick()}.</li>
+     * <li>Aktualizuje siatkę GUI za pomocą {@link #updateGrid()}.</li>
+     * <li>Aktualizuje statystyki symulacji za pomocą {@link #updateStats()}.</li>
+     * </ul>
+     * </p>
+     * <p>
+     * Jeśli symulacja osiągnie warunek końcowy, na przykład brak pozostałych zwierząt
+     * w świecie, symulacja zostaje zatrzymana za pomocą {@link #stopSimulation()},
+     * a użytkownikowi wyświetlane jest powiadomienie.
+     * </p>
+     */
     public void startSimulation() {
         // sprawdzenie czy świat istnieje
         if (world == null) {
@@ -133,7 +215,13 @@ public class SimulationPanel extends JPanel {
         timer.start(); // uruchomienie timera
     }
 
-    // METODA inicjalizująca siatkę
+    /**
+     * Inicjalizuje siatkę symulacji o określonym rozmiarze.
+     * Ta metoda tworzy i konfiguruje układ siatki z etykietami dla kwadratowej siatki,
+     * aktualizuje interfejs graficzny i resetuje poprzednie komponenty siatki.
+     *
+     * @param size rozmiar kwadratowej siatki do zainicjalizowania (np. 10 tworzy siatkę 10x10)
+     */
     private void initializeGrid(int size) {
         JPanel gridPanel = (JPanel) getComponent(0); // pobieranie panelu siatki
         gridPanel.removeAll(); // czyszczenie panelu z istniejących komponentów
@@ -151,7 +239,20 @@ public class SimulationPanel extends JPanel {
         gridPanel.repaint(); // wymuszanie przerysowania układu
     }
 
-    // METODA aktualizująca siatkę
+    /**
+     * <p>
+     * Aktualizuje wizualną reprezentację siatki symulacji.
+     * </p>
+     * <p>
+     * Metoda iteruje przez każdą komórkę w siatce świata symulacji i aktualizuje graficzne
+     * etykiety odpowiadające każdej komórce na podstawie jej aktualnej zawartości. W szczególności:
+     * <ul>
+     *     <li>Jeśli komórka jest pusta (null), ustawia tekst etykiety na "·" aby wskazać puste miejsce</li>
+     *     <li>Jeśli komórka zawiera instancję {@code Predator}, ustawia tekst etykiety na "D"</li>
+     *     <li>Jeśli komórka zawiera instancję {@code Prey}, ustawia tekst etykiety na "O"</li>
+     * </ul>
+     * </p>
+     */
     private void updateGrid() {
         for (int y = 0; y < world.getHeight(); y++) {
             for (int x = 0; x < world.getWidth(); x++) {
@@ -167,7 +268,17 @@ public class SimulationPanel extends JPanel {
         }
     }
 
-    // METODA aktualizująca statystyki
+    /**
+     * <p>
+     * Aktualizuje statystyki symulacji poprzez zliczanie liczby drapieżników i ofiar
+     * w symulowanym świecie. Metoda pobiera listę zwierząt, rozróżnia drapieżniki
+     * i ofiary na podstawie ich klas oraz oblicza ich sumy.
+     * </p>
+     * <p>
+     * Następnie aktualizuje wyświetlacz statystyk o aktualny numer tury, liczbę
+     * drapieżników, ofiar oraz łączną liczbę zwierząt.
+     * </p>
+     */
     private void updateStats() {
         int predatorCount = 0; // licznik drapieżników
         int preyCount = 0; // licznik ofiar
@@ -183,7 +294,17 @@ public class SimulationPanel extends JPanel {
         statsLabel.setText(String.format("Tura: %d | Drapieżniki: %d | Ofiary: %d | Łącznie: %d", world.getTurns(), predatorCount, preyCount, world.getAnimals().size())); // formatowanie tekstu statystyk z aktualnymi danymi
     }
 
-    // METODA losująca pozycję
+    /**
+     * Generuje losową pustą pozycję w podanym świecie.
+     * Metoda próbuje znaleźć niezajętą pozycję w granicach świata.
+     * Wykonuje maksymalnie 100 prób znalezienia pustej komórki.
+     * Jeśli po 100 próbach nie zostanie znaleziona żadna pusta komórka,
+     * zwraca null.
+     *
+     * @param world świat, w którym należy znaleźć losową pustą pozycję
+     * @return losowo wybrana pusta pozycja w świecie lub null jeśli takiej
+     * pozycji nie znaleziono po 100 próbach
+     */
     private Position getRandomEmptyPosition(World world) {
         // pętla losująca, maksymalnie 100 prób
         for (int attempts = 0; attempts < 100; attempts++) {
@@ -197,7 +318,36 @@ public class SimulationPanel extends JPanel {
         return null; // jeśli nie udało się znaleźć wolnego miejsca to nic nie zwracamy
     }
 
-    // METODA przywracająca stan symulacji do początku
+    /**
+     * <p>
+     * Przywraca symulację do stanu początkowego poprzez zatrzymanie wszystkich aktywnych procesów,
+     * wyczyszczenie istniejących danych symulacji oraz reinicjalizację widoku i niezbędnych komponentów.
+     * </p>
+     * <p>
+     * Funkcjonalność:
+     * <ul>
+     * <li>Zatrzymuje timer jeśli jest aktualnie uruchomiony</li>
+     * <li>Resetuje stan wstrzymania do false</li>
+     * <li>Usuwa wszystkie zwierzęta ze świata symulacji i zeruje licznik tur</li>
+     * <li>Reinicjalizuje siatkę graficzną reprezentującą obszar symulacji</li>
+     * <li>Aktualizuje statystyki symulacji aby odzwierciedlały zresetowany stan</li>
+     * <li>Przywraca etykietę przycisku pauzy do stanu domyślnego</li>
+     * </ul>
+     * </p>
+     * <p>
+     * Warunki wstępne:
+     * <ul>
+     * <li>Obiekt 'world', jeśli nie jest null, musi prawidłowo zarządzać swoją listą zwierząt i licznikiem tur</li>
+     * <li>Komponenty siatki graficznej i statystyk muszą pozwalać na reinicjalizację</li>
+     * </ul>
+     * </p>
+     * <p>
+     * Warunki końcowe:
+     * <ul>
+     * <li>Symulacja jest ustawiona w czystym stanie, gotowa do rozpoczęcia nowego przebiegu symulacji</li>
+     * </ul>
+     * </p>
+     */
     public void resetSimulation() {
         if (timer!= null && timer.isRunning()) {
             timer.stop(); // jeśli timer jest włączony to go zatrzymaj
