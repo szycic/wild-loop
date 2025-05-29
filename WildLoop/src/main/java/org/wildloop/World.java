@@ -94,4 +94,9 @@ public class World {
         }
         turns++;
     }
+
+    // METODA przywracająca ilość naszych tur do 0
+    public void resetTurns() {
+        this.turns = 0;
+    }
 }
