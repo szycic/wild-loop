@@ -13,15 +13,6 @@ public class World {
         this.animals = new ArrayList<>();
         this.turns = 0;
     }
-    public World(World world) {
-        this(world.grid.length, world.grid[0].length);
-        this.grid = world.grid.clone();
-        this.animals = new ArrayList<>(world.animals);
-        this.turns = world.turns;
-    }
-    public World() {
-        this(10, 10);
-    }
     
     public Animal[][] getGrid() {
         return grid;
