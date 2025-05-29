@@ -1,9 +1,9 @@
 package org.wildloop;
 
 public abstract class Animal {
-    protected static final int MOVE_ENERGY_COST = 1;
-    protected static final int REPRODUCTION_ENERGY_THRESHOLD = 50;
-    protected static final int REPRODUCTION_ENERGY_COST = 30;
+    protected static final int MOVE_ENERGY_COST = SimulationConfig.getValue("animal.move.energy.cost");
+    protected static final int REPRODUCTION_ENERGY_THRESHOLD = SimulationConfig.getValue("animal.reproduction.energy.threshold");
+    protected static final int REPRODUCTION_ENERGY_COST = SimulationConfig.getValue("animal.reproduction.energy.cost");
 
     private Position position;
     private int energy;

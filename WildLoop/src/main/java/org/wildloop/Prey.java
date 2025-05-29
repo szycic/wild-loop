@@ -1,8 +1,8 @@
 package org.wildloop;
 
 public class Prey extends Animal {
-    private static final int FLEE_RANGE = 4;
-    private static final int GRAZE_ENERGY_GAIN = 5;
+    private static final int FLEE_RANGE = SimulationConfig.getValue("prey.flee.range");
+    private static final int GRAZE_ENERGY_GAIN = SimulationConfig.getValue("prey.graze.energy.gain");
 
     public Prey(Position position, int energy, int maxAge) {
         super(position, energy, maxAge);

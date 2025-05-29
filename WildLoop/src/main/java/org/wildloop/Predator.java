@@ -1,8 +1,8 @@
 package org.wildloop;
 
 public class Predator extends Animal {
-    private static final int HUNT_RANGE = 3;
-    private static final int HUNT_ENERGY_GAIN = 10;
+    private static final int HUNT_RANGE = SimulationConfig.getValue("predator.hunt.range");
+    private static final int HUNT_ENERGY_GAIN = SimulationConfig.getValue("predator.hunt.energy.gain");
 
     public Predator(Position position, int energy, int maxAge) {
         super(position, energy, maxAge);
