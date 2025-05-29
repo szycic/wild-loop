@@ -16,13 +16,6 @@ public class Position {
         return y;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public Direction directionTo(Position target) {
         int dx = Integer.compare(target.getX() - this.x, 0);
         int dy = Integer.compare(target.getY() - this.y, 0);
