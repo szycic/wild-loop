@@ -28,7 +28,7 @@ public record Position(int x, int y) {
         return Math.abs(this.x - target.x()) + Math.abs(this.y - target.y());
     }
 
-    public Position move(Direction direction) {
+    public Position newPosition(Direction direction) {
         return new Position(this.x + direction.getDx(), this.y + direction.getDy());
     }
 }

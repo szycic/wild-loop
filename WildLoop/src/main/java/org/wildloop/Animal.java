@@ -50,7 +50,7 @@ public abstract class Animal {
     void move() {
         Direction direction = getNextMoveDirection();
         if (direction != null) {
-            Position newPosition = position.move(direction);
+            Position newPosition = position.newPosition(direction);
             if (world.isValidPosition(newPosition) && world.isCellEmpty(newPosition)) {
                 Position oldPosition = position;
                 world.getGrid()[oldPosition.x()][oldPosition.y()] = null;
@@ -76,7 +76,7 @@ public abstract class Animal {
     protected abstract Animal createOffspring(Position position);
     private Position findEmptyAdjacentCell() {
         for (Direction dir : Direction.values()) {
-            Position newPos = position.move(dir);
+            Position newPos = position.newPosition(dir);
             if (world.isCellEmpty(newPos)) {
                 return newPos;
             }
