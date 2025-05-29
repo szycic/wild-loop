@@ -10,10 +10,8 @@ import java.util.List;
 public class World {
     /** Dwuwymiarowa siatka reprezentująca rozmieszczenie zwierząt */
     private final Animal[][] grid;
-    
     /** Lista wszystkich aktywnych zwierząt w świecie */
     private final List<Animal> animals;
-    
     /** Licznik wykonanych tur symulacji */
     private int turns;
     
