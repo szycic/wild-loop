@@ -25,7 +25,6 @@ import java.awt.*;
  * </ul>
  */
 public class StartApp extends JFrame {
-
     /** Układ kart służący do przełączania między różnymi panelami interfejsu */
     private final CardLayout cardLayout;
     /** Główny panel kontenerowy zawierający wszystkie panele aplikacji */
@@ -105,13 +104,13 @@ public class StartApp extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // ustawienie marginesów wewnętrznych
 
         JLabel sizeLabel = new JLabel("Rozmiar świata:"); // etykieta dla rozmiaru świata
-        sizeField = new JTextField("20"); // ustawienie domyślnej wartości rozmiaru świata na 20
+        sizeField = new JTextField(Integer.toString(SimulationConfig.getValue("default.world.size"))); // ustawienie domyślnej wartości rozmiaru świata
 
         JLabel preyLabel = new JLabel("Liczba ofiar:"); // etykieta dla liczby ofiar
-        preyField = new JTextField("10"); // ustawienie domyślnej wartości liczby ofiar na 10
+        preyField = new JTextField(Integer.toString(SimulationConfig.getValue("default.prey.count"))); // ustawienie domyślnej wartości liczby ofiar
 
         JLabel predatorLabel = new JLabel("Liczba drapieżników:"); // etykieta dla liczby drapieżników
-        predatorField = new JTextField("5"); // ustawienie domyślnej wartości liczby drapieżników na 5
+        predatorField = new JTextField(Integer.toString(SimulationConfig.getValue("default.predator.count"))); // ustawienie domyślnej wartości liczby drapieżników
 
         JButton backButton = new JButton("Powrót"); // etykieta dla powrotu do menu
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu")); // po wciśnieciu przycisku powrotu przełącz na główny panel

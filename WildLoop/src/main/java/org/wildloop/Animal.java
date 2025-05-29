@@ -6,12 +6,16 @@ package org.wildloop;
  * takie jak poruszanie się, reprodukcja, jedzenie i zarządzanie energią.
  */
 public abstract class Animal {
+    /** Maksymalny poziom energii */
+    protected static final int MAX_ENERGY = SimulationConfig.getValue("animal.max.energy");
     /** Koszt energetyczny pojedynczego ruchu */
     protected static final int MOVE_ENERGY_COST = SimulationConfig.getValue("animal.move.energy.cost");
     /** Próg energii wymagany do reprodukcji */
     protected static final int REPRODUCTION_ENERGY_THRESHOLD = SimulationConfig.getValue("animal.reproduction.energy.threshold");
     /** Koszt energetyczny reprodukcji */
     protected static final int REPRODUCTION_ENERGY_COST = SimulationConfig.getValue("animal.reproduction.energy.cost");
+    /** Energia początkowa potomka */
+    protected static final int OFFSPRING_ENERGY = SimulationConfig.getValue("animal.offspring.energy");
 
     /** Aktualna pozycja zwierzęcia w świecie */
     private Position position;
@@ -37,6 +41,9 @@ public abstract class Animal {
         }
         if (energy < 0) {
             throw new IllegalArgumentException("Energia początkowa nie może być ujemna");
+        }
+        if (energy > MAX_ENERGY) {
+            throw new IllegalArgumentException("Energia początkowa nie może być większa od energii maksymalnej");
         }
         if (maxAge <= 0) {
             throw new IllegalArgumentException("Maksymalny wiek musi być większy od zera");
@@ -73,7 +80,7 @@ public abstract class Animal {
     }
     /** @param energy nowy poziom energii */
     public void setEnergy(int energy) {
-        this.energy = energy;
+        this.energy = Math.min(energy, MAX_ENERGY);
     }
     /** Zwiększa wiek zwierzęcia o 1 */
     public void incrementAge() {
@@ -121,7 +128,6 @@ public abstract class Animal {
             if (offspring_position != null) {
                 Animal offspring = createOffspring(offspring_position);
                 energy -= REPRODUCTION_ENERGY_COST;
-                offspring.setEnergy(REPRODUCTION_ENERGY_COST);
                 world.addAnimal(offspring);
             }
         }
@@ -186,6 +192,8 @@ public abstract class Animal {
 
         if (energy >= REPRODUCTION_ENERGY_THRESHOLD) {
             reproduce();
+        } else {
+            eat();
         }
 
         if (energy <= 0 || age >= maxAge) {

@@ -30,9 +30,11 @@ public class Predator extends Animal {
      */
     @Override
     protected Direction getNextMoveDirection() {
-        Prey nearestPrey = findNearestPrey();
-        if (nearestPrey != null) {
-            return getPosition().directionTo(nearestPrey.getPosition());
+        if (getEnergy() < MAX_ENERGY - HUNT_ENERGY_GAIN) {
+            Prey nearestPrey = findNearestPrey();
+            if (nearestPrey != null) {
+                return getPosition().directionTo(nearestPrey.getPosition());
+            }
         }
         return Direction.getRandom();
     }
@@ -83,7 +85,7 @@ public class Predator extends Animal {
      * Tworzy nowego drapieżnika jako potomka.
      *
      * @param position pozycja dla nowego drapieżnika
-     * @return nowy obiekt drapieżnika z początkową energią równą {@link #REPRODUCTION_ENERGY_COST}
+     * @return nowy obiekt drapieżnika z początkową energią równą {@link #OFFSPRING_ENERGY}
      */
     @Override
     protected Animal createOffspring(Position position) {
@@ -91,6 +93,6 @@ public class Predator extends Animal {
             throw new IllegalArgumentException("Pozycja potomka nie może być pusta");
         }
 
-        return new Predator(position, REPRODUCTION_ENERGY_COST, getMaxAge());
+        return new Predator(position, OFFSPRING_ENERGY, getMaxAge());
     }
 }

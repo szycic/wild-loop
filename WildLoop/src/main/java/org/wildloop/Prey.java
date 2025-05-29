@@ -71,14 +71,16 @@ public class Prey extends Animal {
      */
     @Override
     protected void eat() {
-        setEnergy(getEnergy() + GRAZE_ENERGY_GAIN);
+        if (getEnergy() < MAX_ENERGY - GRAZE_ENERGY_GAIN) {
+            setEnergy(getEnergy() + GRAZE_ENERGY_GAIN);
+        }
     }
 
     /**
      * Tworzy nową ofiarę jako potomka.
      *
      * @param position pozycja dla nowej ofiary
-     * @return nowy obiekt ofiary z początkową energią równą {@link #REPRODUCTION_ENERGY_COST}
+     * @return nowy obiekt ofiary z początkową energią równą {@link #OFFSPRING_ENERGY}
      */
     @Override
     protected Animal createOffspring(Position position) {
@@ -86,6 +88,6 @@ public class Prey extends Animal {
             throw new IllegalArgumentException("Pozycja potomka nie może być pusta");
         }
 
-        return new Prey(position, REPRODUCTION_ENERGY_COST, getMaxAge());
+        return new Prey(position, OFFSPRING_ENERGY, getMaxAge());
     }
 }

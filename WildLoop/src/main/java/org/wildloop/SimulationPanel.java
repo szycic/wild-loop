@@ -17,6 +17,13 @@ import java.util.ArrayList;
  * </p>
  */
 public class SimulationPanel extends JPanel {
+    /** Domyślnie rozmiar świata symulacji */
+    private static final int DEFAULT_WORLD_SIZE = SimulationConfig.getValue("default.world.size");
+    /** Domyślna liczba ofiar */
+    private static final int DEFAULT_PREY_COUNT = SimulationConfig.getValue("default.prey.count");
+    /** Domyślna liczba drapieżników */
+    private static final int DEFAULT_PREDATOR_COUNT = SimulationConfig.getValue("default.predator.count");
+
     /** Referencja do głównej aplikacji, używana do komunikacji między komponentami */
     private final StartApp startApp;
     /** Reprezentacja świata symulacji zawierająca logikę i stan środowiska */
@@ -105,7 +112,7 @@ public class SimulationPanel extends JPanel {
      */
     private void togglePause() {
         isPaused = !isPaused; // negacja aktualnego stanu pauzy
-        if (isPaused) { // sprawdzenie czy isPaused == true, jeśli tak
+        if (isPaused) { // sprawdzenie, czy isPaused == true, jeśli tak
             timer.stop(); // zatrzymaj symulację
             pauseButton.setText("Wznów"); // zmień tekst przycisku z "Pauza na "Wznów"
         } else { // jeśli nie
@@ -192,9 +199,9 @@ public class SimulationPanel extends JPanel {
      * </p>
      */
     public void startSimulation() {
-        // sprawdzenie czy świat istnieje
+        // sprawdzenie, czy świat istnieje
         if (world == null) {
-            setSimulationParameters(20, 10, 5); // to ustaw domyślne parametry
+            setSimulationParameters(DEFAULT_WORLD_SIZE, DEFAULT_PREY_COUNT, DEFAULT_PREDATOR_COUNT); // to ustaw domyślne parametry
         }
 
         isPaused = false; // restart flagi do domyślnej wartości
@@ -366,7 +373,7 @@ public class SimulationPanel extends JPanel {
             for (Animal animal : new ArrayList<>(world.getAnimals())) {
                 world.removeAnimal(animal); // usuwanie wszystkich istniejących zwierząt
             }
-            world.resetTurns(); // resetowanie licznika tur
+            world.resetWorld(); // resetowanie licznika tur
         }
 
         initializeGrid(world != null ? world.getWidth() : 20); // inicjalizacja siatki GUI
