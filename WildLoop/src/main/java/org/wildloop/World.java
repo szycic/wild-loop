@@ -74,7 +74,7 @@ public class World {
             throw new IllegalStateException("Cell is not empty");
         }
 
-        grid[position.getX()][position.getY()] = animal;
+        grid[position.x()][position.y()] = animal;
         animals.add(animal);
         animal.setWorld(this);
     }
@@ -95,11 +95,11 @@ public class World {
         if (!animals.contains(animal)) {
             throw new IllegalStateException("Animal is not in the world");
         }
-        if (!isValidPosition(position) || grid[position.getX()][position.getY()] != animal) {
+        if (!isValidPosition(position) || grid[position.x()][position.y()] != animal) {
             throw new IllegalStateException("Animal position is invalid or grid position mismatch");
         }
 
-        grid[position.getX()][position.getY()] = null;
+        grid[position.x()][position.y()] = null;
         animals.remove(animal);
         animal.setWorld(null);
         animal.setPosition(null);
@@ -113,8 +113,8 @@ public class World {
      * @return true jeśli pozycja jest prawidłowa, false w przeciwnym razie
      */
     public boolean isValidPosition(Position position) {
-        return position.getX() >= 0 && position.getX() < getWidth()
-                && position.getY() >= 0 && position.getY() < getHeight();
+        return position.x() >= 0 && position.x() < getWidth()
+                && position.y() >= 0 && position.y() < getHeight();
     }
 
     /**
@@ -124,7 +124,7 @@ public class World {
      * @return true jeśli komórka jest pusta, false w przeciwnym razie
      */
     public boolean isCellEmpty(Position position) {
-        return isValidPosition(position) && grid[position.getX()][position.getY()] == null;
+        return isValidPosition(position) && grid[position.x()][position.y()] == null;
     }
 
     /**

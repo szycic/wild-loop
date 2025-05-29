@@ -53,8 +53,8 @@ public abstract class Animal {
             Position newPosition = position.move(direction);
             if (world.isValidPosition(newPosition) && world.isCellEmpty(newPosition)) {
                 Position oldPosition = position;
-                world.getGrid()[oldPosition.getX()][oldPosition.getY()] = null;
-                world.getGrid()[newPosition.getX()][newPosition.getY()] = this;
+                world.getGrid()[oldPosition.x()][oldPosition.y()] = null;
+                world.getGrid()[newPosition.x()][newPosition.y()] = this;
                 position = newPosition;
                 energy -= MOVE_ENERGY_COST;
             }
