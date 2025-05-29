@@ -9,9 +9,9 @@ import java.util.List;
  */
 public class World {
     /** Dwuwymiarowa siatka reprezentująca rozmieszczenie zwierząt */
-    private final Animal[][] grid;
+    private Animal[][] grid;
     /** Lista wszystkich aktywnych zwierząt w świecie */
-    private final List<Animal> animals;
+    private List<Animal> animals;
     /** Licznik wykonanych tur symulacji */
     private int turns;
     
@@ -138,9 +138,11 @@ public class World {
     }
 
     /**
-     * Resetuje licznik tur do zera.
+     * Resetuje świat symulacji.
      */
-    public void resetTurns() {
+    public void resetWorld() {
+        this.grid = new Animal[getWidth()][getHeight()];
+        this.animals = new ArrayList<>();
         this.turns = 0;
     }
 }
