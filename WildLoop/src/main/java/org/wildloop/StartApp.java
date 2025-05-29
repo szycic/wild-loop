@@ -7,7 +7,7 @@ public class StartApp extends JFrame {
 
     private final CardLayout cardLayout; // pole przechowujące układ kart do przełączania paneli
     private final JPanel mainPanel; // pole przechowujące główny panel kontenerowy
-    private SimulationPanel simulationPanel; // pole przechowujące panel symulacji
+    private final SimulationPanel simulationPanel; // pole przechowujące panel symulacji
     private JTextField sizeField; // pole tekstowe do wprowadzenia rozmiaru świata
     private JTextField preyField; // pole tekstowe do wprowadzenia liczby ofiar
     private JTextField predatorField; // pole tekstowe do wprowadzenia liczby drapieżników
@@ -41,19 +41,15 @@ public class StartApp extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100)); // ustawienie marginesów wewnętrznych panelu (góra, lewo, dół, prawo)
 
         JButton startButton = new JButton("Start symulacji"); // utworzenie przycisku startu symulacji
-        JButton settingsButton = new JButton("Ustawienia"); // utworzenie przycisku ustawień
         JButton exitButton = new JButton("Wyjście"); // utworzenie przycisku wyjścia z aplikacji
 
         startButton.addActionListener(e -> {
-            cardLayout.show(mainPanel, "Simulation"); // po wciśnięciu przycisku przełącz główny panel na panel symulacji
-            simulationPanel.startSimulation(); // uruchom symulację
+            cardLayout.show(mainPanel, "Settings"); // po wciśnięciu przycisku przełącz główny panel na panel ustawień
         });
-        settingsButton.addActionListener(e -> cardLayout.show(mainPanel, "Settings")); // po wciśnięciu przycisku ustawień przełącz na panel ustawień
         exitButton.addActionListener(e -> System.exit(0)); // po wciśnięciu przycisku wyjścia wyłącz aplikację
 
         // dodanie wszystkich przycisków do panelu
         panel.add(startButton);
-        panel.add(settingsButton);
         panel.add(exitButton);
 
         // zwraca cały utworzony panel
@@ -77,13 +73,15 @@ public class StartApp extends JFrame {
         JButton backButton = new JButton("Powrót"); // etykieta dla powrotu do menu
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu")); // po wciśnieciu przycisku powrotu przełącz na główny panel
 
-        JButton saveButton = new JButton("Zapisz ustawienia"); // przycisk do zapisywania ustawień
+        JButton saveButton = new JButton("Zapisz ustawienia i rozpocznij symulację"); // przycisk do zapisywania ustawień
         saveButton.addActionListener(e -> {
             int size = Integer.parseInt(sizeField.getText()); // pobranie wpisanego rozmiaru świata
             int preyCount = Integer.parseInt(preyField.getText()); // pobranie ilości ofiar
             int predatorCount = Integer.parseInt(predatorField.getText()); // pobranie ilości drapieżników
             simulationPanel.setSimulationParameters(size, preyCount, predatorCount); // ustawienie pobranych wartości w symulacji
-            JOptionPane.showMessageDialog(this, "Ustawienia zapisane!"); // wyświetlenie komunikatu o zapisaniu ustawień
+            // JOptionPane.showMessageDialog(this, "Ustawienia zapisane!"); // wyświetlenie komunikatu o zapisaniu ustawień
+            cardLayout.show(mainPanel, "Simulation");
+            simulationPanel.startSimulation(); // uruchom symulację
         });
 
         // dodanie wszystkiego do panelu
@@ -102,6 +100,7 @@ public class StartApp extends JFrame {
 
     // METODA pokazująca menu
     public void showMenu() {
-        cardLayout.show(mainPanel, "Menu");
-    } //
+        simulationPanel.resetSimulation(); // zrestartowanie danych naszej symulacji do zera
+        cardLayout.show(mainPanel, "Menu"); // przełączenie widoku karty na główne menu
+    }
 }

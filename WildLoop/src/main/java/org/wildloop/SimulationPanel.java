@@ -2,15 +2,15 @@ package org.wildloop;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.util.ArrayList;
 
 public class SimulationPanel extends JPanel {
-    private StartApp startApp; // referencja do głównej aplikacji
+    private final StartApp startApp; // referencja do głównej aplikacji
     private World world; // świat symulacji
     private JLabel[][] gridLabels; // etykiety komórek siatki
-    private JLabel statsLabel; // etykieta statystyk
+    private final JLabel statsLabel; // etykieta statystyk
     private Timer timer; // timer kontrolujący prędkość symulacji
-    private JButton pauseButton; // przycisk pauzy
+    private final JButton pauseButton; // przycisk pauzy
     private boolean isPaused = false; // flaga przechowująca stan pauzy
 
     // KONSTRUKTOR budujący interfejs
@@ -195,5 +195,28 @@ public class SimulationPanel extends JPanel {
             }
         }
         return null; // jeśli nie udało się znaleźć wolnego miejsca to nic nie zwracamy
+    }
+
+    // METODA przywracająca stan symulacji do początku
+    public void resetSimulation() {
+        if (timer!= null && timer.isRunning()) {
+            timer.stop(); // jeśli timer jest włączony to go zatrzymaj
+        }
+
+        isPaused = false; // przywrócenie flagi pauzy do stanu początkowego
+
+        if (world != null) {
+            for (Animal animal : new ArrayList<>(world.getAnimals())) {
+                world.removeAnimal(animal); // usuwanie wszystkich istniejących zwierząt
+            }
+            world.resetTurns(); // resetowanie licznika tur
+        }
+
+        initializeGrid(world != null ? world.getWidth() : 20); // inicjalizacja siatki GUI
+        updateStats(); // zaaktualizowanie statystyk
+
+        if (pauseButton != null) {
+            pauseButton.setText("Pauza"); // resetowanie przycisku pauzy
+        }
     }
 }
