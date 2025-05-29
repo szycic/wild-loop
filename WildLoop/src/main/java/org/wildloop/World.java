@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class World {
-    private Animal[][] grid;
-    private List<Animal> animals;
+    private final Animal[][] grid;
+    private final List<Animal> animals;
     private int turns;
     
     public World(int width, int height) {
