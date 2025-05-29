@@ -32,6 +32,16 @@ public abstract class Animal {
      * @param maxAge maksymalny wiek zwierzęcia
      */
     public Animal(Position position, int energy, int maxAge) {
+        if (position == null) {
+            throw new IllegalArgumentException("Pozycja nie może być pusta");
+        }
+        if (energy < 0) {
+            throw new IllegalArgumentException("Energia początkowa nie może być ujemna");
+        }
+        if (maxAge <= 0) {
+            throw new IllegalArgumentException("Maksymalny wiek musi być większy od zera");
+        }
+
         this.position = position;
         this.energy = energy;
         this.maxAge = maxAge;

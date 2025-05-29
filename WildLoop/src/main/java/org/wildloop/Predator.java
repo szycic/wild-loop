@@ -43,6 +43,13 @@ public class Predator extends Animal {
      * @return najbliższa ofiara lub {@code null}, jeśli żadna nie znajduje się w zasięgu
      */
     private Prey findNearestPrey() {
+        if (world == null) {
+            throw new IllegalStateException("Drapieżnik nie jest przypisany do świata");
+        }
+        if (getPosition() == null) {
+            throw new IllegalStateException("Drapieżnik nie ma określonej pozycji");
+        }
+
         Prey nearestPrey = null;
         int minDistance = Integer.MAX_VALUE;
 
@@ -80,6 +87,10 @@ public class Predator extends Animal {
      */
     @Override
     protected Animal createOffspring(Position position) {
+        if (position == null) {
+            throw new IllegalArgumentException("Pozycja potomka nie może być pusta");
+        }
+
         return new Predator(position, REPRODUCTION_ENERGY_COST, getMaxAge());
     }
 }

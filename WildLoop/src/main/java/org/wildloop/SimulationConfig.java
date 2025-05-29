@@ -16,7 +16,7 @@ public class SimulationConfig {
         try (InputStream input = SimulationConfig.class.getClassLoader().getResourceAsStream("simulation.properties")) {
             properties.load(input);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load simulation.properties", e);
+            throw new RuntimeException("Nie udało się wczytać pliku simulation.properties", e);
         }
     }
 
@@ -33,7 +33,7 @@ public class SimulationConfig {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Wartość " + value + " dla klucza " + key + " nie jest poprawną liczbą całkowitą", e);
+            throw new IllegalArgumentException("Wartość '" + value + "' dla parametru '" + key + "' nie jest poprawną liczbą całkowitą", e);
         }
     }
 }

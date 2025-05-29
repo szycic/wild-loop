@@ -61,15 +61,15 @@ public class World {
      */
     public void addAnimal(Animal animal) {
         if (animal == null) {
-            throw new IllegalArgumentException("Cannot add null animal");
+            throw new IllegalArgumentException("Nie można dodać pustego zwierzęcia");
         }
 
         Position position = animal.getPosition();
         if (!isValidPosition(position)) {
-            throw new IllegalArgumentException("Invalid position");
+            throw new IllegalArgumentException("Nieprawidłowa pozycja");
         }
         if (!isCellEmpty(position)) {
-            throw new IllegalStateException("Cell is not empty");
+            throw new IllegalStateException("Wybrana komórka jest już zajęta");
         }
 
         grid[position.x()][position.y()] = animal;
@@ -86,15 +86,15 @@ public class World {
      */
     public void removeAnimal(Animal animal) {
         if (animal == null) {
-            throw new IllegalArgumentException("Cannot remove null animal");
+            throw new IllegalArgumentException("Nie można usunąć pustego zwierzęcia");
         }
 
         Position position = animal.getPosition();
         if (!animals.contains(animal)) {
-            throw new IllegalStateException("Animal is not in the world");
+            throw new IllegalStateException("Zwierzę nie istnieje w świecie");
         }
         if (!isValidPosition(position) || grid[position.x()][position.y()] != animal) {
-            throw new IllegalStateException("Animal position is invalid or grid position mismatch");
+            throw new IllegalStateException("Nieprawidłowa pozycja zwierzęcia lub niezgodność pozycji w siatce");
         }
 
         grid[position.x()][position.y()] = null;
