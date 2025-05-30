@@ -1,0 +1,73 @@
+@startuml
+title Sequence Diagram
+
+actor User
+
+User -> Main : main(args)
+Main -> StartApp : create StartApp()
+activate StartApp
+
+StartApp -> SimulationPanel : create SimulationPanel(this)
+activate SimulationPanel
+
+User -> StartApp : click "Start Simulation"
+
+StartApp -> SimulationPanel : setSimulationParameters(size, preyCount, predatorCount)
+SimulationPanel -> World : create World(size, size)
+activate World
+
+loop preyCount times
+    SimulationPanel -> World : addAnimal(new Prey(position, energy, maxAge))
+    World -> Prey : create Prey(position, energy, maxAge)
+end
+
+loop predatorCount times
+    SimulationPanel -> World : addAnimal(new Predator(position, energy, maxAge))
+    World -> Predator : create Predator(position, energy, maxAge)
+end
+
+deactivate World
+
+User -> SimulationPanel : click "Save settings and start simulation"
+SimulationPanel -> SimulationPanel : startSimulation()
+SimulationPanel -> World : tick()
+activate World
+
+loop each simulation turn
+    World -> Animal : for each animal: update()
+
+    alt Animal is alive (energy > 0 and age < maxAge)
+        Animal -> Animal : incrementAge()
+
+        alt Animal is Predator
+            Predator -> Predator : move() (override)\n• tracks Prey
+            Predator -> Predator : eat() (override)\n• eats Prey if present
+            alt energy >= reproduction threshold
+                Predator -> Predator : reproduce() (override)\n• offspring is Predator
+                Predator -> World : addAnimal(offspring)
+            end
+        else Animal is Prey
+            Prey -> Prey : move() (override)\n• escapes Predators
+            Prey -> Prey : eat() (override)\n• eats grass
+            alt energy >= reproduction threshold
+                Prey -> Prey : reproduce() (override)\n• offspring is Prey
+                Prey -> World : addAnimal(offspring)
+            end
+        end
+
+    else Animal dies (energy <= 0 or age >= maxAge)
+        Animal -> World : die()
+        World -> Animal : removeAnimal(this)
+        deactivate Animal
+    end
+
+    SimulationPanel -> World : tick() (next turn)
+end
+
+deactivate World
+
+alt all animals are dead
+    SimulationPanel -> User : Display message "Simulation ended!"
+end
+
+@enduml
