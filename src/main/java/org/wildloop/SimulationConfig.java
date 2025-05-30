@@ -14,9 +14,7 @@ import java.util.Properties;
  * @see Predator
  */
 public class SimulationConfig {
-    /**
-     * Object storing loaded configuration parameters
-     */
+    /** Object storing loaded configuration parameters */
     private static final Properties properties = new Properties();
 
     // Static initialization block - loads parameters from simulation.properties file
