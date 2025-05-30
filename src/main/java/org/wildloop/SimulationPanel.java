@@ -6,280 +6,280 @@ import java.util.ArrayList;
 
 /**
  * <p>
- * Reprezentuje główny graficzny interfejs użytkownika dla symulacji
- * składającej się ze świata opartego na siatce zamieszkałego przez drapieżniki i ofiary
- * oraz zapewnia kontrolki do zarządzania i wyświetlania stanu symulacji.
+ * Represents the main graphical user interface for the simulation,
+ * consisting of a grid-based world inhabited by predators and prey,
+ * and provides controls for managing and displaying the simulation state.
  * </p>
  * <p>
- * Ta klasa rozszerza {@link JPanel} i jest zaprojektowana do integracji z frameworkiem Swing GUI.
- * Zarządza siatką symulacji, wyświetlaniem statystyk i zapewnia interakcję użytkownika
- * poprzez przyciski takie jak pauza i powrót.
+ * This class extends {@link JPanel} and is designed to integrate with the Swing GUI framework.
+ * Manages the simulation grid, statistics display, and provides user interaction
+ * through controls such as pause and return buttons.
  * </p>
  *
  * @see StartApp
  * @see SimulationConfig
  */
 public class SimulationPanel extends JPanel {
-    /** Domyślnie rozmiar świata symulacji */
+    /** Default size of a simulation world */
     private static final int DEFAULT_WORLD_SIZE = SimulationConfig.getValue("default.world.size");
-    /** Domyślna liczba ofiar */
+    /** Default initial prey count */
     private static final int DEFAULT_PREY_COUNT = SimulationConfig.getValue("default.prey.count");
-    /** Domyślna liczba drapieżników */
+    /** Default initial predator count */
     private static final int DEFAULT_PREDATOR_COUNT = SimulationConfig.getValue("default.predator.count");
 
-    /** Referencja do głównej aplikacji, używana do komunikacji między komponentami */
+    /** Reference to the main application, used for communication between components */
     private final StartApp startApp;
-    /** Reprezentacja świata symulacji zawierająca logikę i stan środowiska */
+    /** Simulation world representation containing environment logic and state */
     private World world;
-    /** Tablica etykiet reprezentujących poszczególne komórki siatki świata */
+    /** Array of labels representing individual world grid cells */
     private JLabel[][] gridLabels;
-    /** Etykieta wyświetlająca aktualne statystyki symulacji */
+    /** Label displaying current simulation statistics */
     private final JLabel statsLabel;
-    /** Timer kontrolujący częstotliwość aktualizacji i prędkość symulacji */
+    /** Timer controlling update frequency and simulation speed */
     private Timer timer;
-    /** Przycisk służący do wstrzymywania i wznawiania symulacji */
+    /** Button used to pause and resume simulation */
     private final JButton pauseButton;
-    /** Flaga wskazująca czy symulacja jest obecnie wstrzymana */
+    /** Flag indicating if simulation is currently paused */
     private boolean isPaused = false;
 
     /**
-     * Konstruktor panelu symulacji dla aplikacji. Ten panel zawiera
-     * układ siatki reprezentujący obszar symulacji, wyświetlacz statystyk oraz
-     * przyciski kontrolne do wstrzymywania symulacji i powrotu do menu głównego.
+     * Constructor for a simulation panel in the application. This panel contains
+     * a grid layout representing the simulation area, statistics display, and
+     * control buttons for pausing simulation and returning to the main menu.
      *
-     * @param startApp główna instancja aplikacji używana do nawigacji powrotnej do
-     *                 menu głównego i kontroli symulacji.
+     * @param startApp main application instance used for navigation back to
+     *                 the main menu and simulation control.
      */
     public SimulationPanel(StartApp startApp) {
-        this.startApp = startApp; // przypisanie przekazanej referencji do pola klasy
-        setLayout(new BorderLayout()); // główny układ aplikacji (borderlayout - podział na strefy)
+        this.startApp = startApp; // assign passed reference to the class field
+        setLayout(new BorderLayout()); // main application layout (borderlayout - zones division)
 
-        JPanel gridPanel = new JPanel(new GridLayout(20, 20, 1, 1)); // siatka 20x20 z odstępami 1px
-        gridLabels = new JLabel[20][20]; // zainicjalizowanie tablicy etykiet 20x20
+        JPanel gridPanel = new JPanel(new GridLayout(20, 20, 1, 1)); // 20x20 grid with 1px spacing
+        gridLabels = new JLabel[20][20]; // initialize 20x20 labels array
 
-        // tworzenie każdej komórki
+        // create each cell
         for (int x = 0; x < 20; x++) {
             for (int y = 0; y < 20; y++) {
-                gridLabels[x][y] = new JLabel("·", SwingConstants.CENTER); // tworzenie etykiety z kropką, zawartość jest wyśrodkowana
-                gridLabels[x][y].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // ustawienie szarej obwódki wokół etykiety
-                gridLabels[x][y].setOpaque(true); // włączenie przezroczystości (pozwala na wybranie koloru tła)
-                gridLabels[x][y].setBackground(Color.WHITE); // ustawienie białego tła etykiety
-                gridPanel.add(gridLabels[x][y]); // dodanie do panelu naszej etykiety na konkretnej pozycji
+                gridLabels[x][y] = new JLabel("·", SwingConstants.CENTER); // create label with dot, content is centered
+                gridLabels[x][y].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // set gray border around label
+                gridLabels[x][y].setOpaque(true); // enable transparency (allows background color selection)
+                gridLabels[x][y].setBackground(Color.WHITE); // set white background for the label
+                gridPanel.add(gridLabels[x][y]); // add our label to panel at specific position
             }
         }
 
-        // PANEL STATYSTYK
-        statsLabel = new JLabel("Tura: 0 | Drapieżniki: 0 | Ofiary: 0", SwingConstants.CENTER); // inicjalizacja etykiety statystyk
-        statsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // ustawienie pustego obramowania z marginesami 10px
+        // STATISTICS PANEL
+        statsLabel = new JLabel("Turn: 0 | Predators: 0 | Prey: 0", SwingConstants.CENTER); // initialize statistics label
+        statsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // set an empty border with 10px margins
 
-        pauseButton = new JButton("Pauza"); // utworzenie przycisku pauzy
-        pauseButton.addActionListener(e -> togglePause()); // actionlistener przełączający pauzę po kliknięciu
+        pauseButton = new JButton("Pause"); // create pause button
+        pauseButton.addActionListener(e -> togglePause()); // action listener toggling pause on click
 
-        JButton backButton = new JButton("Powrót do menu"); // prycisk powrotu do menu
+        JButton backButton = new JButton("Back to menu"); // button to return to a menu
         backButton.addActionListener(e -> {
-            stopSimulation(); // zatrzymywanie symulacji
-            startApp.showMenu(); // metoda pokazująca panel menu
+            stopSimulation(); // stop simulation
+            startApp.showMenu(); // method showing a menu panel
         });
 
-        // KONTENER NA PRZYCISKI
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5)); // utworzenie panelu na przyciski z wyrównaniem do prawej i odstępami 10x5px
-        buttonPanel.add(pauseButton); // dodanie przycisku pauzy do panelu
-        buttonPanel.add(backButton); // dodanie przycisku powrotu do panelu
+        // BUTTON CONTAINER
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5)); // create a panel for buttons with the right alignment and 10x5px spacing
+        buttonPanel.add(pauseButton); // add pause button to panel
+        buttonPanel.add(backButton); // add return button to panel
 
-        // PANEL DOLNY
-        JPanel bottomPanel = new JPanel(new BorderLayout()); // tworzenie dolnego panelu z układem borderlayout
-        bottomPanel.add(statsLabel, BorderLayout.CENTER); // dodanie etykiety statystyk do środkowej części dolnego panelu
-        bottomPanel.add(buttonPanel, BorderLayout.EAST); // dodanie panelu przycisków do prawej części dolnego panelu
+        // BOTTOM PANEL
+        JPanel bottomPanel = new JPanel(new BorderLayout()); // create a bottom panel with borderlayout
+        bottomPanel.add(statsLabel, BorderLayout.CENTER); // add statistics label to center part of a bottom panel
+        bottomPanel.add(buttonPanel, BorderLayout.EAST); // add a button panel to right part of bottom panel
 
-        add(gridPanel, BorderLayout.CENTER); // dodanie panelu siatki do środkowej części głównego panelu
-        add(bottomPanel, BorderLayout.SOUTH); // dodanie dolnego panelu do dolnej części głównego panelu
+        add(gridPanel, BorderLayout.CENTER); // add a grid panel to the center part of the main panel
+        add(bottomPanel, BorderLayout.SOUTH); // add a bottom panel to bottom part of main panel
     }
 
     /**
      * <p>
-     * Przełącza stan wstrzymania symulacji.
+     * Toggles the simulation pause state.
      * </p>
      * <p>
-     * Jeśli symulacja aktualnie działa, metoda wstrzymuje symulację
-     * poprzez zatrzymanie timera i zmianę tekstu przycisku pauzy, aby wskazać
-     * że symulacja może zostać wznowiona.
+     * If simulation is currently running, the method pauses simulation
+     * by stopping timer and changing pause button text to indicate
+     * that simulation can be resumed.
      * </p>
      * <p>
-     * Jeśli symulacja jest obecnie wstrzymana, metoda wznawia symulację
-     * poprzez uruchomienie timera i aktualizację tekstu przycisku wskazującą,
-     * że symulacja może zostać ponownie wstrzymana.
+     * If simulation is currently paused, the method resumes simulation
+     * by starting the timer and updating button text to indicate
+     * that simulation can be paused again.
      * </p>
      * <p>
-     * Stan wstrzymania jest śledzony przez pole {@code isPaused}.
+     * Pause state is tracked by {@code isPaused} field.
      * </p>
      */
     private void togglePause() {
-        isPaused = !isPaused; // negacja aktualnego stanu pauzy
-        if (isPaused) { // sprawdzenie, czy isPaused == true, jeśli tak
-            timer.stop(); // zatrzymaj symulację
-            pauseButton.setText("Wznów"); // zmień tekst przycisku z "Pauza na "Wznów"
-        } else { // jeśli nie
-            timer.start(); // wznów symulację
-            pauseButton.setText("Pauza"); // zmień tekst przycisku z "Wznów" na "Pauza"
+        isPaused = !isPaused; // negate current pause state
+        if (isPaused) { // check if isPaused == true
+            timer.stop(); // stop simulation
+            pauseButton.setText("Resume"); // change button text from "Pause" to "Resume"
+        } else { // if not
+            timer.start(); // resume simulation
+            pauseButton.setText("Pause"); // change button text from "Resume" to "Pause"
         }
     }
 
     /**
      * <p>
-     * Zatrzymuje symulację poprzez zatrzymanie timera i resetowanie stanu wstrzymania.
+     * Stops simulation by stopping timer and resetting pause state.
      * </p>
      * <p>
-     * Metoda sprawdza, czy timer symulacji jest aktywny. Jeśli tak, zatrzymuje timer,
-     * aby zapobiec dalszym aktualizacjom symulacji. Dodatkowo upewnia się, że stan
-     * wstrzymania jest ustawiony na false, wskazując, że symulacja nie jest już wstrzymana.
+     * Method checks if the simulation timer is active. If so, stops the timer
+     * to prevent further simulation updates. Additionally, ensures the pause
+     * state is set to false, indicating simulation is no longer paused.
      * </p>
      * <p>
-     * Metoda jest wywoływana podczas procesu zakończenia lub resetowania symulacji
-     * w celu przywrócenia jej do stanu domyślnego.
+     * Method is called during simulation termination or reset process
+     * to restore it to the default state.
      * </p>
      */
     private void stopSimulation() {
         if (timer != null) {
-            timer.stop(); // jeśli timer istnieje to go zatrzymaj
+            timer.stop(); // if timer exists then stop it
         }
-        isPaused = false; // przywrócenie flagi do domyślnej wartości
+        isPaused = false; // restore flag to default value
     }
 
     /**
-     * Konfiguruje parametry symulacji poprzez ustawienie wymiarów symulowanego świata,
-     * inicjalizację siatki dla interfejsu graficznego oraz wypełnienie symulacji
-     * zwierzętami typu ofiara i drapieżnik na podstawie podanych liczb.
+     * Configures simulation parameters by setting simulated world dimensions,
+     * initializing grid for graphical interface and populating simulation
+     * with prey and predator type animals based on given numbers.
      *
-     * @param size          rozmiar kwadratowego świata (np. 10 tworzy siatkę 10 × 10)
-     * @param preyCount     liczba zwierząt typu ofiara do wygenerowania w symulacji
-     * @param predatorCount liczba zwierząt typu drapieżnik do wygenerowania w symulacji
+     * @param size          size of a square world (e.g., 10 creates 10x10 grid)
+     * @param preyCount     number of prey type animals to generate in simulation
+     * @param predatorCount number of predator type animals to generate in simulation
      */
     public void setSimulationParameters(int size, int preyCount, int predatorCount) {
-        this.world = new World(size, size); // tworzenie nowego świata o podanym przez nas rozmiarze
-        initializeGrid(size); // inicjalizacja siatki GUI
+        this.world = new World(size, size); // create new world with given size
+        initializeGrid(size); // initialize GUI grid
 
-        // pętla tworząca ofiary
+        // loop creating prey
         for (int i = 0; i < preyCount; i++) {
-            Position pos = getRandomEmptyPosition(world); // wybranie losowej wolnej pozycji
+            Position pos = getRandomEmptyPosition(world); // select a random empty position
             if (pos != null) {
-                world.addAnimal(new Prey(pos, 100, 15)); // jeśli dana pozycja jest wolna, to tworzy nową ofiarę
+                world.addAnimal(new Prey(pos, 100, 15)); // if the position is empty, create new prey
             }
         }
 
-        // pętla tworząca drapieżników
+        // loop creating predators
         for (int i = 0; i < predatorCount; i++) {
-            Position pos = getRandomEmptyPosition(world); // wybranie losowej wolnej pozycji
+            Position pos = getRandomEmptyPosition(world); // select a random empty position
             if (pos != null) {
-                world.addAnimal(new Predator(pos, 100, 20)); // jeśli dana pozycja jest wolna, to tworzy nowego drapieżnika
+                world.addAnimal(new Predator(pos, 100, 20)); // if the position is empty, create a new predator
             }
         }
     }
 
     /**
      * <p>
-     * Uruchamia symulację poprzez inicjalizację lub resetowanie niezbędnych komponentów
-     * i uruchomienie głównej pętli symulacji.
+     * Starts simulation by initializing or resetting the necessary components
+     * and launching the main simulation loop.
      * </p>
      * <p>
-     * Metoda sprawdza, czy świat symulacji jest zainicjalizowany. Jeśli nie,
-     * ustawia domyślne parametry symulacji za pomocą {@link #setSimulationParameters(int, int, int)}.
-     * Upewnia się, że symulacja nie jest wstrzymana poprzez zresetowanie flagi pauzy
-     * i aktualizuje przycisk sterujący, aby wyświetlał "Pauza".
+     * Method checks if a simulation world is initialized. If not,
+     * sets default simulation parameters using {@link #setSimulationParameters(int, int, int)}.
+     * Ensures simulation is not paused by resetting a pause flag
+     * and updates the control button to display "Pause".
      * </p>
      * <p>
-     * Główna pętla symulacji jest zarządzana przez {@link Timer} z
-     * opóźnieniem 500 milisekund. Każde tknięcie timera wykonuje następujące czynności:
+     * Main simulation loop is managed by {@link Timer} with
+     * 500-millisecond delay. Each timer tick performs the following actions:
      * <ul>
-     * <li>Rozwija stan symulacji za pomocą {@link World#tick()}.</li>
-     * <li>Aktualizuje siatkę GUI za pomocą {@link #updateGrid()}.</li>
-     * <li>Aktualizuje statystyki symulacji za pomocą {@link #updateStats()}.</li>
+     * <li>Advances simulation state using {@link World#tick()}.</li>
+     * <li>Updates GUI grid using {@link #updateGrid()}.</li>
+     * <li>Updates simulation statistics using {@link #updateStats()}.</li>
      * </ul>
      * </p>
      * <p>
-     * Jeśli symulacja osiągnie warunek końcowy, na przykład brak pozostałych zwierząt
-     * w świecie, symulacja zostaje zatrzymana za pomocą {@link #stopSimulation()},
-     * a użytkownikowi wyświetlane jest powiadomienie.
+     * If simulation reaches end condition, such as no remaining animals
+     * in world, simulation is stopped using {@link #stopSimulation()},
+     * and user is shown notification.
      * </p>
      */
     public void startSimulation() {
-        // sprawdzenie, czy świat istnieje
+        // check if world exists
         if (world == null) {
-            setSimulationParameters(DEFAULT_WORLD_SIZE, DEFAULT_PREY_COUNT, DEFAULT_PREDATOR_COUNT); // to ustaw domyślne parametry
+            setSimulationParameters(DEFAULT_WORLD_SIZE, DEFAULT_PREY_COUNT, DEFAULT_PREDATOR_COUNT); // set default parameters
         }
 
-        isPaused = false; // restart flagi do domyślnej wartości
-        pauseButton.setText("Pauza"); // ustawienie tekstu przycisku na "pauza"
+        isPaused = false; // restart flag to default value  
+        pauseButton.setText("Pause"); // set button text to "pause"
 
         if (timer != null) {
-            timer.stop(); // jeśli istnieje jakikolwiek włączony timer to go zatrzymujemy
+            timer.stop(); // if any timer is running, then stop it
         }
 
-        // tworzenie nowego timera z opóźnieniem 500ms
+        // create new timer with 500ms delay
         timer = new Timer(500, e -> {
-            // jeśli symulacja nie jest zatrzymana
+            // if simulation is not stopped
             if (!isPaused) {
-                world.tick(); // wykonanie kroku symulacji
-                updateGrid(); // aktualizacja gui
-                updateStats(); // aktualizacja statystyk
+                world.tick(); // perform simulation step
+                updateGrid(); // update gui
+                updateStats(); // update statistics
 
-                // sprawdzanie warunku końca symulacji (czy istnieje jakaś żywa istota)
+                // check simulation end condition (if any living creature exists)
                 if (world.getAnimals().isEmpty()) {
-                    stopSimulation(); // zatrzymanie symulacji
-                    JOptionPane.showMessageDialog(this, "Symulacja zakończona!"); // wyświetlenie komunikatu o końcu symulacji
+                    stopSimulation(); // stop simulation
+                    JOptionPane.showMessageDialog(this, "Simulation ended!"); // display simulation end message
                 }
             }
         });
-        timer.start(); // uruchomienie timera
+        timer.start(); // start timer
     }
 
     /**
-     * Inicjalizuje siatkę symulacji o określonym rozmiarze.
-     * Ta metoda tworzy i konfiguruje układ siatki z etykietami dla kwadratowej siatki,
-     * aktualizuje interfejs graficzny i resetuje poprzednie komponenty siatki.
+     * Initializes simulation grid of a specified size.
+     * This method creates and configures grid layout with labels for square grid,
+     * updates the graphical interface and resets previous grid components.
      *
-     * @param size rozmiar kwadratowej siatki do zainicjalizowania (np. 10 tworzy siatkę 10x10)
+     * @param size size of square grid to initialize (e.g., 10 creates 10x10 grid)
      */
     private void initializeGrid(int size) {
-        JPanel gridPanel = (JPanel) getComponent(0); // pobieranie panelu siatki
-        gridPanel.removeAll(); // czyszczenie panelu z istniejących komponentów
-        gridPanel.setLayout(new GridLayout(size, size)); // ustawienie nowego układu siatki
-        gridLabels = new JLabel[size][size]; // zainicjalizowanie tablicy etykiet
+        JPanel gridPanel = (JPanel) getComponent(0); // get grid panel
+        gridPanel.removeAll(); // clear panel of existing components
+        gridPanel.setLayout(new GridLayout(size, size)); // set a new grid layout
+        gridLabels = new JLabel[size][size]; // initialize labels array
 
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
-                gridLabels[x][y] = new JLabel("·", SwingConstants.CENTER); // tworzenie etykiety z kropką, zawartość jest wyśrodkowana
-                gridLabels[x][y].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // ustawienie szarej obwódki wokół etykiety
-                gridPanel.add(gridLabels[x][y]); // dodanie do panelu naszej etykiety na konkretnej pozycji
+                gridLabels[x][y] = new JLabel("·", SwingConstants.CENTER); // create label with dot, content is centered
+                gridLabels[x][y].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // set gray border around label
+                gridPanel.add(gridLabels[x][y]); // add our label to panel at specific position
             }
         }
-        gridPanel.revalidate(); // wymuszenie przebudowy układu
-        gridPanel.repaint(); // wymuszanie przerysowania układu
+        gridPanel.revalidate(); // force layout rebuild
+        gridPanel.repaint(); // force layout redraw
     }
 
     /**
      * <p>
-     * Aktualizuje wizualną reprezentację siatki symulacji.
+     * Updates visual representation of the simulation grid.
      * </p>
      * <p>
-     * Metoda iteruje przez każdą komórkę w siatce świata symulacji i aktualizuje graficzne
-     * etykiety odpowiadające każdej komórce na podstawie jej aktualnej zawartości. W szczególności:
+     * Method iterates through each cell in the simulation world grid and updates graphical
+     * labels corresponding to each cell based on its current contents. Specifically:
      * <ul>
-     *     <li>Jeśli komórka jest pusta (wartość {@code null}), ustawia tekst etykiety na "·" aby wskazać puste miejsce</li>
-     *     <li>Jeśli komórka zawiera instancję {@link Predator}, ustawia tekst etykiety na "D"</li>
-     *     <li>Jeśli komórka zawiera instancję {@link Prey}, ustawia tekst etykiety na "O"</li>
+     *     <li>If cell is empty (value {@code null}), sets label text to "·" to indicate empty space</li>
+     *     <li>If cell contains instance of {@link Predator}, sets label text to "P"</li>
+     *     <li>If cell contains instance of {@link Prey}, sets label text to "O"</li>
      * </ul>
      * </p>
      */
     private void updateGrid() {
         for (int y = 0; y < world.getHeight(); y++) {
             for (int x = 0; x < world.getWidth(); x++) {
-                Animal animal = world.getGrid()[x][y]; // pobranie zwierzęcia z danej komórki
+                Animal animal = world.getGrid()[x][y]; // get animal from a given cell
                 if (animal == null) {
-                    gridLabels[x][y].setText("·"); // jeśli jest pusta wstawiamy kropkę
+                    gridLabels[x][y].setText("·"); // if empty inserts dot
                 } else if (animal instanceof Predator) {
-                    gridLabels[x][y].setText("D"); // jeśli jest to drapieżnik wstawiamy D
+                    gridLabels[x][y].setText("P"); // if predator inserts P
                 } else if (animal instanceof Prey) {
-                    gridLabels[x][y].setText("O"); // jeśli jest to ofiara wstawiamy O
+                    gridLabels[x][y].setText("O"); // if prey inserts O
                 }
             }
         }
@@ -287,103 +287,103 @@ public class SimulationPanel extends JPanel {
 
     /**
      * <p>
-     * Aktualizuje statystyki symulacji poprzez zliczanie liczby drapieżników i ofiar
-     * w symulowanym świecie. Metoda pobiera listę zwierząt, rozróżnia drapieżniki
-     * i ofiary na podstawie ich klas oraz oblicza ich sumy.
+     * Updates simulation statistics by counting the number of predators and prey
+     * in a simulated world. Method gets a list of animals, distinguishes predators
+     * and prey based on their classes and calculates their totals.
      * </p>
      * <p>
-     * Następnie aktualizuje wyświetlacz statystyk o aktualny numer tury, liczbę
-     * drapieżników, ofiar oraz łączną liczbę zwierząt.
+     * Then updates statistics display with current turn number, number of
+     * predators, prey and total number of animals.
      * </p>
      */
     private void updateStats() {
-        int predatorCount = 0; // licznik drapieżników
-        int preyCount = 0; // licznik ofiar
+        int predatorCount = 0; // predator counter
+        int preyCount = 0; // prey counter
 
         for (Animal animal : world.getAnimals()) {
             if (animal instanceof Predator) {
-                predatorCount++; // zliczanie wszystkich drapieżników
+                predatorCount++; // count all predators
             } else if (animal instanceof Prey) {
-                preyCount++; // zliczanie wszystkich ofiar
+                preyCount++; // count all prey
             }
         }
 
-        statsLabel.setText(String.format("Tura: %d | Drapieżniki: %d | Ofiary: %d | Łącznie: %d", world.getTurns(), predatorCount, preyCount, world.getAnimals().size())); // formatowanie tekstu statystyk z aktualnymi danymi
+        statsLabel.setText(String.format("Turn: %d | Predators: %d | Prey: %d | Total: %d", world.getTurns(), predatorCount, preyCount, world.getAnimals().size())); // format statistics text with current data
     }
 
     /**
-     * Generuje losową pustą pozycję w podanym świecie.
-     * Metoda próbuje znaleźć niezajętą pozycję w granicach świata.
-     * Wykonuje maksymalnie 100 prób znalezienia pustej komórki.
-     * Jeśli po 100 próbach nie zostanie znaleziona żadna pusta komórka,
-     * zwraca {@code null}.
+     * Generates random empty position in a given world.
+     * Method tries to find unoccupied position within world bounds.
+     * Makes maximum of 100 attempts to find an empty cell.
+     * If after 100 attempts no empty cell is found,
+     * returns {@code null}.
      *
-     * @param world świat, w którym należy znaleźć losową pustą pozycję
-     * @return losowo wybrana pusta pozycja w świecie lub {@code null}, jeśli takiej
-     * pozycji nie znaleziono po 100 próbach
+     * @param world world in which to find random empty position
+     * @return randomly selected empty position in a world or {@code null} if such
+     * position was not found after 100 attempts
      */
     private Position getRandomEmptyPosition(World world) {
-        // pętla losująca, maksymalnie 100 prób
+        // random loop, maximum 100 attempts
         for (int attempts = 0; attempts < 100; attempts++) {
-            int x = (int) (Math.random() * world.getWidth()); // losowanie pozycji X
-            int y = (int) (Math.random() * world.getHeight()); // losowanie pozycji Y
-            Position pos = new Position(x, y); // przypisanie wylosowanych danych
+            int x = (int) (Math.random() * world.getWidth()); // random X position
+            int y = (int) (Math.random() * world.getHeight()); // random Y position
+            Position pos = new Position(x, y); // assign random data
             if (world.isCellEmpty(pos)) {
-                return pos; // jeśli wylosowana komórka jest pusta to zwracamy naszą pozycję
+                return pos; // if random cell is empty return our position
             }
         }
-        return null; // jeśli nie udało się znaleźć wolnego miejsca to nic nie zwracamy
+        return null; // if no empty space found return null
     }
 
     /**
      * <p>
-     * Przywraca symulację do stanu początkowego poprzez zatrzymanie wszystkich aktywnych procesów,
-     * wyczyszczenie istniejących danych symulacji oraz reinicjalizację widoku i niezbędnych komponentów.
+     * Restores simulation to the initial state by stopping all active processes,
+     * clearing existing simulation data and reinitializing view and necessary components.
      * </p>
      * <p>
-     * Funkcjonalność:
+     * Functionality:
      * <ul>
-     * <li>Zatrzymuje timer, jeśli jest aktualnie uruchomiony</li>
-     * <li>Resetuje stan wstrzymania do false</li>
-     * <li>Usuwa wszystkie zwierzęta ze świata symulacji i zeruje licznik tur</li>
-     * <li>Reinicjalizuje siatkę graficzną reprezentującą obszar symulacji</li>
-     * <li>Aktualizuje statystyki symulacji, aby odzwierciedlały zresetowany stan</li>
-     * <li>Przywraca etykietę przycisku pauzy do stanu domyślnego</li>
+     * <li>Stops timer if currently running</li>
+     * <li>Resets pause state to false</li>
+     * <li>Removes all animals from a simulation world and resets turn counter</li>
+     * <li>Reinitializes graphical grid representing a simulation area</li>
+     * <li>Updates simulation statistics to reflect the reset state</li>
+     * <li>Restores pause button label to default state</li>
      * </ul>
      * </p>
      * <p>
-     * Warunki wstępne:
+     * Preconditions:
      * <ul>
-     * <li>Obiekt 'world', jeśli nie jest {@code null}, musi prawidłowo zarządzać swoją listą zwierząt i licznikiem tur</li>
-     * <li>Komponenty siatki graficznej i statystyk muszą pozwalać na reinicjalizację</li>
+     * <li>'world' object, if not {@code null}, must properly manage its animal list and turn counter</li>
+     * <li>Grid graphics and statistics components must allow reinitialization</li>
      * </ul>
      * </p>
      * <p>
-     * Warunki końcowe:
+     * Postconditions:
      * <ul>
-     * <li>Symulacja jest ustawiona w czystym stanie, gotowa do rozpoczęcia nowego przebiegu symulacji</li>
+     * <li>Simulation is set to clean state, ready to start a new simulation run</li>
      * </ul>
      * </p>
      */
     public void resetSimulation() {
-        if (timer!= null && timer.isRunning()) {
-            timer.stop(); // jeśli timer jest włączony to go zatrzymaj
+        if (timer != null && timer.isRunning()) {
+            timer.stop(); // if timer is running then stop it
         }
 
-        isPaused = false; // przywrócenie flagi pauzy do stanu początkowego
+        isPaused = false; // restore pause flag to initial state
 
         if (world != null) {
             for (Animal animal : new ArrayList<>(world.getAnimals())) {
-                world.removeAnimal(animal); // usuwanie wszystkich istniejących zwierząt
+                world.removeAnimal(animal); // remove all existing animals
             }
-            world.resetWorld(); // resetowanie licznika tur
+            world.resetWorld(); // reset turn counter
         }
 
-        initializeGrid(world != null ? world.getWidth() : 20); // inicjalizacja siatki GUI
-        updateStats(); // zaktualizowanie statystyk
+        initializeGrid(world != null ? world.getWidth() : 20); // initialize GUI grid
+        updateStats(); // update statistics
 
         if (pauseButton != null) {
-            pauseButton.setText("Pauza"); // resetowanie przycisku pauzy
+            pauseButton.setText("Pause"); // reset pause button
         }
     }
 }

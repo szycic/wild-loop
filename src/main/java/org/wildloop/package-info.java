@@ -2,47 +2,47 @@
  * <h1>WildLoop</h1>
  *
  * <p>
- * WildLoop to aplikacja symulująca interakcję między drapieżnikami i ofiarami w środowisku
- * opartym na siatce. Projekt demonstruje podstawowe zasady ekosystemu i zachowania zwierząt
- * w kontrolowanym środowisku.
+ * WildLoop is an application simulating interaction between predators and prey in a grid-based
+ * environment. The project demonstrates basic principles of ecosystem and animal behavior
+ * in a controlled environment.
  * </p>
  *
- * <h2>Główne komponenty</h2>
+ * <h2>Main Components</h2>
  * <ul>
- *   <li>{@link org.wildloop.StartApp} - Główne okno aplikacji zarządzające interfejsem użytkownika</li>
- *   <li>{@link org.wildloop.SimulationPanel} - Panel odpowiedzialny za wyświetlanie i kontrolę symulacji</li>
- *   <li>{@link org.wildloop.SimulationConfig} - Import domyślnej konfiguracji symulacji</li>
- *   <li>{@link org.wildloop.World} - Reprezentacja świata symulacji i jego logiki</li>
- *   <li>{@link org.wildloop.Position} - Reprezentacja niezmiennej pozycji w dwuwymiarowej przestrzeni</li>
- *   <li>{@link org.wildloop.Direction} - Reprezentacja wektorów przesunięcia</li>
- *   <li>{@link org.wildloop.Animal} - Abstrakcyjna klasa bazowa dla wszystkich zwierząt</li>
- *   <li>{@link org.wildloop.Prey} - Implementacja ofiary</li>
- *   <li>{@link org.wildloop.Predator} - Implementacja drapieżnika</li>
+ *   <li>{@link org.wildloop.StartApp} - Main application window managing the user interface</li>
+ *   <li>{@link org.wildloop.SimulationPanel} - Panel responsible for displaying and controlling simulation</li>
+ *   <li>{@link org.wildloop.SimulationConfig} - Import of default simulation configuration</li>
+ *   <li>{@link org.wildloop.World} - Representation of a simulation world and its logic</li>
+ *   <li>{@link org.wildloop.Position} - Representation of immutable position in 2D space</li>
+ *   <li>{@link org.wildloop.Direction} - Representation of displacement vectors</li>
+ *   <li>{@link org.wildloop.Animal} - Abstract base class for all animals</li>
+ *   <li>{@link org.wildloop.Prey} - Implementation of prey</li>
+ *   <li>{@link org.wildloop.Predator} - Implementation of predator</li>
  * </ul>
  *
- * <h2>Funkcje</h2>
+ * <h2>Features</h2>
  * <ul>
- *   <li>Interaktywna symulacja ekosystemu</li>
- *   <li>Konfigurowalne parametry symulacji (rozmiar świata, liczba zwierząt)</li>
- *   <li>Wizualizacja w czasie rzeczywistym</li>
- *   <li>Statystyki populacji</li>
- *   <li>Możliwość wstrzymania/wznowienia symulacji</li>
+ *   <li>Interactive ecosystem simulation</li>
+ *   <li>Configurable simulation parameters (world size, number of animals)</li>
+ *   <li>Real-time visualization</li>
+ *   <li>Population statistics</li>
+ *   <li>Ability to pause/resume simulation</li>
  * </ul>
  *
- * <h2>Uruchamianie aplikacji</h2>
+ * <h2>Running the Application</h2>
  * <p>
- * Aplikacja jest uruchamiana poprzez metodę {@code main}, która tworzy nową instancję {@link org.wildloop.StartApp}
- * w wątku EDT (Event Dispatch Thread) Swinga za pomocą {@link javax.swing.SwingUtilities#invokeLater(Runnable)}.
+ * The application is launched through the {@code main} method which creates a new instance of {@link org.wildloop.StartApp}
+ * in Swing's Event Dispatch Thread (EDT) using {@link javax.swing.SwingUtilities#invokeLater(Runnable)}.
  * </p>
  *
- * <h2>Wymagania systemowe</h2>
+ * <h2>System Requirements</h2>
  * <ul>
- *   <li>Java 24 lub nowsza</li>
- *   <li>Środowisko graficzne obsługujące Swing</li>
+ *   <li>Java 24 or newer</li>
+ *   <li>Graphical environment supporting Swing</li>
  * </ul>
  *
  * @author Szymon Cichy, Tomasz Druszcz, Jan Osmęda
- * @version 0.46
+ * @version 0.52
  * @see org.wildloop.StartApp
  * @see org.wildloop.SimulationPanel
  * @see org.wildloop.SimulationConfig

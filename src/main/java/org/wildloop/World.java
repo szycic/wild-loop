@@ -4,76 +4,76 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Reprezentuje świat symulacji, w którym zwierzęta mogą się poruszać i wchodzić w interakcje.
- * Świat jest zorganizowany jako dwuwymiarowa siatka, gdzie każda komórka może zawierać jedno zwierzę.
+ * Represents the simulation world where animals can move and interact.
+ * The world is organized as a two-dimensional grid where each cell can contain one animal.
  *
  * @see Animal
  * @see Position
  * @see Direction
  */
 public class World {
-    /** Dwuwymiarowa siatka reprezentująca rozmieszczenie zwierząt */
+    /** Two-dimensional grid representing animal placement */
     private Animal[][] grid;
-    /** Lista wszystkich aktywnych zwierząt w świecie */
+    /** List of all active animals in the world */
     private List<Animal> animals;
-    /** Licznik wykonanych tur symulacji */
+    /** Counter of completed simulation turns */
     private int turns;
-    
+
     /**
-     * Tworzy nowy świat o określonych wymiarach.
-     * 
-     * @param width szerokość świata (liczba komórek)
-     * @param height wysokość świata (liczba komórek)
+     * Creates a new world with specified dimensions.
+     *
+     * @param width  width of the world (number of cells)
+     * @param height height of the world (number of cells)
      */
     public World(int width, int height) {
         this.grid = new Animal[width][height];
         this.animals = new ArrayList<>();
         this.turns = 0;
     }
-    
-    /** @return aktualna siatka świata ze zwierzętami */
+
+    /** @return current world grid with animals */
     public Animal[][] getGrid() {
         return grid;
     }
 
-    /** @return lista wszystkich żywych zwierząt */
+    /** @return list of all living animals */
     public List<Animal> getAnimals() {
         return animals;
     }
 
-    /** @return liczba wykonanych tur */
+    /** @return number of completed turns */
     public int getTurns() {
         return turns;
     }
 
-    /** @return szerokość świata */
+    /** @return width of the world */
     public int getWidth() {
         return grid.length;
     }
 
-    /** @return wysokość świata */
+    /** @return height of the world */
     public int getHeight() {
         return grid[0].length;
     }
-    
+
     /**
-     * Dodaje nowe zwierzę do świata.
-     * 
-     * @param animal zwierzę do dodania
-     * @throws IllegalArgumentException jeśli zwierzę jest null lub jego pozycja jest nieprawidłowa
-     * @throws IllegalStateException jeśli docelowa komórka jest już zajęta
+     * Adds a new animal to the world.
+     *
+     * @param animal animal to add
+     * @throws IllegalArgumentException if animal is null or its position is invalid
+     * @throws IllegalStateException    if target cell is already occupied
      */
     public void addAnimal(Animal animal) {
         if (animal == null) {
-            throw new IllegalArgumentException("Nie można dodać pustego zwierzęcia");
+            throw new IllegalArgumentException("Cannot add null animal");
         }
 
         Position position = animal.getPosition();
         if (!isValidPosition(position)) {
-            throw new IllegalArgumentException("Nieprawidłowa pozycja");
+            throw new IllegalArgumentException("Invalid position");
         }
         if (!isCellEmpty(position)) {
-            throw new IllegalStateException("Wybrana komórka jest już zajęta");
+            throw new IllegalStateException("Selected cell is already occupied");
         }
 
         grid[position.x()][position.y()] = animal;
@@ -82,23 +82,23 @@ public class World {
     }
 
     /**
-     * Usuwa zwierzę ze świata.
-     * 
-     * @param animal zwierzę do usunięcia
-     * @throws IllegalArgumentException jeśli zwierzę jest null
-     * @throws IllegalStateException jeśli zwierzę nie istnieje w świecie lub jego pozycja jest nieprawidłowa
+     * Removes an animal from the world.
+     *
+     * @param animal animal to remove
+     * @throws IllegalArgumentException if animal is null
+     * @throws IllegalStateException    if animal does not exist in the world or its position is invalid
      */
     public void removeAnimal(Animal animal) {
         if (animal == null) {
-            throw new IllegalArgumentException("Nie można usunąć pustego zwierzęcia");
+            throw new IllegalArgumentException("Cannot remove null animal");
         }
 
         Position position = animal.getPosition();
         if (!animals.contains(animal)) {
-            throw new IllegalStateException("Zwierzę nie istnieje w świecie");
+            throw new IllegalStateException("Animal does not exist in the world");
         }
         if (!isValidPosition(position) || grid[position.x()][position.y()] != animal) {
-            throw new IllegalStateException("Nieprawidłowa pozycja zwierzęcia lub niezgodność pozycji w siatce");
+            throw new IllegalStateException("Invalid animal position or grid position mismatch");
         }
 
         grid[position.x()][position.y()] = null;
@@ -109,10 +109,10 @@ public class World {
     }
 
     /**
-     * Sprawdza, czy dana pozycja mieści się w granicach świata.
-     * 
-     * @param position pozycja do sprawdzenia
-     * @return true, jeśli pozycja jest prawidłowa, false w przeciwnym razie
+     * Checks if a given position is within world boundaries.
+     *
+     * @param position position to check
+     * @return true if the position is valid, false otherwise
      */
     public boolean isValidPosition(Position position) {
         return position.x() >= 0 && position.x() < getWidth()
@@ -120,18 +120,18 @@ public class World {
     }
 
     /**
-     * Sprawdza, czy komórka na danej pozycji jest pusta.
-     * 
-     * @param position pozycja do sprawdzenia
-     * @return true, jeśli komórka jest pusta, false w przeciwnym razie
+     * Checks if cell at given position is empty.
+     *
+     * @param position position to check
+     * @return true if the cell is empty, false otherwise
      */
     public boolean isCellEmpty(Position position) {
         return isValidPosition(position) && grid[position.x()][position.y()] == null;
     }
 
     /**
-     * Wykonuje jedną turę symulacji, aktualizując stan wszystkich zwierząt
-     * i zwiększając licznik tur.
+     * Executes one simulation turn, updating the state of all animals
+     * and incrementing turn counter.
      */
     public void tick() {
         List<Animal> currentAnimals = new ArrayList<>(animals);
@@ -142,7 +142,7 @@ public class World {
     }
 
     /**
-     * Resetuje świat symulacji.
+     * Resets the simulation world.
      */
     public void resetWorld() {
         this.grid = new Animal[getWidth()][getHeight()];

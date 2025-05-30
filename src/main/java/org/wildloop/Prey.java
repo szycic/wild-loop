@@ -1,35 +1,39 @@
 package org.wildloop;
 
 /**
- * Reprezentuje ofiarę w symulacji. Ofiara ucieka przed obiektami klasy Predator
- * w określonym zasięgu i zyskuje energię poprzez pasienie się.
+ * Represents prey in the simulation. Prey flees from Predator objects
+ * within a specified range and gains energy through grazing.
  *
  * @see Animal
  * @see Predator
  */
 public class Prey extends Animal {
-    /** Maksymalny zasięg, w którym ofiara może wykryć drapieżnika */
+    /**
+     * Maximum range at which prey can detect predator
+     */
     private static final int FLEE_RANGE = SimulationConfig.getValue("prey.flee.range");
-    /** Ilość energii uzyskiwana przez ofiarę podczas żerowania */
+    /**
+     * Amount of energy gained by prey while grazing
+     */
     private static final int GRAZE_ENERGY_GAIN = SimulationConfig.getValue("prey.graze.energy.gain");
 
     /**
-     * Tworzy nową ofiarę.
+     * Creates new prey.
      *
-     * @param position początkowa pozycja ofiary
-     * @param energy początkowa energia ofiary
-     * @param maxAge maksymalny wiek, który może osiągnąć ofiara
+     * @param position initial position of the prey
+     * @param energy   initial energy of the prey
+     * @param maxAge   maximum age the prey can reach
      */
     public Prey(Position position, int energy, int maxAge) {
         super(position, energy, maxAge);
     }
 
     /**
-     * Określa kierunek następnego ruchu ofiary.
-     * Jeśli w zasięgu {@link #FLEE_RANGE} znajduje się drapieżnik, ofiara ucieka w przeciwnym kierunku.
-     * W przeciwnym razie wybiera losowy kierunek.
+     * Determines direction of prey's next move.
+     * If a predator is within {@link #FLEE_RANGE}, prey flees in opposite direction.
+     * Otherwise, chooses a random direction.
      *
-     * @return kierunek, w którym ofiara powinna się poruszyć
+     * @return direction in which prey should move
      */
     @Override
     protected Direction getNextMoveDirection() {
@@ -41,16 +45,16 @@ public class Prey extends Animal {
     }
 
     /**
-     * Znajduje najbliższego drapieżnika w zasięgu wykrywania ofiary.
+     * Finds the nearest predator within prey's detection range.
      *
-     * @return najbliższy drapieżnik lub {@code null}, jeśli żaden nie znajduje się w zasięgu
+     * @return nearest predator or {@code null} if none is within range
      */
     private Predator findNearestPredator() {
         if (world == null) {
-            throw new IllegalStateException("Ofiara nie jest przypisana do świata");
+            throw new IllegalStateException("Prey is not assigned to a world");
         }
         if (getPosition() == null) {
-            throw new IllegalStateException("Ofiara nie ma określonej pozycji");
+            throw new IllegalStateException("Prey has no position defined");
         }
 
         Predator nearestPredator = null;
@@ -70,7 +74,7 @@ public class Prey extends Animal {
     }
 
     /**
-     * Pozwala ofierze paść się, zwiększając jej energię o {@link #GRAZE_ENERGY_GAIN}.
+     * Allows prey to graze, increasing its energy by {@link #GRAZE_ENERGY_GAIN}.
      */
     @Override
     protected void eat() {
@@ -80,15 +84,15 @@ public class Prey extends Animal {
     }
 
     /**
-     * Tworzy nową ofiarę jako potomka.
+     * Creates a new prey as offspring.
      *
-     * @param position pozycja dla nowej ofiary
-     * @return nowy obiekt ofiary z początkową energią równą {@link #OFFSPRING_ENERGY}
+     * @param position position for the new prey
+     * @return new prey object with initial energy equal to {@link #OFFSPRING_ENERGY}
      */
     @Override
     protected Animal createOffspring(Position position) {
         if (position == null) {
-            throw new IllegalArgumentException("Pozycja potomka nie może być pusta");
+            throw new IllegalArgumentException("Offspring position cannot be null");
         }
 
         return new Prey(position, OFFSPRING_ENERGY, getMaxAge());

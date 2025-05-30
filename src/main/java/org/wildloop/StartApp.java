@@ -4,132 +4,132 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Dziedziczy po {@link JFrame} i służy jako główny kontener interfejsu użytkownika
- * aplikacji. Wykorzystuje układ kart ({@link CardLayout}) do zarządzania i przełączania między różnymi
- * panelami interfejsu, takimi jak menu główne, ustawienia i ekrany symulacji.
+ * Extends {@link JFrame} and serves as the main user interface container
+ * for the application. Uses {@link CardLayout} to manage and switch between different
+ * interface panels such as main menu, settings and simulation screens.
  * <p>
- * Klasa zapewnia następujące funkcjonalności:
+ * The class provides the following functionality:
  * <ul>
- * <li>Początkowa konfiguracja głównego okna aplikacji, w tym rozmiar, tytuł i zachowanie</li>
- * <li>Zarządzanie głównym układem kart, umożliwiając przełączanie między różnymi widokami</li>
- * <li>Tworzenie określonych paneli interfejsu (menu, ustawienia i symulacja)</li>
- * <li>Obsługa interakcji użytkownika, takich jak uruchamianie symulacji, zapisywanie ustawień i wyjście</li>
+ * <li>Initial configuration of the main application window including size, title and behavior</li>
+ * <li>Management of the main card layout, enabling switching between different views</li>
+ * <li>Creation of specific interface panels (menu, settings and simulation)</li>
+ * <li>Handling user interactions such as launching simulation, saving settings and exiting</li>
  * </ul>
  * <p>
- * Aplikacja składa się z trzech głównych paneli:
+ * The application consists of three main panels:
  * <ul>
- * <li>MenuPanel: Zawiera opcje rozpoczęcia symulacji lub wyjścia z aplikacji</li>
- * <li>SettingsPanel: Pozwala użytkownikowi skonfigurować parametry symulacji, takie jak rozmiar świata,
- *     liczba ofiar i liczba drapieżników</li>
- * <li>SimulationPanel: Wyświetla i zarządza symulacją skonfigurowanego środowiska wirtualnego</li>
+ * <li>MenuPanel: Contains options to start simulation or exit the application</li>
+ * <li>SettingsPanel: Allows user to configure simulation parameters such as world size,
+ *     amount of prey and number of predators</li>
+ * <li>SimulationPanel: Displays and manages simulation of a configured virtual environment</li>
  * </ul>
  *
  * @see SimulationPanel
  * @see SimulationConfig
  */
 public class StartApp extends JFrame {
-    /** Układ kart służący do przełączania między różnymi panelami interfejsu */
+    /** Card layout used for switching between different interface panels */
     private final CardLayout cardLayout;
-    /** Główny panel kontenerowy zawierający wszystkie panele aplikacji */
+    /** Main container panel containing all application panels */
     private final JPanel mainPanel;
-    /** Panel odpowiedzialny za wyświetlanie i zarządzanie symulacją */
+    /** Panel responsible for displaying and managing simulation */
     private final SimulationPanel simulationPanel;
-    /** Pole tekstowe do wprowadzenia rozmiaru świata symulacji */
+    /** Text field for entering simulation world size */
     private JTextField sizeField;
-    /** Pole tekstowe do wprowadzenia początkowej liczby ofiar */
+    /** Text field for entering the initial prey count */
     private JTextField preyField;
-    /** Pole tekstowe do wprowadzenia początkowej liczby drapieżników */
+    /** Text field for entering the initial predator count */
     private JTextField predatorField;
 
     /**
-     * Tworzy nowe okno aplikacji i inicjalizuje wszystkie komponenty interfejsu.
-     * Ustawia podstawowe parametry okna takie jak tytuł, rozmiar i zachowanie,
-     * oraz tworzy i konfiguruje wszystkie panele aplikacji.
+     * Creates a new application window and initializes all interface components.
+     * Sets basic window parameters such as title, size and behavior,
+     * and creates and configures all application panels.
      */
     public StartApp() {
-        this.setTitle("Wild-loop"); // ustawienie tytułu okna
-        this.setSize(800, 600); // ustawienie rozmiaru okna na 800x600px
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE); // wyłączenie aplikacji przy zamknięciu okna
-        //this.setResizable(false); // blokowanie możliwości rozszerzania okna
-        this.setLocationRelativeTo(null); // centrowanie okna na ekranie
+        this.setTitle("Wild-loop"); // set a window title
+        this.setSize(800, 600); // set window size to 800x600px
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE); // close an application when a window closes
+        //this.setResizable(false); // disable window resizing
+        this.setLocationRelativeTo(null); // center window on screen
 
-        cardLayout = new CardLayout(); // inicjalizacja układu kart
-        mainPanel = new JPanel(cardLayout); // tworzenie głównego panelu z układem kart
+        cardLayout = new CardLayout(); // initialize card layout
+        mainPanel = new JPanel(cardLayout); // create the main panel with card layout
 
-        JPanel menuPanel = createMenuPanel(); // tworzenie panelu menu wywołując metodę
-        JPanel settingsPanel = createSettingsPanel(); // tworzenie panelu ustawień wywołując metodę
-        simulationPanel = new SimulationPanel(this); // inicjalizacja panelu symulacji z przekazaniem referencji
+        JPanel menuPanel = createMenuPanel(); // create a menu panel by calling method
+        JPanel settingsPanel = createSettingsPanel(); // create a settings panel by calling method
+        simulationPanel = new SimulationPanel(this); // initialize a simulation panel with reference
 
-        mainPanel.add(menuPanel, "Menu"); // dodanie panelu menu do głównego panelu
-        mainPanel.add(settingsPanel, "Settings"); // dodanie panelu ustawień do głównego panelu
-        mainPanel.add(simulationPanel, "Simulation"); // dodanie panelu symulacji do głównego panelu
+        mainPanel.add(menuPanel, "Menu"); // add a menu panel to the main panel
+        mainPanel.add(settingsPanel, "Settings"); // add a settings panel to the main panel
+        mainPanel.add(simulationPanel, "Simulation"); // add a simulation panel to the main panel
 
-        this.add(mainPanel); // dodanie głównego panelu do okna
-        this.setVisible(true); // włączenie widoczności okna
+        this.add(mainPanel); // add the main panel to window
+        this.setVisible(true); // set the window visible
     }
 
     /**
-     * Tworzy panel menu głównego aplikacji.
-     * Panel zawiera przyciski do rozpoczęcia symulacji i wyjścia z aplikacji,
-     * rozmieszczone w układzie pionowym.
+     * Creates the main menu panel for the application.
+     * Panel contains buttons to start simulation and exit application,
+     * arranged in a vertical layout.
      *
-     * @return utworzony i skonfigurowany panel menu
+     * @return created and configured a menu panel
      */
     private JPanel createMenuPanel() {
-        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10)); // utworzenie panelu z układem siatki 3 wierszy, 1 kolumną i odstępami 10px
-        panel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100)); // ustawienie marginesów wewnętrznych panelu (góra, lewo, dół, prawo)
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10)); // create a panel with 3 rows, 1 column grid layout and 10px gaps
+        panel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100)); // set internal margins (top, left, bottom, right)
 
-        JButton startButton = new JButton("Start symulacji"); // utworzenie przycisku startu symulacji
-        JButton exitButton = new JButton("Wyjście"); // utworzenie przycisku wyjścia z aplikacji
+        JButton startButton = new JButton("Start Simulation"); // create a simulation start button
+        JButton exitButton = new JButton("Exit"); // create the exit button
 
         startButton.addActionListener(e -> {
-            cardLayout.show(mainPanel, "Settings"); // po wciśnięciu przycisku przełącz główny panel na panel ustawień
+            cardLayout.show(mainPanel, "Settings"); // switch to a settings panel when button pressed
         });
-        exitButton.addActionListener(e -> System.exit(0)); // po wciśnięciu przycisku wyjścia wyłącz aplikację
+        exitButton.addActionListener(e -> System.exit(0)); // exit application when button pressed
 
-        // dodanie wszystkich przycisków do panelu
+        // add all buttons to the panel
         panel.add(startButton);
         panel.add(exitButton);
 
-        // zwraca cały utworzony panel
+        // return created panel
         return panel;
     }
 
     /**
-     * Tworzy panel konfiguracji parametrów symulacji.
-     * Panel zawiera pola do wprowadzenia rozmiaru świata, liczby ofiar i drapieżników,
-     * oraz przyciski do zapisania ustawień i powrotu do menu.
+     * Creates a simulation configuration parameters panel.
+     * Panel contains fields for entering world size, prey and predator counts,
+     * and buttons to save settings and return to a menu.
      *
-     * @return utworzony i skonfigurowany panel ustawień
+     * @return created and configured settings panel
      */
     private JPanel createSettingsPanel() {
-        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10)); // utworzenie panelu z układem siatki 5x2 i odstępami 10px
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // ustawienie marginesów wewnętrznych
+        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10)); // create panel with 5x2 grid layout and 10px gaps
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // set internal margins
 
-        JLabel sizeLabel = new JLabel("Rozmiar świata:"); // etykieta dla rozmiaru świata
-        sizeField = new JTextField(Integer.toString(SimulationConfig.getValue("default.world.size"))); // ustawienie domyślnej wartości rozmiaru świata
+        JLabel sizeLabel = new JLabel("World size:"); // label for world size
+        sizeField = new JTextField(Integer.toString(SimulationConfig.getValue("default.world.size"))); // set default world size value
 
-        JLabel preyLabel = new JLabel("Liczba ofiar:"); // etykieta dla liczby ofiar
-        preyField = new JTextField(Integer.toString(SimulationConfig.getValue("default.prey.count"))); // ustawienie domyślnej wartości liczby ofiar
+        JLabel preyLabel = new JLabel("Prey count:"); // label for prey count
+        preyField = new JTextField(Integer.toString(SimulationConfig.getValue("default.prey.count"))); // set the default prey count
 
-        JLabel predatorLabel = new JLabel("Liczba drapieżników:"); // etykieta dla liczby drapieżników
-        predatorField = new JTextField(Integer.toString(SimulationConfig.getValue("default.predator.count"))); // ustawienie domyślnej wartości liczby drapieżników
+        JLabel predatorLabel = new JLabel("Predator count:"); // label for predator count
+        predatorField = new JTextField(Integer.toString(SimulationConfig.getValue("default.predator.count"))); // set the default predator count
 
-        JButton backButton = new JButton("Powrót"); // etykieta dla powrotu do menu
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu")); // po wciśnieciu przycisku powrotu przełącz na główny panel
+        JButton backButton = new JButton("Back"); // label for return to menu
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu")); // switch to the main panel when back button pressed
 
-        JButton saveButton = new JButton("Zapisz ustawienia i rozpocznij symulację"); // przycisk do zapisywania ustawień
+        JButton saveButton = new JButton("Save settings and start simulation"); // button for saving settings
         saveButton.addActionListener(e -> {
-            int size = Integer.parseInt(sizeField.getText()); // pobranie wpisanego rozmiaru świata
-            int preyCount = Integer.parseInt(preyField.getText()); // pobranie ilości ofiar
-            int predatorCount = Integer.parseInt(predatorField.getText()); // pobranie ilości drapieżników
-            simulationPanel.setSimulationParameters(size, preyCount, predatorCount); // ustawienie pobranych wartości w symulacji
-            // JOptionPane.showMessageDialog(this, "Ustawienia zapisane!"); // wyświetlenie komunikatu o zapisaniu ustawień
+            int size = Integer.parseInt(sizeField.getText()); // get entered world size
+            int preyCount = Integer.parseInt(preyField.getText()); // get prey count
+            int predatorCount = Integer.parseInt(predatorField.getText()); // get predator count
+            simulationPanel.setSimulationParameters(size, preyCount, predatorCount); // set retrieved values in simulation
+            // JOptionPane.showMessageDialog(this, "Settings saved!"); // show settings saved message
             cardLayout.show(mainPanel, "Simulation");
-            simulationPanel.startSimulation(); // uruchom symulację
+            simulationPanel.startSimulation(); // start simulation
         });
 
-        // dodanie wszystkiego do panelu
+        // add everything to the panel
         panel.add(sizeLabel);
         panel.add(sizeField);
         panel.add(preyLabel);
@@ -139,17 +139,17 @@ public class StartApp extends JFrame {
         panel.add(saveButton);
         panel.add(backButton);
 
-        // zwraca cały utworzony panel
+        // return created panel
         return panel;
     }
 
     /**
-     * Przełącza interfejs z powrotem do menu głównego i resetuje stan symulacji.
-     * Ta metoda jest wywoływana, gdy symulacja się kończy lub użytkownik
-     * chce wrócić do menu głównego.
+     * Switches interface back to the main menu and resets the simulation state.
+     * This method is called when simulation ends or the user wants to
+     * return to the main menu.
      */
     public void showMenu() {
-        simulationPanel.resetSimulation(); // zrestartowanie danych naszej symulacji do zera
-        cardLayout.show(mainPanel, "Menu"); // przełączenie widoku karty na główne menu
+        simulationPanel.resetSimulation(); // reset simulation data to zero
+        cardLayout.show(mainPanel, "Menu"); // switch card view to the main menu
     }
 }

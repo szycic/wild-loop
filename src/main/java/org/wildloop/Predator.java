@@ -1,35 +1,39 @@
 package org.wildloop;
 
 /**
- * Reprezentuje drapieżnika w symulacji. Drapieżnik poluje na obiekty klasy Prey
- * w określonym zasięgu i zyskuje energię poprzez ich zjadanie.
+ * Represents predator in the simulation. Predator hunts for Prey objects
+ * within a specified range and gains energy by eating them.
  *
  * @see Animal
  * @see Prey
  */
 public class Predator extends Animal {
-    /** Maksymalny zasięg, w którym drapieżnik może wykryć ofiarę */
+    /**
+     * Maximum range at which a predator can detect prey
+     */
     private static final int HUNT_RANGE = SimulationConfig.getValue("predator.hunt.range");
-    /** Ilość energii uzyskiwana przez drapieżnika po zjedzeniu ofiary */
+    /**
+     * Amount of energy gained by predator after eating prey
+     */
     private static final int HUNT_ENERGY_GAIN = SimulationConfig.getValue("predator.hunt.energy.gain");
 
     /**
-     * Tworzy nowego drapieżnika.
+     * Creates a new predator.
      *
-     * @param position początkowa pozycja drapieżnika
-     * @param energy początkowa energia drapieżnika
-     * @param maxAge maksymalny wiek, który może osiągnąć drapieżnik
+     * @param position initial position of the predator
+     * @param energy   initial energy of the predator
+     * @param maxAge   maximum age the predator can reach
      */
     public Predator(Position position, int energy, int maxAge) {
         super(position, energy, maxAge);
     }
 
     /**
-     * Określa kierunek następnego ruchu drapieżnika.
-     * Jeśli w zasięgu {@link #HUNT_RANGE} znajduje się ofiara, drapieżnik porusza się w jej kierunku.
-     * W przeciwnym razie wybiera losowy kierunek.
+     * Determines the direction of predator's next move.
+     * If there is prey within {@link #HUNT_RANGE}, predator moves towards it.
+     * Otherwise, it chooses a random direction.
      *
-     * @return kierunek, w którym drapieżnik powinien się poruszyć
+     * @return direction in which predator should move
      */
     @Override
     protected Direction getNextMoveDirection() {
@@ -43,16 +47,16 @@ public class Predator extends Animal {
     }
 
     /**
-     * Znajduje najbliższą ofiarę w zasięgu polowania drapieżnika.
+     * Finds the nearest prey within predator's hunting range.
      *
-     * @return najbliższa ofiara lub {@code null}, jeśli żadna nie znajduje się w zasięgu
+     * @return nearest prey or {@code null} if none is within range
      */
     private Prey findNearestPrey() {
         if (world == null) {
-            throw new IllegalStateException("Drapieżnik nie jest przypisany do świata");
+            throw new IllegalStateException("Predator is not assigned to a world");
         }
         if (getPosition() == null) {
-            throw new IllegalStateException("Drapieżnik nie ma określonej pozycji");
+            throw new IllegalStateException("Predator has no position");
         }
 
         Prey nearestPrey = null;
@@ -72,8 +76,8 @@ public class Predator extends Animal {
     }
 
     /**
-     * Pozwala drapieżnikowi zjeść ofiarę, jeśli jakaś znajduje się na sąsiednim polu.
-     * Po zjedzeniu ofiary drapieżnik zyskuje energię równą {@link #HUNT_ENERGY_GAIN}.
+     * Allows the predator to eat prey if one is on an adjacent cell.
+     * After eating the prey, predator gains energy equal to {@link #HUNT_ENERGY_GAIN}.
      */
     @Override
     protected void eat() {
@@ -85,15 +89,15 @@ public class Predator extends Animal {
     }
 
     /**
-     * Tworzy nowego drapieżnika jako potomka.
+     * Creates a new predator as offspring.
      *
-     * @param position pozycja dla nowego drapieżnika
-     * @return nowy obiekt drapieżnika z początkową energią równą {@link #OFFSPRING_ENERGY}
+     * @param position position for the new predator
+     * @return new predator object with initial energy equal to {@link #OFFSPRING_ENERGY}
      */
     @Override
     protected Animal createOffspring(Position position) {
         if (position == null) {
-            throw new IllegalArgumentException("Pozycja potomka nie może być pusta");
+            throw new IllegalArgumentException("Offspring position cannot be null");
         }
 
         return new Predator(position, OFFSPRING_ENERGY, getMaxAge());

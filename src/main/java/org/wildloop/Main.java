@@ -3,9 +3,9 @@ package org.wildloop;
 import javax.swing.*;
 
 /**
- * Główna klasa aplikacji, zawierająca punkt wejścia do programu.
- * Klasa uruchamia i inicjalizuje aplikację poprzez stworzenie
- * głównego okna w wątku event-dispatching (EDT).
+ * Main application class containing program entry point.
+ * The class launches and initializes the application by creating
+ * the main window in the event-dispatching thread (EDT).
  *
  * @see StartApp
  * @see SimulationPanel
@@ -19,9 +19,9 @@ import javax.swing.*;
  */
 public class Main {
     /**
-     * Punkt wejścia aplikacji. Tworzy i uruchamia główne okno aplikacji w wątku EDT.
-     * 
-     * @param args argumenty wiersza poleceń (nie są wykorzystywane)
+     * Application entry point. Creates and launches the main application window in the EDT thread.
+     *
+     * @param args command line arguments (not used)
      */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(StartApp::new);

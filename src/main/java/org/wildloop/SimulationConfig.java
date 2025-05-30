@@ -4,8 +4,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Odpowiada za zarządzanie ustawieniami konfiguracyjnymi symulacji.
- * Odczytuje właściwości z pliku konfiguracyjnego {@code simulation.properties}.
+ * Manages configuration settings for the simulation.
+ * Reads properties from the {@code simulation.properties} configuration file.
  *
  * @see StartApp
  * @see SimulationPanel
@@ -14,32 +14,34 @@ import java.util.Properties;
  * @see Predator
  */
 public class SimulationConfig {
-    /** Obiekt przechowujący załadowane parametry konfiguracyjne */
+    /**
+     * Object storing loaded configuration parameters
+     */
     private static final Properties properties = new Properties();
 
-    // Statyczny blok inicjalizujący — ładuje parametry z pliku simulation.properties
+    // Static initialization block - loads parameters from simulation.properties file
     static {
         try (InputStream input = SimulationConfig.class.getClassLoader().getResourceAsStream("simulation.properties")) {
             properties.load(input);
         } catch (Exception e) {
-            throw new RuntimeException("Nie udało się wczytać pliku simulation.properties", e);
+            throw new RuntimeException("Failed to load simulation.properties file", e);
         }
     }
 
     /**
-     * Pobiera wartość powiązaną z podanym kluczem z załadowanych właściwości
-     * i konwertuje ją na liczbę całkowitą.
+     * Gets the value associated with the given key from the loaded properties
+     * and converts it to an integer.
      *
-     * @param key klucz, dla którego ma zostać pobrana wartość
-     * @return wartość całkowita odpowiadająca podanemu kluczowi
-     * @throws IllegalArgumentException jeśli wartość dla danego klucza nie może być przekonwertowana na liczbę całkowitą
+     * @param key key for which the value should be retrieved
+     * @return integer value corresponding to the given key
+     * @throws IllegalArgumentException if the value for the given key cannot be converted to an integer
      */
     public static int getValue(String key) {
         String value = properties.getProperty(key);
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Wartość '" + value + "' dla parametru '" + key + "' nie jest poprawną liczbą całkowitą", e);
+            throw new IllegalArgumentException("Value '" + value + "' for parameter '" + key + "' is not a valid integer", e);
         }
     }
 }

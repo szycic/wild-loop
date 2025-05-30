@@ -1,55 +1,55 @@
 package org.wildloop;
 
 /**
- * Abstrakcyjna klasa bazowa reprezentująca zwierzę w symulacji.
- * Definiuje podstawowe zachowania i atrybuty wspólne dla wszystkich zwierząt,
- * takie jak poruszanie się, reprodukcja, jedzenie i zarządzanie energią.
+ * Abstract base class representing an animal in the simulation.
+ * Defines basic behaviors and attributes common to all animals,
+ * such as movement, reproduction, eating and energy management.
  *
  * @see Prey
  * @see Predator
  */
 public abstract class Animal {
-    /** Maksymalny poziom energii */
+    /** Maximum energy level */
     protected static final int MAX_ENERGY = SimulationConfig.getValue("animal.max.energy");
-    /** Koszt energetyczny pojedynczego ruchu */
+    /** Energy cost of a single move */
     protected static final int MOVE_ENERGY_COST = SimulationConfig.getValue("animal.move.energy.cost");
-    /** Próg energii wymagany do reprodukcji */
+    /** Energy threshold required for reproduction */
     protected static final int REPRODUCTION_ENERGY_THRESHOLD = SimulationConfig.getValue("animal.reproduction.energy.threshold");
-    /** Koszt energetyczny reprodukcji */
+    /** Energy cost of reproduction */
     protected static final int REPRODUCTION_ENERGY_COST = SimulationConfig.getValue("animal.reproduction.energy.cost");
-    /** Energia początkowa potomka */
+    /** Initial energy of offspring */
     protected static final int OFFSPRING_ENERGY = SimulationConfig.getValue("animal.offspring.energy");
 
-    /** Aktualna pozycja zwierzęcia w świecie */
+    /** Current position of the animal in the world */
     private Position position;
-    /** Aktualny poziom energii zwierzęcia */
+    /** Current energy level of the animal */
     private int energy;
-    /** Aktualny wiek zwierzęcia */
+    /** Current age of the animal */
     private int age;
-    /** Maksymalny wiek, po którym zwierzę umiera */
+    /** Maximum age after which the animal die */
     private final int maxAge;
-    /** Referencja do świata, w którym żyje zwierzę */
+    /** Reference to the world in which the animal lives */
     protected World world;
 
     /**
-     * Tworzy nowe zwierzę o zadanych parametrach początkowych.
+     * Creates a new animal with given initial parameters.
      *
-     * @param position początkowa pozycja
-     * @param energy początkowy poziom energii
-     * @param maxAge maksymalny wiek zwierzęcia
+     * @param position initial position
+     * @param energy   initial energy level
+     * @param maxAge   maximum age the animal can reach
      */
     public Animal(Position position, int energy, int maxAge) {
         if (position == null) {
-            throw new IllegalArgumentException("Pozycja nie może być pusta");
+            throw new IllegalArgumentException("Position cannot be null");
         }
         if (energy < 0) {
-            throw new IllegalArgumentException("Energia początkowa nie może być ujemna");
+            throw new IllegalArgumentException("Initial energy cannot be negative");
         }
         if (energy > MAX_ENERGY) {
-            throw new IllegalArgumentException("Energia początkowa nie może być większa od energii maksymalnej");
+            throw new IllegalArgumentException("Initial energy cannot be greater than maximum energy");
         }
         if (maxAge <= 0) {
-            throw new IllegalArgumentException("Maksymalny wiek musi być większy od zera");
+            throw new IllegalArgumentException("Maximum age must be greater than zero");
         }
 
         this.position = position;
@@ -57,47 +57,51 @@ public abstract class Animal {
         this.maxAge = maxAge;
         this.age = 0;
     }
-    
-    // Gettery
-    /** @return aktualna pozycja zwierzęcia */
+
+    /** @return current position of the animal */
     public Position getPosition() {
         return position;
     }
-    /** @return aktualny poziom energii */
+
+    /** @return current energy level of the animal */
     public int getEnergy() {
         return energy;
     }
-    /** @return aktualny wiek */
+
+    /** @return current age of the animal */
     public int getAge() {
         return age;
     }
-    /** @return maksymalny możliwy wiek */
+
+    /** @return maximum age that the animal can reach */
     public int getMaxAge() {
         return maxAge;
     }
 
-    // Settery
-    /** @param position nowa pozycja zwierzęcia */
+    /** @param position new position of the animal */
     public void setPosition(Position position) {
         this.position = position;
     }
-    /** @param energy nowy poziom energii */
+
+    /** @param energy new energy level */
     public void setEnergy(int energy) {
         this.energy = Math.min(energy, MAX_ENERGY);
     }
-    /** Zwiększa wiek zwierzęcia o 1 */
+
+    /** Increases animal age by 1 */
     public void incrementAge() {
         this.age++;
     }
-    /** @param world świat, w którym zostanie umieszczone zwierzę */
+
+    /** @param world world in which the animal will be placed */
     public void setWorld(World world) {
         this.world = world;
     }
 
     /**
-     * Przesuwa zwierzę w kierunku określonym przez {@link #getNextMoveDirection()}.
-     * Ruch jest wykonywany, tylko jeśli nowa pozycja jest prawidłowa i pusta.
-     * Każdy ruch kosztuje energię określoną przez {@link #MOVE_ENERGY_COST}.
+     * Moves the animal in the direction determined by {@link #getNextMoveDirection()}.
+     * Movement is only performed if the new position is valid and empty.
+     * Each move costs energy specified by {@link #MOVE_ENERGY_COST}.
      */
     void move() {
         Direction direction = getNextMoveDirection();
@@ -114,16 +118,16 @@ public abstract class Animal {
     }
 
     /**
-     * Określa kierunek następnego ruchu zwierzęcia.
-     * Implementacja zależy od konkretnego typu zwierzęcia.
-     * 
-     * @return kierunek ruchu lub {@code null}, jeśli zwierzę nie może się poruszyć
+     * Determines the direction of the next animal movement.
+     * Implementation depends on the specific animal type.
+     *
+     * @return movement direction or {@code null} if the animal cannot move
      */
     protected abstract Direction getNextMoveDirection();
 
     /**
-     * Próbuje rozmnożyć zwierzę, jeśli ma wystarczająco energii.
-     * Potomstwo jest tworzone na sąsiednim pustym polu.
+     * Tries to reproduce the animal if it has enough energy.
+     * Offspring is created on an empty adjacent cell.
      */
     void reproduce() {
         if (energy >= REPRODUCTION_ENERGY_THRESHOLD) {
@@ -137,18 +141,18 @@ public abstract class Animal {
     }
 
     /**
-     * Tworzy nowe zwierzę tego samego typu.
-     * Implementacja zależy od konkretnego typu zwierzęcia.
+     * Creates a new animal of the same type.
+     * Implementation depends on the specific animal type.
      *
-     * @param position pozycja dla nowego zwierzęcia
-     * @return nowe zwierzę
+     * @param position position for the new animal
+     * @return new animal
      */
     protected abstract Animal createOffspring(Position position);
 
     /**
-     * Szuka pustego pola sąsiadującego z aktualną pozycją zwierzęcia.
+     * Finds an empty cell adjacent to the current animal position.
      *
-     * @return pozycję pustego sąsiedniego pola lub {@code null}, jeśli nie znaleziono
+     * @return position of empty adjacent cell or {@code null} if none found
      */
     private Position findEmptyAdjacentCell() {
         for (Direction dir : Direction.values()) {
@@ -161,27 +165,27 @@ public abstract class Animal {
     }
 
     /**
-     * Definiuje zachowanie żywieniowe zwierzęcia.
-     * Implementacja zależy od konkretnego typu zwierzęcia.
+     * Defines the feeding behavior of the animal.
+     * Implementation depends on the specific animal type.
      */
     protected abstract void eat();
 
     /**
-     * Usuwa zwierzę ze świata (zwierzę umiera).
+     * Removes the animal from the world (animal dies).
      */
     public void die() {
         world.removeAnimal(this);
     }
 
     /**
-     * Aktualizuje stan zwierzęcia w każdej turze symulacji.
-     * Wykonuje następujące czynności:
+     * Updates the animal's state in each simulation turn.
+     * Performs the following actions:
      * <ol>
-     * <li>Zwiększa wiek</li>
-     * <li>Wykonuje ruch</li>
-     * <li>Próbuje znaleźć pożywienie</li>
-     * <li>Próbuje się rozmnożyć, jeśli ma wystarczająco energii</li>
-     * <li>Umiera, jeśli skończyła się energia lub przekroczył maksymalny wiek</li>
+     * <li>Increases age</li>
+     * <li>Makes a move</li>
+     * <li>Tries to find food</li>
+     * <li>Tries to reproduce if has enough energy</li>
+     * <li>Dies if runs out of energy or exceeds maximum age</li>
      * </ol>
      */
     public void update() {
