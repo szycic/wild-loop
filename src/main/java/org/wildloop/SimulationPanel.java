@@ -2,6 +2,8 @@ package org.wildloop;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -41,6 +43,10 @@ public class SimulationPanel extends JPanel {
     private final JButton pauseButton;
     /** Flag indicating if simulation is currently paused */
     private boolean isPaused = false;
+    /** Panel for displaying animal info */
+    private final InfoPanel animalInfoPanel;
+    /** Currently selected animal */
+    private Animal selectedAnimal;
 
     /**
      * Constructor for a simulation panel in the application. This panel contains
@@ -68,6 +74,23 @@ public class SimulationPanel extends JPanel {
             }
         }
 
+        animalInfoPanel = new InfoPanel();
+        animalInfoPanel.setBorder(BorderFactory.createTitledBorder("Animal Info"));
+
+        // add mouse listener to grid labels
+        for (int x = 0; x < 20; x++) {
+            for (int y = 0; y < 20; y++) {
+                final int finalX = x;
+                final int finalY = y;
+                gridLabels[x][y].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        handleAnimalClick(finalX, finalY); // Handle click on grid cell
+                    }
+                });
+            }
+        }
+
         // STATISTICS PANEL
         statsLabel = new JLabel("Turn: 0 | Predators: 0 | Prey: 0", SwingConstants.CENTER); // initialize statistics label
         statsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // set an empty border with 10px margins
@@ -90,6 +113,7 @@ public class SimulationPanel extends JPanel {
         JPanel bottomPanel = new JPanel(new BorderLayout()); // create a bottom panel with borderlayout
         bottomPanel.add(statsLabel, BorderLayout.CENTER); // add statistics label to center part of a bottom panel
         bottomPanel.add(buttonPanel, BorderLayout.EAST); // add a button panel to right part of bottom panel
+        bottomPanel.add(animalInfoPanel, BorderLayout.WEST);
 
         add(gridPanel, BorderLayout.CENTER); // add a grid panel to the center part of the main panel
         add(bottomPanel, BorderLayout.SOUTH); // add a bottom panel to bottom part of main panel
@@ -249,6 +273,19 @@ public class SimulationPanel extends JPanel {
             for (int x = 0; x < size; x++) {
                 gridLabels[x][y] = new JLabel("·", SwingConstants.CENTER); // create label with dot, content is centered
                 gridLabels[x][y].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // set gray border around label
+                gridLabels[x][y].setOpaque(true); // Enable background coloring
+                gridLabels[x][y].setBackground(Color.WHITE); // Set default background
+
+                // Add mouse listener to each label
+                final int finalX = x;
+                final int finalY = y;
+                gridLabels[x][y].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        handleAnimalClick(finalX, finalY); // Handle click on grid cell
+                    }
+                });
+
                 gridPanel.add(gridLabels[x][y]); // add our label to panel at specific position
             }
         }
@@ -281,7 +318,13 @@ public class SimulationPanel extends JPanel {
                 } else if (animal instanceof Prey) {
                     gridLabels[x][y].setText("O"); // if prey inserts O
                 }
+                updateCellAppearance(x, y, world.getGrid()[x][y]);
             }
+        }
+
+        if (selectedAnimal != null && !world.getAnimals().contains(selectedAnimal)) {
+            animalInfoPanel.showAnimalDead();
+            selectedAnimal = null;
         }
     }
 
@@ -306,6 +349,13 @@ public class SimulationPanel extends JPanel {
             } else if (animal instanceof Prey) {
                 preyCount++; // count all prey
             }
+        }
+
+        if (selectedAnimal != null && !world.getAnimals().contains(selectedAnimal)) {
+            animalInfoPanel.showAnimalDead();
+            selectedAnimal = null;
+        } else if (selectedAnimal != null) {
+            animalInfoPanel.updateInfo();
         }
 
         statsLabel.setText(String.format("Turn: %d | Predators: %d | Prey: %d | Total: %d", world.getTurns(), predatorCount, preyCount, world.getAnimals().size())); // format statistics text with current data
@@ -384,6 +434,65 @@ public class SimulationPanel extends JPanel {
 
         if (pauseButton != null) {
             pauseButton.setText("Pause"); // reset pause button
+        }
+
+        selectedAnimal = null;
+        animalInfoPanel.setSelectedAnimal(null);
+    }
+
+    /**
+     * Handles click on a grid cell to select/deselect animals.
+     * @param x X coordinate of the clicked cell
+     * @param y Y coordinate of the clicked cell
+     */
+    private void handleAnimalClick(int x, int y) {
+        // Reset previous selection highlight
+        if (selectedAnimal != null) {
+            Position pos = selectedAnimal.getPosition();
+            if (pos != null && world.isValidPosition(pos)) {
+                updateCellAppearance(pos.x(), pos.y(), selectedAnimal);
+            }
+        }
+
+        // Get animal at clicked position
+        Animal animal = world.getGrid()[x][y];
+
+        if (animal != null && animal == selectedAnimal) {
+            // Clicked on already selected animal - deselect it
+            selectedAnimal = null;
+            animalInfoPanel.setSelectedAnimal(null);
+        } else {
+            // Select new animal or null if clicked on empty cell
+            selectedAnimal = animal;
+            animalInfoPanel.setSelectedAnimal(animal);
+        }
+
+        // Highlight newly selected animal
+        if (selectedAnimal != null) {
+            Position pos = selectedAnimal.getPosition();
+            if (pos != null && world.isValidPosition(pos)) {
+                gridLabels[pos.x()][pos.y()].setBackground(animalInfoPanel.getHighlightColor());
+            }
+        }
+    }
+
+    /**
+     * Updates the appearance of a single grid cell.
+     * @param x X coordinate of the cell
+     * @param y Y coordinate of the cell
+     * @param animal Animal in the cell (null if empty)
+     */
+    private void updateCellAppearance(int x, int y, Animal animal) {
+        JLabel label = gridLabels[x][y];
+        if (animal == null) {
+            label.setText("·"); // Empty cell
+            label.setBackground(Color.WHITE); // Default background
+        } else if (animal instanceof Predator) {
+            label.setText("P"); // Predator
+            label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.WHITE);
+        } else if (animal instanceof Prey) {
+            label.setText("O"); // Prey
+            label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.WHITE);
         }
     }
 }
