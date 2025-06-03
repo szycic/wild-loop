@@ -11,6 +11,7 @@ import javax.swing.*;
  * @see SimulationPanel
  * @see SimulationConfig
  * @see World
+ * @see InfoPanel
  * @see Position
  * @see Direction
  * @see Animal
