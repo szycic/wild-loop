@@ -3,6 +3,13 @@ package org.wildloop;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Displays information about the currently selected animal in the simulation.
+ * It shows details such as type, energy, age, and allows highlighting of the selected animal.
+ * The panel updates dynamically based on user interactions with the simulation.
+ *
+ * @see SimulationPanel
+ */
 public class InfoPanel extends JPanel {
     /** Label to display animal information */
     private final JLabel infoLabel;

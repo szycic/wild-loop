@@ -20,6 +20,7 @@ import java.util.ArrayList;
  *
  * @see StartApp
  * @see SimulationConfig
+ * @see InfoPanel
  */
 public class SimulationPanel extends JPanel {
     /** Default size of a simulation world */
