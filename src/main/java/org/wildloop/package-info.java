@@ -11,6 +11,7 @@
  * <ul>
  *   <li>{@link org.wildloop.StartApp} - Main application window managing the user interface</li>
  *   <li>{@link org.wildloop.SimulationPanel} - Panel responsible for displaying and controlling simulation</li>
+ *   <li>{@link org.wildloop.InfoPanel} - Panel displaying information about selected animals</li>
  *   <li>{@link org.wildloop.SimulationConfig} - Import of default simulation configuration</li>
  *   <li>{@link org.wildloop.World} - Representation of a simulation world and its logic</li>
  *   <li>{@link org.wildloop.Position} - Representation of immutable position in 2D space</li>
@@ -42,9 +43,10 @@
  * </ul>
  *
  * @author Szymon Cichy, Tomasz Druszcz, Jan Osmęda
- * @version 0.52
+ * @version 0.58
  * @see org.wildloop.StartApp
  * @see org.wildloop.SimulationPanel
+ * @see org.wildloop.InfoPanel
  * @see org.wildloop.SimulationConfig
  * @see org.wildloop.World
  * @see org.wildloop.Position
