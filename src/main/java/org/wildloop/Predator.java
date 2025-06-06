@@ -18,6 +18,12 @@ public class Predator extends Animal {
     private static final int HUNT_ENERGY_GAIN = SimulationConfig.getValue("predator.hunt.energy.gain");
 
     /**
+     * A static counter used to generate unique identifiers for prey instances.
+     * Increments with each new prey created to ensure ID uniqueness.
+     */
+    private static long idCounter = 0;
+
+    /**
      * Creates a new predator.
      *
      * @param position initial position of the predator
@@ -26,6 +32,17 @@ public class Predator extends Animal {
      */
     public Predator(Position position, int energy, int maxAge) {
         super(position, energy, maxAge);
+    }
+
+    /**
+     * Generates a unique identifier for the prey instance.
+     * The ID is prefixed with "PREDATOR-" followed by an incrementing counter.
+     *
+     * @return unique identifier for the prey
+     */
+    @Override
+    protected String generateUniqueId() {
+        return "PREDATOR-" + ++idCounter;
     }
 
     /**

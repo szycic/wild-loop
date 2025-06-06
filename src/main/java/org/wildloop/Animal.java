@@ -30,6 +30,7 @@ public abstract class Animal {
     private final int maxAge;
     /** Reference to the world in which the animal lives */
     protected World world;
+    private final String id;
 
     /**
      * Creates a new animal with given initial parameters.
@@ -56,6 +57,15 @@ public abstract class Animal {
         this.energy = energy;
         this.maxAge = maxAge;
         this.age = 0;
+        this.id = generateUniqueId();
+    }
+
+    /** @return unique identifier for the animal */
+    protected abstract String generateUniqueId();
+
+    /** @return unique identifier of the animal */
+    public String getId() {
+        return id;
     }
 
     /** @return current position of the animal */

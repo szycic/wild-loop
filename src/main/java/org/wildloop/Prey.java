@@ -8,14 +8,16 @@ package org.wildloop;
  * @see Predator
  */
 public class Prey extends Animal {
-    /**
-     * Maximum range at which prey can detect predator
-     */
+    /** Maximum range at which prey can detect predator */
     private static final int FLEE_RANGE = SimulationConfig.getValue("prey.flee.range");
-    /**
-     * Amount of energy gained by prey while grazing
-     */
+    /** Amount of energy gained by prey while grazing */
     private static final int GRAZE_ENERGY_GAIN = SimulationConfig.getValue("prey.graze.energy.gain");
+
+    /**
+     * A static counter used to generate unique identifiers for prey instances.
+     * Increments with each new prey created to ensure ID uniqueness.
+     */
+    private static long idCounter = 0;
 
     /**
      * Creates new prey.
@@ -26,6 +28,17 @@ public class Prey extends Animal {
      */
     public Prey(Position position, int energy, int maxAge) {
         super(position, energy, maxAge);
+    }
+
+    /**
+     * Generates a unique identifier for the prey instance.
+     * The ID is prefixed with "PREY-" followed by an incrementing counter.
+     *
+     * @return unique identifier for the prey
+     */
+    @Override
+    protected String generateUniqueId() {
+        return "PREY-" + ++idCounter;
     }
 
     /**
