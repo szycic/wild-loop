@@ -359,7 +359,7 @@ public class SimulationPanel extends JPanel {
             animalInfoPanel.updateInfo();
         }
 
-        statsLabel.setText(String.format("Turn: %d | Predators: %d | Prey: %d | Total: %d", world.getTurns(), predatorCount, preyCount, world.getAnimals().size())); // format statistics text with current data
+        statsLabel.setText(String.format("Turn: %d | Predators: %d | Prey: %d | Total: %d", world.getTurn(), predatorCount, preyCount, world.getAnimals().size())); // format statistics text with current data
     }
 
     /**

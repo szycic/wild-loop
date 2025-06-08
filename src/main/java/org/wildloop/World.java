@@ -1,6 +1,7 @@
 package org.wildloop;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +18,9 @@ public class World {
     /** List of all active animals in the world */
     private List<Animal> animals;
     /** Counter of completed simulation turns */
-    private int turns;
+    private int turn;
+    /** List of events that occurred in the world */
+    private List<Event> events;
 
     /**
      * Creates a new world with specified dimensions.
@@ -28,7 +31,8 @@ public class World {
     public World(int width, int height) {
         this.grid = new Animal[width][height];
         this.animals = new ArrayList<>();
-        this.turns = 0;
+        this.turn = 0;
+        this.events = new ArrayList<>();
     }
 
     /** @return current world grid with animals */
@@ -42,8 +46,8 @@ public class World {
     }
 
     /** @return number of completed turns */
-    public int getTurns() {
-        return turns;
+    public int getTurn() {
+        return turn;
     }
 
     /** @return width of the world */
@@ -54,6 +58,24 @@ public class World {
     /** @return height of the world */
     public int getHeight() {
         return grid[0].length;
+    }
+
+    /** @return unmodifiable list of all events that occurred in the world */
+    public List<Event> getEvents() {
+        return Collections.unmodifiableList(events);
+    }
+
+    /**
+     * Adds a new event to the world.
+     *
+     * @param event event to add
+     * @throws IllegalArgumentException if event is null
+     */
+    public void addEvent(Event event) {
+        if (event == null) {
+            throw new IllegalArgumentException("Cannot add null event");
+        }
+        events.add(event);
     }
 
     /**
@@ -138,7 +160,7 @@ public class World {
         for (Animal animal : currentAnimals) {
             animal.update();
         }
-        turns++;
+        turn++;
     }
 
     /**
@@ -147,6 +169,6 @@ public class World {
     public void resetWorld() {
         this.grid = new Animal[getWidth()][getHeight()];
         this.animals = new ArrayList<>();
-        this.turns = 0;
+        this.turn = 0;
     }
 }
