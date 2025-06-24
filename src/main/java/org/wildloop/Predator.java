@@ -26,12 +26,11 @@ public class Predator extends Animal {
     /**
      * Creates a new predator.
      *
+     * @param world    reference to the world where the predator lives
      * @param position initial position of the predator
-     * @param energy   initial energy of the predator
-     * @param maxAge   maximum age the predator can reach
      */
-    public Predator(World world, Position position, int energy, int maxAge) {
-        super(world, position, energy, maxAge);
+    public Predator(World world, Position position) {
+        super(world, position);
     }
 
     /**
@@ -118,6 +117,6 @@ public class Predator extends Animal {
             throw new IllegalArgumentException("Offspring position cannot be null");
         }
 
-        return new Predator(world, position, OFFSPRING_ENERGY, getMaxAge());
+        return new Predator(world, position);
     }
 }

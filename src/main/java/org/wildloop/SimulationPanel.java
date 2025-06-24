@@ -191,7 +191,7 @@ public class SimulationPanel extends JPanel {
         for (int i = 0; i < preyCount; i++) {
             Position pos = getRandomEmptyPosition(world); // select a random empty position
             if (pos != null) {
-                new Prey(world, pos, 100, 15);
+                new Prey(world, pos);
             }
         }
 
@@ -199,7 +199,7 @@ public class SimulationPanel extends JPanel {
         for (int i = 0; i < predatorCount; i++) {
             Position pos = getRandomEmptyPosition(world); // select a random empty position
             if (pos != null) {
-                new Predator(world, pos, 100, 20);
+                new Predator(world, pos);
             }
         }
     }

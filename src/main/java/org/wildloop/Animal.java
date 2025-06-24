@@ -11,6 +11,8 @@ package org.wildloop;
 public abstract class Animal {
     /** Maximum energy level */
     protected static final int MAX_ENERGY = SimulationConfig.getValue("animal.max.energy");
+    /** Default energy level for new animals */
+    protected static final int DEFAULT_ENERGY = SimulationConfig.getValue("animal.default.energy");
     /** Energy cost of a single move */
     protected static final int MOVE_ENERGY_COST = SimulationConfig.getValue("animal.move.energy.cost");
     /** Energy threshold required for reproduction */
@@ -38,31 +40,23 @@ public abstract class Animal {
     /**
      * Creates a new animal with given initial parameters.
      *
+     * @param world    reference to the world where the animal lives
      * @param position initial position
-     * @param energy   initial energy level
-     * @param maxAge   maximum age the animal can reach
      */
-    public Animal(World world, Position position, int energy, int maxAge) {
+    public Animal(World world, Position position) {
         if (world == null) {
             throw new IllegalArgumentException("World cannot be null");
         }
         if (position == null) {
             throw new IllegalArgumentException("Position cannot be null");
         }
-        if (energy < 0) {
-            throw new IllegalArgumentException("Initial energy cannot be negative");
-        }
-        if (energy > MAX_ENERGY) {
-            throw new IllegalArgumentException("Initial energy cannot be greater than maximum energy");
-        }
-        if (maxAge <= 0) {
-            throw new IllegalArgumentException("Maximum age must be greater than zero");
-        }
 
         this.world = world;
         this.position = position;
-        this.energy = energy;
-        this.maxAge = maxAge;
+        this.energy = DEFAULT_ENERGY;
+        this.maxAge = this instanceof Prey
+                ? SimulationConfig.getValue("prey.max.age")
+                : SimulationConfig.getValue("predator.max.age");
         this.age = 0;
         this.id = generateUniqueId();
 
@@ -150,6 +144,7 @@ public abstract class Animal {
             Position offspring_position = findEmptyAdjacentCell();
             if (offspring_position != null) {
                 Animal offspring = createOffspring(offspring_position);
+                offspring.setEnergy(OFFSPRING_ENERGY);
                 Event.log(EventType.REPRODUCE, world, this, offspring);
 
                 energy -= REPRODUCTION_ENERGY_COST;
