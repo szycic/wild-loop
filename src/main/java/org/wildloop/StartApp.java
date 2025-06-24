@@ -48,10 +48,26 @@ public class StartApp extends JFrame {
      */
     public StartApp() {
         this.setTitle("Wild-loop"); // set a window title
-        this.setSize(800, 600); // set window size to 800x600px
+        this.setSize(1300, 800); // set window size to 800x600px
+        this.setMinimumSize(new Dimension(1300, 800));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE); // close an application when a window closes
-        //this.setResizable(false); // disable window resizing
+        this.setResizable(false); // disable window resizing
         this.setLocationRelativeTo(null); // center window on screen
+
+        // Add application icon
+        try {
+            // Load image from file
+            java.net.URL imageURL = getClass().getResource("/wildloop-logo.jpg");
+            if (imageURL != null) {
+                Image image = new ImageIcon(imageURL).getImage();
+                setIconImage(image); // Set window icon only
+            } else {
+                System.err.println("Icon file not found");
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading icon: " + e.getMessage());
+        }
+
 
         cardLayout = new CardLayout(); // initialize card layout
         mainPanel = new JPanel(cardLayout); // create the main panel with card layout
@@ -76,11 +92,22 @@ public class StartApp extends JFrame {
      * @return created and configured a menu panel
      */
     private JPanel createMenuPanel() {
-        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10)); // create a panel with 3 rows, 1 column grid layout and 10px gaps
-        panel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100)); // set internal margins (top, left, bottom, right)
+        JPanel panel = new JPanel(new GridLayout(5, 1, 10, 10)); // create a panel with 3 rows, 1 column grid layout and 10px gaps
+        panel.setBorder(BorderFactory.createEmptyBorder(50, 150, 50, 150)); // set internal margins (top, left, bottom, right)
+
+        Font buttonFont = new Font("Arial", Font.BOLD, 24);
+
+        JLabel nameLabel = new JLabel("<html><center>WildLoop</center></html>", SwingConstants.CENTER);
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 28));
+
+        JLabel authorsLabel = new JLabel("<html><center>Authors<br>Szymon Cichy, Tomasz Druszcz, Jan Osmęda</center></hmtl>", SwingConstants.CENTER);
+        authorsLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
         JButton startButton = new JButton("Start Simulation"); // create a simulation start button
+        startButton.setFont(buttonFont);
+
         JButton exitButton = new JButton("Exit"); // create the exit button
+        exitButton.setFont(buttonFont);
 
         startButton.addActionListener(e -> {
             cardLayout.show(mainPanel, "Settings"); // switch to a settings panel when button pressed
@@ -88,8 +115,11 @@ public class StartApp extends JFrame {
         exitButton.addActionListener(e -> System.exit(0)); // exit application when button pressed
 
         // add all buttons to the panel
+        panel.add(nameLabel);
+        panel.add(authorsLabel);
         panel.add(startButton);
         panel.add(exitButton);
+        panel.add(new JLabel("<html><br></html>"));
 
         // return created panel
         return panel;
@@ -104,21 +134,34 @@ public class StartApp extends JFrame {
      */
     private JPanel createSettingsPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10)); // create panel with 5x2 grid layout and 10px gaps
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50)); // set internal margins
+        panel.setBorder(BorderFactory.createEmptyBorder(50, 150, 50, 150)); // set internal margins
+
+        Font buttonFont = new Font("Arial", Font.BOLD, 24);
 
         JLabel sizeLabel = new JLabel("World size:"); // label for world size
+        sizeLabel.setFont(buttonFont);
         sizeField = new JTextField(Integer.toString(SimulationConfig.getValue("default.world.size"))); // set default world size value
+        sizeField.setFont(new Font("Arial", Font.BOLD, 24));
+        sizeField.setHorizontalAlignment(JTextField.CENTER);
 
         JLabel preyLabel = new JLabel("Prey count:"); // label for prey count
+        preyLabel.setFont(buttonFont);
         preyField = new JTextField(Integer.toString(SimulationConfig.getValue("default.prey.count"))); // set the default prey count
+        preyField.setFont(new Font("Arial", Font.BOLD, 24));
+        preyField.setHorizontalAlignment(JTextField.CENTER);
 
         JLabel predatorLabel = new JLabel("Predator count:"); // label for predator count
+        predatorLabel.setFont(buttonFont);
         predatorField = new JTextField(Integer.toString(SimulationConfig.getValue("default.predator.count"))); // set the default predator count
+        predatorField.setFont(new Font("Arial", Font.BOLD, 24));
+        predatorField.setHorizontalAlignment(JTextField.CENTER);
 
         JButton backButton = new JButton("Back"); // label for return to menu
+        backButton.setFont(buttonFont);
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu")); // switch to the main panel when back button pressed
 
-        JButton saveButton = new JButton("Save settings and start simulation"); // button for saving settings
+        JButton saveButton = new JButton("Start simulation"); // button for saving settings
+        saveButton.setFont(buttonFont);
         saveButton.addActionListener(e -> {
             int size = Integer.parseInt(sizeField.getText()); // get entered world size
             int preyCount = Integer.parseInt(preyField.getText()); // get prey count
@@ -144,7 +187,7 @@ public class StartApp extends JFrame {
     }
 
     /**
-     * Switches interface back to the main menu and reset the simulation state.
+     * Switches interface back to the main menu and resets the simulation state.
      * This method is called when simulation ends or the user wants to
      * return to the main menu.
      */
