@@ -19,6 +19,10 @@
  *   <li>{@link org.wildloop.Animal} - Abstract base class for all animals</li>
  *   <li>{@link org.wildloop.Prey} - Implementation of prey</li>
  *   <li>{@link org.wildloop.Predator} - Implementation of predator</li>
+ *   <li>{@link org.wildloop.Event} - Representation of events occurring in the simulation</li>
+ *   <li>{@link org.wildloop.EventType} - Enumeration of event types</li>
+ *   <li>{@link org.wildloop.EventLogger} - Logger for simulation events</li>
+ *   <li>{@link org.wildloop.LogExporter} - Utility for exporting simulation logs</li>
  * </ul>
  *
  * <h2>Features</h2>
@@ -54,5 +58,9 @@
  * @see org.wildloop.Animal
  * @see org.wildloop.Prey
  * @see org.wildloop.Predator
+ * @see org.wildloop.Event
+ * @see org.wildloop.EventType
+ * @see org.wildloop.EventLogger
+ * @see org.wildloop.LogExporter
  */
 package org.wildloop;
