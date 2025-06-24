@@ -33,6 +33,9 @@ public class World {
         this.animals = new ArrayList<>();
         this.turn = 1;
         this.id = UUID.randomUUID().toString().substring(0, 8);
+
+        LogExporter.openLog(this.id);
+        Event.log(EventType.SIMULATION_START, this);
     }
 
     /** @return current world grid with animals */
@@ -87,7 +90,7 @@ public class World {
 
         grid[position.x()][position.y()] = animal;
         animals.add(animal);
-        animal.setWorld(this);
+        Event.log(EventType.SPAWN, this, animal);
     }
 
     /**
@@ -112,7 +115,6 @@ public class World {
 
         grid[position.x()][position.y()] = null;
         animals.remove(animal);
-        animal.setEnergy(-1);
     }
 
     /**
@@ -155,6 +157,6 @@ public class World {
     public void resetWorld() {
         this.grid = new Animal[getWidth()][getHeight()];
         this.animals = new ArrayList<>();
-        this.turn = 0;
+        this.turn = 1;
     }
 }

@@ -30,8 +30,8 @@ public class Predator extends Animal {
      * @param energy   initial energy of the predator
      * @param maxAge   maximum age the predator can reach
      */
-    public Predator(Position position, int energy, int maxAge) {
-        super(position, energy, maxAge);
+    public Predator(World world, Position position, int energy, int maxAge) {
+        super(world, position, energy, maxAge);
     }
 
     /**
@@ -70,9 +70,6 @@ public class Predator extends Animal {
      * @return nearest prey or {@code null} if none is within range
      */
     private Prey findNearestPrey() {
-        if (world == null) {
-            throw new IllegalStateException("Predator is not assigned to a world");
-        }
         if (getPosition() == null) {
             throw new IllegalStateException("Predator has no position");
         }
@@ -101,11 +98,11 @@ public class Predator extends Animal {
     protected void eat() {
         Prey prey = findNearestPrey();
         if (prey != null && getPosition().distanceTo(prey.getPosition()) == 1) {
-            prey.die();
             Event.log(EventType.DIE_EATEN, world, prey, this);
+            prey.die();
 
-            setEnergy(getEnergy() + HUNT_ENERGY_GAIN);
             Event.log(EventType.EAT_PREY, world, this, prey);
+            setEnergy(getEnergy() + HUNT_ENERGY_GAIN);
         }
     }
 
@@ -121,6 +118,6 @@ public class Predator extends Animal {
             throw new IllegalArgumentException("Offspring position cannot be null");
         }
 
-        return new Predator(position, OFFSPRING_ENERGY, getMaxAge());
+        return new Predator(world, position, OFFSPRING_ENERGY, getMaxAge());
     }
 }

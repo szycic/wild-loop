@@ -170,6 +170,8 @@ public class SimulationPanel extends JPanel {
             timer.stop(); // if timer exists then stop it
         }
         isPaused = false; // restore flag to default value
+        Event.log(EventType.SIMULATION_END, world); // log simulation end event
+        LogExporter.closeLog(); // close a log file
     }
 
     /**
@@ -184,15 +186,12 @@ public class SimulationPanel extends JPanel {
     public void setSimulationParameters(int size, int preyCount, int predatorCount) {
         this.world = new World(size, size); // create new world with given size
         initializeGrid(size); // initialize GUI grid
-        Event.log(EventType.SIMULATION_START, world);
 
         // loop creating prey
         for (int i = 0; i < preyCount; i++) {
             Position pos = getRandomEmptyPosition(world); // select a random empty position
             if (pos != null) {
-                Prey prey = new Prey(pos, 100, 15);
-                world.addAnimal(prey); // if the position is empty, create new prey
-                Event.log(EventType.SPAWN, world, prey); // log spawn event
+                new Prey(world, pos, 100, 15);
             }
         }
 
@@ -200,9 +199,7 @@ public class SimulationPanel extends JPanel {
         for (int i = 0; i < predatorCount; i++) {
             Position pos = getRandomEmptyPosition(world); // select a random empty position
             if (pos != null) {
-                Predator predator = new Predator(pos, 100, 20);
-                world.addAnimal(predator); // if the position is empty, create a new predator
-                Event.log(EventType.SPAWN, world, predator); // log spawn event
+                new Predator(world, pos, 100, 20);
             }
         }
     }
@@ -256,7 +253,6 @@ public class SimulationPanel extends JPanel {
 
                 // check simulation end condition (if any living creature exists)
                 if (world.getAnimals().isEmpty()) {
-                    Event.log(EventType.SIMULATION_END, world); // log simulation end event
                     stopSimulation(); // stop simulation
                     JOptionPane.showMessageDialog(this, "Simulation ended!"); // display simulation end message
                 }

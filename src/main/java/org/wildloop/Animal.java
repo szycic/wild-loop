@@ -28,6 +28,8 @@ public abstract class Animal {
     private int age;
     /** Maximum age after which the animal die */
     private final int maxAge;
+    /** Flag indicating whether the animal is dead */
+    private boolean isDead = false;
     /** Reference to the world in which the animal lives */
     protected World world;
     /** Unique identifier for the animal instance */
@@ -40,7 +42,10 @@ public abstract class Animal {
      * @param energy   initial energy level
      * @param maxAge   maximum age the animal can reach
      */
-    public Animal(Position position, int energy, int maxAge) {
+    public Animal(World world, Position position, int energy, int maxAge) {
+        if (world == null) {
+            throw new IllegalArgumentException("World cannot be null");
+        }
         if (position == null) {
             throw new IllegalArgumentException("Position cannot be null");
         }
@@ -54,11 +59,14 @@ public abstract class Animal {
             throw new IllegalArgumentException("Maximum age must be greater than zero");
         }
 
+        this.world = world;
         this.position = position;
         this.energy = energy;
         this.maxAge = maxAge;
         this.age = 0;
         this.id = generateUniqueId();
+
+        world.addAnimal(this);
     }
 
     /** @return unique identifier for the animal */
@@ -104,11 +112,6 @@ public abstract class Animal {
         this.age++;
     }
 
-    /** @param world world in which the animal will be placed */
-    public void setWorld(World world) {
-        this.world = world;
-    }
-
     /**
      * Moves the animal in the direction determined by {@link #getNextMoveDirection()}.
      * Movement is only performed if the new position is valid and empty.
@@ -123,6 +126,8 @@ public abstract class Animal {
                 world.getGrid()[oldPosition.x()][oldPosition.y()] = null;
                 world.getGrid()[newPosition.x()][newPosition.y()] = this;
                 position = newPosition;
+                Event.log(EventType.MOVE, world, this);
+
                 energy -= MOVE_ENERGY_COST;
             }
         }
@@ -145,9 +150,9 @@ public abstract class Animal {
             Position offspring_position = findEmptyAdjacentCell();
             if (offspring_position != null) {
                 Animal offspring = createOffspring(offspring_position);
-                energy -= REPRODUCTION_ENERGY_COST;
-                world.addAnimal(offspring);
                 Event.log(EventType.REPRODUCE, world, this, offspring);
+
+                energy -= REPRODUCTION_ENERGY_COST;
             }
         }
     }
@@ -187,6 +192,8 @@ public abstract class Animal {
      */
     public void die() {
         world.removeAnimal(this);
+        energy = -1;
+        isDead = true;
     }
 
     /**
@@ -206,10 +213,7 @@ public abstract class Animal {
         }
 
         incrementAge();
-
         move();
-        Event.log(EventType.MOVE, world, this);
-
         eat();
 
         if (energy >= REPRODUCTION_ENERGY_THRESHOLD) {
@@ -218,14 +222,14 @@ public abstract class Animal {
             eat();
         }
 
-        if (energy <= 0) {
-            die();
+        if (energy <= 0 && !isDead) {
             Event.log(EventType.DIE_ENERGY, world, this);
+            die();
         }
 
-        if (age >= maxAge) {
-            die();
+        if (age >= maxAge && !isDead) {
             Event.log(EventType.DIE_AGE, world, this);
+            die();
         }
     }
 }

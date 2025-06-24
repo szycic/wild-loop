@@ -1,5 +1,14 @@
 package org.wildloop;
 
+/**
+ * Enum representing various types of events that can occur during the simulation.
+ * Each event type has a specific format for its description and may require certain parameters.
+ * The enum provides methods to generate formatted descriptions and validate parameters.
+ *
+ * @see Event
+ * @see EventLogger
+ * @see LogExporter
+ */
 public enum EventType {
     /** Signals the start of the simulation */
     SIMULATION_START("Simulation started"),

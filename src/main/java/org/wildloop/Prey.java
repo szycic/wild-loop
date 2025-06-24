@@ -26,8 +26,8 @@ public class Prey extends Animal {
      * @param energy   initial energy of the prey
      * @param maxAge   maximum age the prey can reach
      */
-    public Prey(Position position, int energy, int maxAge) {
-        super(position, energy, maxAge);
+    public Prey(World world, Position position, int energy, int maxAge) {
+        super(world, position, energy, maxAge);
     }
 
     /**
@@ -64,9 +64,6 @@ public class Prey extends Animal {
      * @return nearest predator or {@code null} if none is within range
      */
     private Predator findNearestPredator() {
-        if (world == null) {
-            throw new IllegalStateException("Prey is not assigned to a world");
-        }
         if (getPosition() == null) {
             throw new IllegalStateException("Prey has no position defined");
         }
@@ -93,8 +90,8 @@ public class Prey extends Animal {
     @Override
     protected void eat() {
         if (getEnergy() < MAX_ENERGY - GRAZE_ENERGY_GAIN) {
-            setEnergy(getEnergy() + GRAZE_ENERGY_GAIN);
             Event.log(EventType.EAT_GRASS, world, this);
+            setEnergy(getEnergy() + GRAZE_ENERGY_GAIN);
         }
     }
 
@@ -110,6 +107,6 @@ public class Prey extends Animal {
             throw new IllegalArgumentException("Offspring position cannot be null");
         }
 
-        return new Prey(position, OFFSPRING_ENERGY, getMaxAge());
+        return new Prey(world, position, OFFSPRING_ENERGY, getMaxAge());
     }
 }

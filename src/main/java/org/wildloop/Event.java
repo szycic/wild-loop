@@ -10,6 +10,10 @@ import java.util.Objects;
  * Represents an event that occurs in the simulation world.
  * Events can be related to animal actions, interactions, or state changes.
  * Each event is associated with a specific world, type, and may involve one or two animals.
+ *
+ * @see EventType
+ * @see EventLogger
+ * @see LogExporter
  */
 public final class Event {
     /** Type of the event */

@@ -16,6 +16,10 @@ import java.util.function.Consumer;
  * to respond to various events in the simulation. Each listener is a
  * {@code Consumer<Event>} that processes an {@link Event} when it occurs.
  * </p>
+ *
+ * @see Event
+ * @see EventType
+ * @see LogExporter
  */
 public class EventLogger {
     /**
