@@ -17,6 +17,10 @@ import javax.swing.*;
  * @see Animal
  * @see Prey
  * @see Predator
+ * @see Event
+ * @see EventType
+ * @see EventLogger
+ * @see LogExporter
  */
 public class Main {
     /**
