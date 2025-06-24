@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -39,6 +40,20 @@ public class LogExporter {
         if (!logDir.exists()) {
             createLogDirectory();
         }
+
+        Consumer<Event> logListener = event -> {
+            if (logWriter != null) {
+                try {
+                    logWriter.write(event.toString());
+                    logWriter.newLine();
+                    logWriter.flush();
+                } catch (IOException e) {
+                    System.err.println("Failed to write to log file: " + e.getMessage());
+                }
+            }
+        };
+
+        EventLogger.subscribe(logListener);
     }
     
     /**
@@ -74,16 +89,6 @@ public class LogExporter {
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING
             );
-            
-            EventLogger.subscribe(event -> {
-                try {
-                    logWriter.write(event.toString());
-                    logWriter.newLine();
-                    logWriter.flush();
-                } catch (IOException e) {
-                    System.err.println("Failed to write to log file: " + e.getMessage());
-                }
-            });
         } catch (IOException e) {
             System.err.println("Failed to create log file: " + e.getMessage());
         }
