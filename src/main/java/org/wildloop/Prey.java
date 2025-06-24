@@ -42,9 +42,9 @@ public class Prey extends Animal {
     }
 
     /**
-     * Determines direction of prey's next move.
+     * Determines the direction of prey's next move.
      * If a predator is within {@link #FLEE_RANGE}, prey flees in opposite direction.
-     * Otherwise, chooses a random direction.
+     * Otherwise, choose a random direction.
      *
      * @return direction in which prey should move
      */
@@ -52,6 +52,7 @@ public class Prey extends Animal {
     protected Direction getNextMoveDirection() {
         Predator nearestPredator = findNearestPredator();
         if (nearestPredator != null) {
+            Event.log(EventType.FLEE, world, this, nearestPredator);
             return getPosition().directionFrom(nearestPredator.getPosition());
         }
         return Direction.getRandom();
@@ -93,11 +94,12 @@ public class Prey extends Animal {
     protected void eat() {
         if (getEnergy() < MAX_ENERGY - GRAZE_ENERGY_GAIN) {
             setEnergy(getEnergy() + GRAZE_ENERGY_GAIN);
+            Event.log(EventType.EAT_GRASS, world, this);
         }
     }
 
     /**
-     * Creates a new prey as offspring.
+     * Creates new prey as offspring.
      *
      * @param position position for the new prey
      * @return new prey object with initial energy equal to {@link #OFFSPRING_ENERGY}

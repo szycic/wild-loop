@@ -86,7 +86,7 @@ public class SimulationPanel extends JPanel {
                 gridLabels[x][y].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        handleAnimalClick(finalX, finalY); // Handle click on grid cell
+                        handleAnimalClick(finalX, finalY); // Handle click on the grid cell
                     }
                 });
             }
@@ -94,7 +94,7 @@ public class SimulationPanel extends JPanel {
 
         // STATISTICS PANEL
         statsLabel = new JLabel("Turn: 0 | Predators: 0 | Prey: 0", SwingConstants.CENTER); // initialize statistics label
-        statsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // set an empty border with 10px margins
+        statsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // set an empty border with 10 px margins
 
         pauseButton = new JButton("Pause"); // create pause button
         pauseButton.addActionListener(e -> togglePause()); // action listener toggling pause on click
@@ -143,9 +143,11 @@ public class SimulationPanel extends JPanel {
         if (isPaused) { // check if isPaused == true
             timer.stop(); // stop simulation
             pauseButton.setText("Resume"); // change button text from "Pause" to "Resume"
+            Event.log(EventType.SIMULATION_PAUSE, world); // log pause event
         } else { // if not
             timer.start(); // resume simulation
             pauseButton.setText("Pause"); // change button text from "Resume" to "Pause"
+            Event.log(EventType.SIMULATION_RESUME, world); // log resume event
         }
     }
 
@@ -182,12 +184,15 @@ public class SimulationPanel extends JPanel {
     public void setSimulationParameters(int size, int preyCount, int predatorCount) {
         this.world = new World(size, size); // create new world with given size
         initializeGrid(size); // initialize GUI grid
+        Event.log(EventType.SIMULATION_START, world);
 
         // loop creating prey
         for (int i = 0; i < preyCount; i++) {
             Position pos = getRandomEmptyPosition(world); // select a random empty position
             if (pos != null) {
-                world.addAnimal(new Prey(pos, 100, 15)); // if the position is empty, create new prey
+                Prey prey = new Prey(pos, 100, 15);
+                world.addAnimal(prey); // if the position is empty, create new prey
+                Event.log(EventType.SPAWN, world, prey); // log spawn event
             }
         }
 
@@ -195,7 +200,9 @@ public class SimulationPanel extends JPanel {
         for (int i = 0; i < predatorCount; i++) {
             Position pos = getRandomEmptyPosition(world); // select a random empty position
             if (pos != null) {
-                world.addAnimal(new Predator(pos, 100, 20)); // if the position is empty, create a new predator
+                Predator predator = new Predator(pos, 100, 20);
+                world.addAnimal(predator); // if the position is empty, create a new predator
+                Event.log(EventType.SPAWN, world, predator); // log spawn event
             }
         }
     }
@@ -222,7 +229,7 @@ public class SimulationPanel extends JPanel {
      * </p>
      * <p>
      * If simulation reaches end condition, such as no remaining animals
-     * in world, simulation is stopped using {@link #stopSimulation()},
+     * in a world, simulation is stopped using {@link #stopSimulation()},
      * and user is shown notification.
      * </p>
      */
@@ -239,7 +246,7 @@ public class SimulationPanel extends JPanel {
             timer.stop(); // if any timer is running, then stop it
         }
 
-        // create new timer with 500ms delay
+        // create a new timer with 500 ms delay
         timer = new Timer(500, e -> {
             // if simulation is not stopped
             if (!isPaused) {
@@ -249,6 +256,7 @@ public class SimulationPanel extends JPanel {
 
                 // check simulation end condition (if any living creature exists)
                 if (world.getAnimals().isEmpty()) {
+                    Event.log(EventType.SIMULATION_END, world); // log simulation end event
                     stopSimulation(); // stop simulation
                     JOptionPane.showMessageDialog(this, "Simulation ended!"); // display simulation end message
                 }
@@ -277,13 +285,13 @@ public class SimulationPanel extends JPanel {
                 gridLabels[x][y].setOpaque(true); // Enable background coloring
                 gridLabels[x][y].setBackground(Color.WHITE); // Set default background
 
-                // Add mouse listener to each label
+                // Add a mouse listener to each label
                 final int finalX = x;
                 final int finalY = y;
                 gridLabels[x][y].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        handleAnimalClick(finalX, finalY); // Handle click on grid cell
+                        handleAnimalClick(finalX, finalY); // Handle click on the grid cell
                     }
                 });
 
@@ -365,7 +373,7 @@ public class SimulationPanel extends JPanel {
     /**
      * Generates random empty position in a given world.
      * Method tries to find unoccupied position within world bounds.
-     * Makes maximum of 100 attempts to find an empty cell.
+     * Makes a maximum of 100 attempts to find an empty cell.
      * If after 100 attempts no empty cell is found,
      * returns {@code null}.
      *
@@ -455,15 +463,15 @@ public class SimulationPanel extends JPanel {
             }
         }
 
-        // Get animal at clicked position
+        // Get the animal at clicked position
         Animal animal = world.getGrid()[x][y];
 
         if (animal != null && animal == selectedAnimal) {
-            // Clicked on already selected animal - deselect it
+            // Clicked on the already selected animal-deselect it
             selectedAnimal = null;
             animalInfoPanel.setSelectedAnimal(null);
         } else {
-            // Select new animal or null if clicked on empty cell
+            // Select a new animal or null if clicked on an empty cell
             selectedAnimal = animal;
             animalInfoPanel.setSelectedAnimal(animal);
         }

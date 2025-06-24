@@ -30,6 +30,7 @@ public abstract class Animal {
     private final int maxAge;
     /** Reference to the world in which the animal lives */
     protected World world;
+    /** Unique identifier for the animal instance */
     private final String id;
 
     /**
@@ -146,6 +147,7 @@ public abstract class Animal {
                 Animal offspring = createOffspring(offspring_position);
                 energy -= REPRODUCTION_ENERGY_COST;
                 world.addAnimal(offspring);
+                Event.log(EventType.REPRODUCE, world, this, offspring);
             }
         }
     }
@@ -194,7 +196,7 @@ public abstract class Animal {
      * <li>Increases age</li>
      * <li>Makes a move</li>
      * <li>Tries to find food</li>
-     * <li>Tries to reproduce if has enough energy</li>
+     * <li>Tries to reproduce if it has enough energy</li>
      * <li>Dies if runs out of energy or exceeds maximum age</li>
      * </ol>
      */
@@ -204,7 +206,10 @@ public abstract class Animal {
         }
 
         incrementAge();
+
         move();
+        Event.log(EventType.MOVE, world, this);
+
         eat();
 
         if (energy >= REPRODUCTION_ENERGY_THRESHOLD) {
@@ -213,8 +218,14 @@ public abstract class Animal {
             eat();
         }
 
-        if (energy <= 0 || age >= maxAge) {
+        if (energy <= 0) {
             die();
+            Event.log(EventType.DIE_ENERGY, world, this);
+        }
+
+        if (age >= maxAge) {
+            die();
+            Event.log(EventType.DIE_AGE, world, this);
         }
     }
 }

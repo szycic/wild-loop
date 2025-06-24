@@ -69,4 +69,14 @@ public record Position(int x, int y) {
     public Position newPosition(Direction direction) {
         return new Position(this.x + direction.getDx(), this.y + direction.getDy());
     }
+
+    /**
+     * Returns a string representation of the position in the format "(x, y)".
+     *
+     * @return string representation of the position
+     */
+    @Override
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ")";
+    }
 }

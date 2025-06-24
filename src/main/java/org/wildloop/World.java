@@ -1,8 +1,8 @@
 package org.wildloop;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents the simulation world where animals can move and interact.
@@ -19,8 +19,8 @@ public class World {
     private List<Animal> animals;
     /** Counter of completed simulation turns */
     private int turn;
-    /** List of events that occurred in the world */
-    private List<Event> events;
+    /** Unique identifier for the world instance */
+    private final String id;
 
     /**
      * Creates a new world with specified dimensions.
@@ -31,8 +31,8 @@ public class World {
     public World(int width, int height) {
         this.grid = new Animal[width][height];
         this.animals = new ArrayList<>();
-        this.turn = 0;
-        this.events = new ArrayList<>();
+        this.turn = 1;
+        this.id = UUID.randomUUID().toString().substring(0, 8);
     }
 
     /** @return current world grid with animals */
@@ -60,30 +60,17 @@ public class World {
         return grid[0].length;
     }
 
-    /** @return unmodifiable list of all events that occurred in the world */
-    public List<Event> getEvents() {
-        return Collections.unmodifiableList(events);
-    }
-
-    /**
-     * Adds a new event to the world.
-     *
-     * @param event event to add
-     * @throws IllegalArgumentException if event is null
-     */
-    public void addEvent(Event event) {
-        if (event == null) {
-            throw new IllegalArgumentException("Cannot add null event");
-        }
-        events.add(event);
+    /** @return unique identifier of the world */
+    public String getId() {
+        return id;
     }
 
     /**
      * Adds a new animal to the world.
      *
      * @param animal animal to add
-     * @throws IllegalArgumentException if animal is null or its position is invalid
-     * @throws IllegalStateException    if target cell is already occupied
+     * @throws IllegalArgumentException if an animal is null or its position is invalid
+     * @throws IllegalStateException    if the target cell is already occupied
      */
     public void addAnimal(Animal animal) {
         if (animal == null) {
@@ -107,8 +94,8 @@ public class World {
      * Removes an animal from the world.
      *
      * @param animal animal to remove
-     * @throws IllegalArgumentException if animal is null
-     * @throws IllegalStateException    if animal does not exist in the world or its position is invalid
+     * @throws IllegalArgumentException if the animal is null
+     * @throws IllegalStateException    if an animal does not exist in the world or its position is invalid
      */
     public void removeAnimal(Animal animal) {
         if (animal == null) {
@@ -125,8 +112,6 @@ public class World {
 
         grid[position.x()][position.y()] = null;
         animals.remove(animal);
-        animal.setWorld(null);
-        animal.setPosition(null);
         animal.setEnergy(-1);
     }
 
@@ -160,6 +145,7 @@ public class World {
         for (Animal animal : currentAnimals) {
             animal.update();
         }
+        Event.log(EventType.SIMULATION_TURN, this);
         turn++;
     }
 
