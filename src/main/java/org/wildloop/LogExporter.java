@@ -9,15 +9,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
 /**
- * <p>
  * LogExporter is responsible for exporting simulation logs to files.
  * It manages the creation of log files, writing events to them, and archiving
  * logs with timestamps and {@link World} IDs.
- * </p>
  * <p>
  * The logs are stored in a specified directory with a consistent naming scheme,
  * allowing for easy retrieval and analysis of simulation events.
- * </p>
  *
  * @see EventLogger
  * @see Event

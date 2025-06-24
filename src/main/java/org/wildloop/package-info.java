@@ -1,13 +1,9 @@
 /**
- * <h1>WildLoop</h1>
- *
- * <p>
+ * <h2>WildLoop</h2>
  * WildLoop is an application simulating interaction between predators and prey in a grid-based
  * environment. The project demonstrates basic principles of ecosystem and animal behavior
  * in a controlled environment.
- * </p>
- *
- * <h2>Main Components</h2>
+ * <h3>Main Components</h3>
  * <ul>
  *   <li>{@link org.wildloop.StartApp} - Main application window managing the user interface</li>
  *   <li>{@link org.wildloop.SimulationPanel} - Panel responsible for displaying and controlling simulation</li>
@@ -24,8 +20,7 @@
  *   <li>{@link org.wildloop.EventLogger} - Logger for simulation events</li>
  *   <li>{@link org.wildloop.LogExporter} - Utility for exporting simulation logs</li>
  * </ul>
- *
- * <h2>Features</h2>
+ * <h3>Features</h3>
  * <ul>
  *   <li>Interactive ecosystem simulation</li>
  *   <li>Configurable simulation parameters (world size, number of animals)</li>
@@ -33,14 +28,10 @@
  *   <li>Population statistics</li>
  *   <li>Ability to pause/resume simulation</li>
  * </ul>
- *
- * <h2>Running the Application</h2>
- * <p>
+ * <h3>Running the Application</h3>
  * The application is launched through the {@code main} method which creates a new instance of {@link org.wildloop.StartApp}
  * in Swing's Event Dispatch Thread (EDT) using {@link javax.swing.SwingUtilities#invokeLater(Runnable)}.
- * </p>
- *
- * <h2>System Requirements</h2>
+ * <h3>System Requirements</h3>
  * <ul>
  *   <li>Java 24 or newer</li>
  *   <li>Graphical environment supporting Swing</li>

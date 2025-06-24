@@ -5,17 +5,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * <p>
  * The EventLogger class is responsible for managing and logging events
  * that occur within the simulation world. It maintains a list of listeners
  * that can handle these events, allowing for modular and extensible event
  * handling.
- * </p>
  * <p>
  * This class provides a static list of listeners, which can be registered
  * to respond to various events in the simulation. Each listener is a
  * {@code Consumer<Event>} that processes an {@link Event} when it occurs.
- * </p>
  *
  * @see Event
  * @see EventType

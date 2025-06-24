@@ -144,7 +144,7 @@ public class StartApp extends JFrame {
     }
 
     /**
-     * Switches interface back to the main menu and resets the simulation state.
+     * Switches interface back to the main menu and reset the simulation state.
      * This method is called when simulation ends or the user wants to
      * return to the main menu.
      */

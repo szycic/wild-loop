@@ -63,45 +63,71 @@ public abstract class Animal {
         world.addAnimal(this);
     }
 
-    /** @return unique identifier for the animal */
+    /**
+     * Generates a unique identifier for the animal.
+     * @return unique identifier as a string
+     */
     protected abstract String generateUniqueId();
 
-    /** @return unique identifier of the animal */
+    /**
+     * Returns the unique identifier of the animal.
+     * @return unique identifier of the animal
+     */
     public String getId() {
         return id;
     }
 
-    /** @return current position of the animal */
+    /**
+     * Returns the current position of the animal in the world.
+     * @return current position of the animal
+     */
     public Position getPosition() {
         return position;
     }
 
-    /** @return current energy level of the animal */
+    /**
+     * Returns the current energy level of the animal.
+     * @return current energy level of the animal
+     */
     public int getEnergy() {
         return energy;
     }
 
-    /** @return current age of the animal */
+    /**
+     * Returns the current age of the animal.
+     * @return current age of the animal
+     */
     public int getAge() {
         return age;
     }
 
-    /** @return maximum age that the animal can reach */
+    /**
+     * Returns the maximum age of the animal.
+     * @return maximum age of the animal
+     */
     public int getMaxAge() {
         return maxAge;
     }
 
-    /** @param position new position of the animal */
+    /**
+     * Sets the current position of the animal.
+     * @param position new position of the animal
+     */
     public void setPosition(Position position) {
         this.position = position;
     }
 
-    /** @param energy new energy level */
+    /**
+     * Sets the current energy level of the animal.
+     * @param energy new energy level of the animal
+     */
     public void setEnergy(int energy) {
         this.energy = Math.min(energy, MAX_ENERGY);
     }
 
-    /** Increases animal age by 1 */
+    /**
+     * Increments the age of the animal by one year.
+     */
     public void incrementAge() {
         this.age++;
     }

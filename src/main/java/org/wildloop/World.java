@@ -38,32 +38,50 @@ public class World {
         Event.log(EventType.SIMULATION_START, this);
     }
 
-    /** @return current world grid with animals */
+    /**
+     * Returns the two-dimensional grid representing the world.
+     * @return grid of animals in the world
+     */
     public Animal[][] getGrid() {
         return grid;
     }
 
-    /** @return list of all living animals */
+    /**
+     * Returns a list of all animals currently in the world.
+     * @return list of animals
+     */
     public List<Animal> getAnimals() {
         return animals;
     }
 
-    /** @return number of completed turns */
+    /**
+     * Returns the current turn number in the simulation.
+     * @return current turn number
+     */
     public int getTurn() {
         return turn;
     }
 
-    /** @return width of the world */
+    /**
+     * Returns the width of the world.
+     * @return width of the world
+     */
     public int getWidth() {
         return grid.length;
     }
 
-    /** @return height of the world */
+    /**
+     * Returns the height of the world.
+     * @return height of the world
+     */
     public int getHeight() {
         return grid[0].length;
     }
 
-    /** @return unique identifier of the world */
+    /**
+     * Returns the unique identifier of the world.
+     * @return unique identifier of the world
+     */
     public String getId() {
         return id;
     }
