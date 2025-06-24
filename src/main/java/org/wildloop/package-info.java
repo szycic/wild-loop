@@ -2,7 +2,7 @@
  * <h2>WildLoop</h2>
  * WildLoop is an application simulating interaction between predators and prey in a grid-based
  * environment. The project demonstrates basic principles of ecosystem and animal behavior
- * in a controlled environment. Repository of the project can be found at <a href="https://github.com/szycic/wild-loop">GitHub</a>.
+ * in a controlled environment. Repository of the project can be found at <a href="https://github.com/szycic/wild-loop" target="_blank">GitHub</a>.
  * <h3>Main Components</h3>
  * <ul>
  *   <li>{@link org.wildloop.StartApp} - Main application window managing the user interface</li>
