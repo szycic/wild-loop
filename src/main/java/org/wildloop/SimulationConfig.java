@@ -17,7 +17,7 @@ public class SimulationConfig {
     /** Object storing loaded configuration parameters */
     private static final Properties properties = new Properties();
 
-    // Static initialization block - loads parameters from simulation.properties file
+    // Static initialization block - loads parameters from the simulation.properties file
     static {
         try (InputStream input = SimulationConfig.class.getClassLoader().getResourceAsStream("simulation.properties")) {
             properties.load(input);
