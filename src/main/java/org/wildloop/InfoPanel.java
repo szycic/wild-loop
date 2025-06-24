@@ -28,6 +28,7 @@ public class InfoPanel extends JPanel {
 
         infoLabel = new JLabel("No animal selected"); // initializing info label
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER); // set text alignment to center
+        infoLabel.setFont(new Font("Arial", Font.BOLD, 24));
         add(infoLabel, BorderLayout.CENTER); // add label to the panel
     }
 

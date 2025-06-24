@@ -7,13 +7,16 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
+ * <p>
  * Represents the main graphical user interface for the simulation,
  * consisting of a grid-based world inhabited by predators and prey,
  * and provides controls for managing and displaying the simulation state.
+ * </p>
  * <p>
  * This class extends {@link JPanel} and is designed to integrate with the Swing GUI framework.
  * Manages the simulation grid, statistics display, and provides user interaction
  * through controls such as pause and return buttons.
+ * </p>
  *
  * @see StartApp
  * @see SimulationConfig
@@ -74,6 +77,7 @@ public class SimulationPanel extends JPanel {
 
         animalInfoPanel = new InfoPanel();
         animalInfoPanel.setBorder(BorderFactory.createTitledBorder("Animal Info"));
+        animalInfoPanel.setFont(new Font("Arial", Font.BOLD, 24));
 
         // add mouse listener to grid labels
         for (int x = 0; x < 20; x++) {
@@ -91,12 +95,15 @@ public class SimulationPanel extends JPanel {
 
         // STATISTICS PANEL
         statsLabel = new JLabel("Turn: 0 | Predators: 0 | Prey: 0", SwingConstants.CENTER); // initialize statistics label
+        statsLabel.setFont(new Font("Arial", Font.BOLD, 24));
         statsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // set an empty border with 10 px margins
 
         pauseButton = new JButton("Pause"); // create pause button
+        pauseButton.setFont(new Font("Arial", Font.BOLD, 24));
         pauseButton.addActionListener(e -> togglePause()); // action listener toggling pause on click
 
         JButton backButton = new JButton("Back to menu"); // button to return to a menu
+        backButton.setFont(new Font("Arial", Font.BOLD, 24));
         backButton.addActionListener(e -> {
             stopSimulation(); // stop simulation
             startApp.showMenu(); // method showing a menu panel
@@ -118,17 +125,22 @@ public class SimulationPanel extends JPanel {
     }
 
     /**
+     * <p>
      * Toggles the simulation pause state.
+     * </p>
      * <p>
      * If simulation is currently running, the method pauses simulation
      * by stopping timer and changing pause button text to indicate
      * that simulation can be resumed.
+     * </p>
      * <p>
      * If simulation is currently paused, the method resumes simulation
      * by starting the timer and updating button text to indicate
      * that simulation can be paused again.
+     * </p>
      * <p>
      * Pause state is tracked by {@code isPaused} field.
+     * </p>
      */
     private void togglePause() {
         isPaused = !isPaused; // negate current pause state
@@ -144,14 +156,18 @@ public class SimulationPanel extends JPanel {
     }
 
     /**
+     * <p>
      * Stops simulation by stopping timer and resetting pause state.
+     * </p>
      * <p>
      * Method checks if the simulation timer is active. If so, stops the timer
      * to prevent further simulation updates. Additionally, ensures the pause
      * state is set to false, indicating simulation is no longer paused.
+     * </p>
      * <p>
      * Method is called during simulation termination or reset process
      * to restore it to the default state.
+     * </p>
      */
     private void stopSimulation() {
         if (timer != null) {
@@ -193,13 +209,16 @@ public class SimulationPanel extends JPanel {
     }
 
     /**
+     * <p>
      * Starts simulation by initializing or resetting the necessary components
      * and launching the main simulation loop.
+     * </p>
      * <p>
      * Method checks if a simulation world is initialized. If not,
      * sets default simulation parameters using {@link #setSimulationParameters(int, int, int)}.
      * Ensures simulation is not paused by resetting a pause flag
      * and updates the control button to display "Pause".
+     * </p>
      * <p>
      * Main simulation loop is managed by {@link Timer} with
      * 500-millisecond delay. Each timer tick performs the following actions:
@@ -208,10 +227,12 @@ public class SimulationPanel extends JPanel {
      * <li>Updates GUI grid using {@link #updateGrid()}.</li>
      * <li>Updates simulation statistics using {@link #updateStats()}.</li>
      * </ul>
+     * </p>
      * <p>
      * If simulation reaches end condition, such as no remaining animals
      * in a world, simulation is stopped using {@link #stopSimulation()},
      * and user is shown notification.
+     * </p>
      */
     public void startSimulation() {
         // check if world exists
@@ -219,8 +240,9 @@ public class SimulationPanel extends JPanel {
             setSimulationParameters(DEFAULT_WORLD_SIZE, DEFAULT_PREY_COUNT, DEFAULT_PREDATOR_COUNT); // set default parameters
         }
 
-        isPaused = false; // restart flag to default value  
+        isPaused = false; // restart flag to default value
         pauseButton.setText("Pause"); // set button text to "pause"
+        pauseButton.setFont(new Font("Arial", Font.BOLD, 24));
 
         if (timer != null) {
             timer.stop(); // if any timer is running, then stop it
@@ -282,7 +304,9 @@ public class SimulationPanel extends JPanel {
     }
 
     /**
+     * <p>
      * Updates visual representation of the simulation grid.
+     * </p>
      * <p>
      * Method iterates through each cell in the simulation world grid and updates graphical
      * labels corresponding to each cell based on its current contents. Specifically:
@@ -291,6 +315,7 @@ public class SimulationPanel extends JPanel {
      *     <li>If cell contains instance of {@link Predator}, sets label text to "P"</li>
      *     <li>If cell contains instance of {@link Prey}, sets label text to "O"</li>
      * </ul>
+     * </p>
      */
     private void updateGrid() {
         for (int y = 0; y < world.getHeight(); y++) {
@@ -314,12 +339,15 @@ public class SimulationPanel extends JPanel {
     }
 
     /**
+     * <p>
      * Updates simulation statistics by counting the number of predators and prey
      * in a simulated world. Method gets a list of animals, distinguishes predators
      * and prey based on their classes and calculates their totals.
+     * </p>
      * <p>
      * Then updates statistics display with current turn number, number of
      * predators, prey and total number of animals.
+     * </p>
      */
     private void updateStats() {
         int predatorCount = 0; // predator counter
@@ -368,8 +396,10 @@ public class SimulationPanel extends JPanel {
     }
 
     /**
+     * <p>
      * Restores simulation to the initial state by stopping all active processes,
      * clearing existing simulation data and reinitializing view and necessary components.
+     * </p>
      * <p>
      * Functionality:
      * <ul>
@@ -380,17 +410,20 @@ public class SimulationPanel extends JPanel {
      * <li>Updates simulation statistics to reflect the reset state</li>
      * <li>Restores pause button label to default state</li>
      * </ul>
+     * </p>
      * <p>
      * Preconditions:
      * <ul>
      * <li>'world' object, if not {@code null}, must properly manage its animal list and turn counter</li>
      * <li>Grid graphics and statistics components must allow reinitialization</li>
      * </ul>
+     * </p>
      * <p>
      * Postconditions:
      * <ul>
      * <li>Simulation is set to clean state, ready to start a new simulation run</li>
      * </ul>
+     * </p>
      */
     public void resetSimulation() {
         if (timer != null && timer.isRunning()) {
@@ -423,34 +456,36 @@ public class SimulationPanel extends JPanel {
      * @param y Y coordinate of the clicked cell
      */
     private void handleAnimalClick(int x, int y) {
-        // Reset previous selection highlight
-        if (selectedAnimal != null) {
-            Position pos = selectedAnimal.getPosition();
-            if (pos != null && world.isValidPosition(pos)) {
-                updateCellAppearance(pos.x(), pos.y(), selectedAnimal);
-            }
-        }
-
         // Get the animal at clicked position
-        Animal animal = world.getGrid()[x][y];
+        Animal clickedAnimal = world.getGrid()[x][y];
 
-        if (animal != null && animal == selectedAnimal) {
-            // Clicked on the already selected animal-deselect it
+        // Reset all cell appearances first
+        if (clickedAnimal != null && clickedAnimal == selectedAnimal) {
             selectedAnimal = null;
             animalInfoPanel.setSelectedAnimal(null);
+        } else if (clickedAnimal != null) {
+            selectedAnimal = clickedAnimal;
+            animalInfoPanel.setSelectedAnimal(clickedAnimal);
         } else {
-            // Select a new animal or null if clicked on an empty cell
-            selectedAnimal = animal;
-            animalInfoPanel.setSelectedAnimal(animal);
+            selectedAnimal = null;
+            animalInfoPanel.setSelectedAnimal(null);
         }
 
-        // Highlight newly selected animal
-        if (selectedAnimal != null) {
-            Position pos = selectedAnimal.getPosition();
-            if (pos != null && world.isValidPosition(pos)) {
-                gridLabels[pos.x()][pos.y()].setBackground(animalInfoPanel.getHighlightColor());
+        for (int i = 0; i < world.getWidth(); i++) {
+            for (int j = 0; j < world.getHeight(); j++) {
+                Animal currentAnimal = world.getGrid()[i][j];
+                if (currentAnimal == selectedAnimal) {
+                    gridLabels[i][j].setBackground(animalInfoPanel.getHighlightColor());
+                } else if (currentAnimal instanceof Predator) {
+                    gridLabels[i][j].setBackground(Color.RED);
+                } else if (currentAnimal instanceof Prey) {
+                    gridLabels[i][j].setBackground(Color.BLUE);
+                } else {
+                    gridLabels[i][j].setBackground(Color.WHITE);
+                }
             }
         }
+
     }
 
     /**
@@ -466,10 +501,10 @@ public class SimulationPanel extends JPanel {
             label.setBackground(Color.WHITE); // Default background
         } else if (animal instanceof Predator) {
             label.setText("P"); // Predator
-            label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.WHITE);
+            label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.RED);
         } else if (animal instanceof Prey) {
             label.setText("O"); // Prey
-            label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.WHITE);
+            label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.BLUE);
         }
     }
 }
