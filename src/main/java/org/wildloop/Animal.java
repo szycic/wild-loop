@@ -55,8 +55,8 @@ public abstract class Animal {
         this.position = position;
         this.energy = DEFAULT_ENERGY;
         this.maxAge = this instanceof Prey
-                ? SimulationConfig.getValue("prey.max.age")
-                : SimulationConfig.getValue("predator.max.age");
+                ? Prey.MAX_AGE
+                : Predator.MAX_AGE;
         this.age = 0;
         this.id = generateUniqueId();
 

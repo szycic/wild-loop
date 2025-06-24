@@ -8,14 +8,12 @@ package org.wildloop;
  * @see Prey
  */
 public class Predator extends Animal {
-    /**
-     * Maximum range at which a predator can detect prey
-     */
-    private static final int HUNT_RANGE = SimulationConfig.getValue("predator.hunt.range");
-    /**
-     * Amount of energy gained by predator after eating prey
-     */
-    private static final int HUNT_ENERGY_GAIN = SimulationConfig.getValue("predator.hunt.energy.gain");
+    /** Maximum age of predator after which it dies */
+    protected static final int MAX_AGE = SimulationConfig.getValue("predator.max.age");
+    /** Maximum range at which a predator can detect prey */
+    protected static final int HUNT_RANGE = SimulationConfig.getValue("predator.hunt.range");
+    /** Amount of energy gained by predator after eating prey */
+    protected static final int HUNT_ENERGY_GAIN = SimulationConfig.getValue("predator.hunt.energy.gain");
 
     /**
      * A static counter used to generate unique identifiers for prey instances.

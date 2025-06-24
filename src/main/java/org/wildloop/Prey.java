@@ -8,10 +8,12 @@ package org.wildloop;
  * @see Predator
  */
 public class Prey extends Animal {
+    /** Maximum age of prey after which it dies */
+    protected static final int MAX_AGE = SimulationConfig.getValue("prey.max.age");
     /** Maximum range at which prey can detect predator */
-    private static final int FLEE_RANGE = SimulationConfig.getValue("prey.flee.range");
+    protected static final int FLEE_RANGE = SimulationConfig.getValue("prey.flee.range");
     /** Amount of energy gained by prey while grazing */
-    private static final int GRAZE_ENERGY_GAIN = SimulationConfig.getValue("prey.graze.energy.gain");
+    protected static final int GRAZE_ENERGY_GAIN = SimulationConfig.getValue("prey.graze.energy.gain");
 
     /**
      * A static counter used to generate unique identifiers for prey instances.
@@ -88,7 +90,7 @@ public class Prey extends Animal {
      */
     @Override
     protected void eat() {
-        if (getEnergy() < MAX_ENERGY - GRAZE_ENERGY_GAIN) {
+        if (getEnergy() <= MAX_ENERGY - GRAZE_ENERGY_GAIN) {
             Event.log(EventType.EAT_GRASS, world, this);
             setEnergy(getEnergy() + GRAZE_ENERGY_GAIN);
         }
