@@ -22,22 +22,7 @@ import java.util.function.Consumer;
  * @see LogExporter
  */
 public class EventLogger {
-    /**
-     * <p>
-     * A list maintaining all registered listeners for handling events.
-     * Each listener is a {@code Consumer<Event>} that processes an {@link Event}
-     * when it occurs. Events can represent actions, changes, or interactions
-     * within the simulation world.
-     * </p>
-     * <p>
-     * This list allows multiple listeners to be notified whenever an event
-     * is triggered, enabling modular and extensible event handling.
-     * </p>
-     * <p>
-     * The listeners are stored as a static and thread-safe {@link ArrayList},
-     * and are meant to be managed and invoked by the containing class.
-     * </p>
-     */
+    /** A list maintaining all registered listeners for handling events */
     private static final List<Consumer<Event>> listeners = new ArrayList<>();
 
     /**
