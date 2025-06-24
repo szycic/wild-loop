@@ -90,7 +90,7 @@ public class LogExporter {
     }
 
     /**
-     * Closes the current log file and archives it by callink {@link #archiveLog()}.
+     * Closes the current log file and archives it by calling {@link #archiveLog()}.
      */
     public static void closeLog() {
         if (logWriter != null) {
