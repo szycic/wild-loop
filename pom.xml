@@ -6,7 +6,7 @@
 
     <groupId>org.wildloop</groupId>
     <artifactId>WildLoop</artifactId>
-    <version>0.58</version>
+    <version>0.6.2</version>
 
     <properties>
         <maven.compiler.source>24</maven.compiler.source>
