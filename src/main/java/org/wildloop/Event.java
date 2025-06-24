@@ -44,6 +44,12 @@ public final class Event {
         this.timestamp = Instant.now();
     }
 
+    /**
+     * Logs an event with the specified type and world.
+     * @param type   the type of the event to log; cannot be null
+     * @param world  the world in which the event occurs; can be null if the event is not world-specific
+     * @param params additional parameters related to the event; can be null or empty
+     */
     public static void log(EventType type, World world, Object... params) {
         Event event = new Event(type, world, params);
         EventLogger.publish(event);
