@@ -40,8 +40,9 @@ jobs:
             echo "Test results found, publishing summary."
             echo "## Test Results" >> $GITHUB_STEP_SUMMARY
             for file in target/surefire-reports/*.txt; do
-              echo "### \`$(basename "$file")\`" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`text" >> $GITHUB_STEP_SUMMARY
               cat "$file" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
             done
             echo "Test summary published."
