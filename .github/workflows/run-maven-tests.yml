@@ -39,7 +39,7 @@ jobs:
           if ls target/surefire-reports/TEST-*.xml 1> /dev/null 2>&1; then
             echo "Test results found, publishing summary."
             echo "## Test Results" >> $GITHUB_STEP_SUMMARY
-            grep -A 10 "Results :" target/surefire-reports/*.txt >> $GITHUB_STEP_SUMMARY || echo "No test summary found." >> $GITHUB_STEP_SUMMARY
+            cat target/surefire-reports/*.txt >> $GITHUB_STEP_SUMMARY || echo "No test summary found." >> $GITHUB_STEP_SUMMARY
             echo "Test summary published."
           else
             echo "No test results found, skipping summary publication."
