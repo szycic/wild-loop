@@ -74,13 +74,13 @@ This project was designed to help practice:
 Below is a schematic example of the simulation grid (actual visualisation may vary):
 
 ```
-. . P . . R .
-. R . . . . .
+. . P . . O .
+. O . . . . .
 . . . P . . .
 ```
 Legend:  
-- `P` – Prey  
-- `R` – Predator  
+- `O` – Prey  
+- `P` – Predator  
 - `.` – Empty cell
 
 ## Authors
