@@ -242,7 +242,22 @@ public class SimulationPanel extends JPanel {
                 // check simulation end condition (if any living creature exists)
                 if (world.getAnimals().isEmpty()) {
                     stopSimulation(); // stop simulation
-                    JOptionPane.showMessageDialog(this, "Simulation ended!"); // display simulation end message
+                    JOptionPane.showMessageDialog(this, "There is no animals left\nSimulation ended"); // display simulation end message
+                }
+
+                boolean isFull = true; // assume grid is full
+                outerFor:
+                for (Object[] row : world.getGrid()) {
+                    for (Object cell : row) {
+                        if (cell == null) {
+                            isFull = false; // if any cell is empty, set flag to false
+                            break outerFor; // Exit early on first null
+                        }
+                    }
+                }
+                if (isFull) {
+                    stopSimulation(); // stop simulation if grid is full
+                    JOptionPane.showMessageDialog(this, "The world is full\nSimulation ended"); // display simulation end message
                 }
             }
         });
