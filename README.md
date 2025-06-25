@@ -15,17 +15,17 @@ Each animal has a life energy level that decreases over time and can be replenis
 ## Key Features
 
 - 2D grid world with configurable size
-- distinct behaviours for predators and prey
-- simple decision-making algorithms (hunt, escape, random movement)
-- life energy and reproduction mechanisms
-- population dynamics observable over simulation turns
-- integrated logging system for tracking simulation events and debugging
-- clean object-oriented design using Java
+- Distinct behaviours for predators and prey
+- Simple decision-making algorithms (hunt, escape, random movement)
+- Life energy and reproduction mechanisms
+- Population dynamics observable over simulation turns
+- Integrated logging system for tracking simulation events and debugging
+- Clean object-oriented design using Java
 
 ## System Requirements
 
 - Java 21 or newer
-- graphical environment supporting Swing
+- Graphical environment supporting Swing
 
 ## Getting Started
 
