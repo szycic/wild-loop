@@ -54,8 +54,9 @@ public class Predator extends Animal {
         if (getEnergy() <= MAX_ENERGY - HUNT_ENERGY_GAIN) {
             Prey nearestPrey = findNearestPrey();
             if (nearestPrey != null) {
-                Event.log(EventType.HUNT, world, this, nearestPrey);
-                return getPosition().directionTo(nearestPrey.getPosition());
+                Direction huntDirection = getPosition().directionTo(nearestPrey.getPosition());
+                Event.log(EventType.HUNT, world, this, nearestPrey, huntDirection);
+                return huntDirection;
             }
         }
         return Direction.getRandom();

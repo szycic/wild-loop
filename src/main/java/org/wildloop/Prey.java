@@ -53,8 +53,9 @@ public class Prey extends Animal {
     protected Direction getNextMoveDirection() {
         Predator nearestPredator = findNearestPredator();
         if (nearestPredator != null) {
-            Event.log(EventType.FLEE, world, this, nearestPredator);
-            return getPosition().directionFrom(nearestPredator.getPosition());
+            Direction fleeDirection = getPosition().directionFrom(nearestPredator.getPosition());
+            Event.log(EventType.FLEE, world, this, nearestPredator, fleeDirection);
+            return fleeDirection;
         }
         return Direction.getRandom();
     }

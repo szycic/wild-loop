@@ -74,7 +74,7 @@ public class SimulationPanel extends JPanel {
 
         animalInfoPanel = new InfoPanel();
         animalInfoPanel.setBorder(BorderFactory.createTitledBorder("Animal Info"));
-        animalInfoPanel.setFont(new Font("Arial", Font.BOLD, 24));
+        animalInfoPanel.setFont(new Font("Arial", Font.BOLD, 20));
 
         // add mouse listener to grid labels
         for (int x = 0; x < 20; x++) {
@@ -92,15 +92,15 @@ public class SimulationPanel extends JPanel {
 
         // STATISTICS PANEL
         statsLabel = new JLabel("Turn: 0 | Predators: 0 | Prey: 0", SwingConstants.CENTER); // initialize statistics label
-        statsLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        statsLabel.setFont(new Font("Arial", Font.BOLD, 20));
         statsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // set an empty border with 10 px margins
 
         pauseButton = new JButton("Pause"); // create pause button
-        pauseButton.setFont(new Font("Arial", Font.BOLD, 24));
+        pauseButton.setFont(new Font("Arial", Font.BOLD, 20));
         pauseButton.addActionListener(e -> togglePause()); // action listener toggling pause on click
 
         JButton backButton = new JButton("Back to menu"); // button to return to a menu
-        backButton.setFont(new Font("Arial", Font.BOLD, 24));
+        backButton.setFont(new Font("Arial", Font.BOLD, 20));
         backButton.addActionListener(e -> {
             stopSimulation(); // stop simulation
             startApp.showMenu(); // method showing a menu panel
@@ -225,7 +225,7 @@ public class SimulationPanel extends JPanel {
 
         isPaused = false; // restart flag to default value
         pauseButton.setText("Pause"); // set button text to "pause"
-        pauseButton.setFont(new Font("Arial", Font.BOLD, 24));
+        pauseButton.setFont(new Font("Arial", Font.BOLD, 20));
 
         if (timer != null) {
             timer.stop(); // if any timer is running, then stop it

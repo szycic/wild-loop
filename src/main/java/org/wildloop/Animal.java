@@ -31,7 +31,7 @@ public abstract class Animal {
     /** Maximum age after which the animal die */
     private final int maxAge;
     /** Flag indicating whether the animal is dead */
-    private boolean isDead = false;
+    private boolean dead = false;
     /** Reference to the world in which the animal lives */
     protected World world;
     /** Unique identifier for the animal instance */
@@ -110,11 +110,23 @@ public abstract class Animal {
     }
 
     /**
-     * Sets the current position of the animal.
-     * @param position new position of the animal
+     * Checks if the animal is dead.
+     * @return true if the animal is dead, false otherwise
+     */
+    public boolean isDead() {
+        return dead;
+    }
+
+    /**
+     * Sets a new position for the animal in the world.
+     * @param position new position for the animal
      */
     public void setPosition(Position position) {
+        Position oldPosition = this.position;
         this.position = position;
+
+        world.getGrid()[oldPosition.x()][oldPosition.y()] = null;
+        world.getGrid()[position.x()][position.y()] = this;
     }
 
     /**
@@ -142,11 +154,8 @@ public abstract class Animal {
         if (direction != null) {
             Position newPosition = position.newPosition(direction);
             if (world.isValidPosition(newPosition) && world.isCellEmpty(newPosition)) {
-                Position oldPosition = position;
-                world.getGrid()[oldPosition.x()][oldPosition.y()] = null;
-                world.getGrid()[newPosition.x()][newPosition.y()] = this;
-                position = newPosition;
-                Event.log(EventType.MOVE, world, this);
+                setPosition(newPosition);
+                Event.log(EventType.MOVE, world, this, direction);
 
                 energy -= MOVE_ENERGY_COST;
             }
@@ -214,7 +223,7 @@ public abstract class Animal {
     public void die() {
         world.removeAnimal(this);
         energy = -1;
-        isDead = true;
+        dead = true;
     }
 
     /**
@@ -229,7 +238,7 @@ public abstract class Animal {
      * </ol>
      */
     public void update() {
-        if (world == null) {
+        if (world == null || position == null || dead) {
             return;
         }
 
@@ -243,12 +252,12 @@ public abstract class Animal {
             eat();
         }
 
-        if (energy <= 0 && !isDead) {
+        if (energy <= 0 && !dead) {
             Event.log(EventType.DIE_ENERGY, world, this);
             die();
         }
 
-        if (age >= maxAge && !isDead) {
+        if (age >= maxAge && !dead) {
             Event.log(EventType.DIE_AGE, world, this);
             die();
         }

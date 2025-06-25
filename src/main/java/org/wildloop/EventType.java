@@ -31,7 +31,7 @@ public enum EventType {
     DIE_AGE("%s died at %s due to old age", Animal.class),
 
     /** Records movement of an animal to a new position */
-    MOVE("%s moved to %s", Animal.class),
+    MOVE("%s moved %s to %s", Animal.class, Direction.class),
     /** Records reproduction between two animals creating offspring */
     REPRODUCE("%s at %s reproduced, creating offspring %s at %s", Animal.class, Animal.class),
     /** Records a prey animal grazing and gaining energy */
@@ -39,9 +39,9 @@ public enum EventType {
     /** Records a predator eating prey and gaining energy */
     EAT_PREY("%s at %s ate %s at %s, gaining energy", Predator.class, Prey.class),
     /** Records prey fleeing from a predator */
-    FLEE("%s at %s is fleeing from %s at %s", Prey.class, Predator.class),
+    FLEE("%s at %s is fleeing from %s at %s to the %s", Prey.class, Predator.class, Direction.class),
     /** Records predator hunting prey */
-    HUNT("%s at %s is hunting %s at %s", Predator.class, Prey.class);
+    HUNT("%s at %s is hunting %s at %s to the %s", Predator.class, Prey.class, Direction.class);
 
     /** Event description format */
     private final String format;
@@ -70,11 +70,24 @@ public enum EventType {
         return switch (this) {
             case SIMULATION_START, SIMULATION_PAUSE, SIMULATION_RESUME, SIMULATION_END, SIMULATION_TURN -> format;
 
-            case DIE_ENERGY, DIE_AGE, SPAWN, MOVE ->
+            case DIE_ENERGY, DIE_AGE, SPAWN ->
                 String.format(format, ((Animal)params[0]).getId(), ((Animal)params[0]).getPosition().toString());
 
-            case DIE_EATEN, FLEE ->
-                String.format(format, ((Prey)params[0]).getId(), ((Prey)params[0]).getPosition().toString(), ((Predator)params[1]).getId(), ((Predator)params[1]).getPosition().toString());
+            case DIE_EATEN ->
+                    String.format(format, ((Prey)params[0]).getId(), ((Prey)params[0]).getPosition().toString(), ((Predator)params[1]).getId(), ((Predator)params[1]).getPosition().toString());
+
+            case MOVE ->
+                String.format(format, ((Animal)params[0]).getId(), ((Direction)params[1]).name(), ((Animal)params[0]).getPosition().toString());
+
+            case FLEE ->
+                String.format(format, ((Prey)params[0]).getId(), ((Prey)params[0]).getPosition().toString(),
+                        ((Predator)params[1]).getId(), ((Predator)params[1]).getPosition().toString(),
+                        ((Direction)params[2]).name());
+
+            case HUNT ->
+                String.format(format, ((Predator)params[0]).getId(), ((Predator)params[0]).getPosition().toString(),
+                        ((Prey)params[1]).getId(), ((Prey)params[1]).getPosition().toString(),
+                        ((Direction)params[2]).name());
 
             case REPRODUCE ->
                 String.format(format, ((Animal)params[0]).getId(), ((Animal)params[0]).getPosition().toString(),
@@ -83,7 +96,7 @@ public enum EventType {
             case EAT_GRASS ->
                 String.format(format, ((Prey)params[0]).getId(), ((Prey)params[0]).getPosition().toString());
 
-            case EAT_PREY, HUNT ->
+            case EAT_PREY ->
                 String.format(format, ((Predator)params[0]).getId(), ((Predator)params[0]).getPosition().toString(),
                         ((Prey)params[1]).getId(), ((Prey)params[1]).getPosition().toString());
 

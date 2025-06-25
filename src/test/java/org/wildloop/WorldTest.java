@@ -58,7 +58,7 @@ public class WorldTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> world.removeAnimal(animal)); // Attempt to remove the same animal again
 
-        assertEquals("Animal does not exist in the world", exception.getMessage()); // Check if the exception message is as expected
+        assertEquals(animal.getId() + " does not exist in the world", exception.getMessage()); // Check if the exception message is as expected
     }
 
     @Test
@@ -71,7 +71,7 @@ public class WorldTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> world.removeAnimal(animal)); // Attempt to remove the animal
 
-        assertEquals("Invalid animal position or grid position mismatch", exception.getMessage()); // Check if the exception message is as expected
+        assertEquals(animal.getId() + " position " + animal.getPosition() + " does not match the grid", exception.getMessage()); // Check if the exception message is as expected
     }
 
     @Test

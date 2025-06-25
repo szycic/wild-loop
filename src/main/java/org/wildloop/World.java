@@ -125,10 +125,13 @@ public class World {
 
         Position position = animal.getPosition();
         if (!animals.contains(animal)) {
-            throw new IllegalStateException("Animal does not exist in the world");
+            throw new IllegalStateException(animal.getId() + " does not exist in the world");
         }
-        if (!isValidPosition(position) || grid[position.x()][position.y()] != animal) {
-            throw new IllegalStateException("Invalid animal position or grid position mismatch");
+        if (!isValidPosition(position)) {
+            throw new IllegalStateException(animal.getId() + " position" + animal.getPosition() + " is invalid");
+        }
+        if (grid[position.x()][position.y()] != animal) {
+            throw new IllegalStateException(animal.getId() + " position " + animal.getPosition() + " does not match the grid");
         }
 
         grid[position.x()][position.y()] = null;
@@ -163,7 +166,7 @@ public class World {
     public void tick() {
         List<Animal> currentAnimals = new ArrayList<>(animals);
         for (Animal animal : currentAnimals) {
-            animal.update();
+            if (!animal.isDead()) animal.update();
         }
         Event.log(EventType.SIMULATION_TURN, this);
         turn++;

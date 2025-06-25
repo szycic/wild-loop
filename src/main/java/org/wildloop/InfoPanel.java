@@ -28,7 +28,7 @@ public class InfoPanel extends JPanel {
 
         infoLabel = new JLabel("No animal selected"); // initializing info label
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER); // set text alignment to center
-        infoLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        infoLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(infoLabel, BorderLayout.CENTER); // add label to the panel
     }
 
@@ -48,8 +48,7 @@ public class InfoPanel extends JPanel {
         if(selectedAnimal == null) {
             infoLabel.setText("No animal selected"); // default text when no animal is selected
         } else {
-            String animalType = selectedAnimal instanceof Predator ? "Predator" : "Prey";
-            String info = String.format("%s | Energy: %d/%d | Age: %d/%d ", animalType, selectedAnimal.getEnergy(), Animal.MAX_ENERGY, selectedAnimal.getAge(), selectedAnimal.getMaxAge()); // create info with animal details
+            String info = String.format("%s | Energy: %d/%d | Age: %d/%d ", selectedAnimal.getId(), selectedAnimal.getEnergy(), Animal.MAX_ENERGY, selectedAnimal.getAge(), selectedAnimal.getMaxAge()); // create info with animal details
             infoLabel.setText(info); // set the formatted text
         }
     }
