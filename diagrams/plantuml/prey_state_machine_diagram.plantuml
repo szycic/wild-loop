@@ -1,17 +1,13 @@
 @startuml
 title Prey State Machine Diagram
 
-[*] --> Idle : created
-
 Idle --> Moving : on tick / update()\nincrementAge()\nmove()
 
 state Moving {
-    [*] --> DecideDirection
     DecideDirection --> Flee : predator within FLEE_RANGE\ngetNextMoveDirection()\ndirectionFrom(predator)
     DecideDirection --> RandomMove : no predator nearby\ngetNextMoveDirection()\nrandom direction
     Flee --> MoveAction : move()
     RandomMove --> MoveAction : move()
-    MoveAction --> [*]
 }
 
 Moving --> Eating : eat()
@@ -22,5 +18,4 @@ Reproducing --> Idle : done reproducing
 ' Death is checked only after the whole cycle (after returning to Idle)
 Idle --> Dead : at end of turn\n(energy <= 0 or age >= maxAge)
 
-Dead --> [*]
 @enduml

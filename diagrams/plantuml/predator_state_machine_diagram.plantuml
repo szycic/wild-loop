@@ -1,27 +1,20 @@
 @startuml
 title Predator State Machine Diagram
 
-[*] --> Idle : created
-
 Idle --> Moving : on tick / update()\nincrementAge()\nmove()
 
 state Moving {
-    [*] --> DecideDirection
     DecideDirection --> Hunt : prey within HUNT_RANGE\ngetNextMoveDirection()\ndirectionTo(prey)
     DecideDirection --> RandomMove : no prey nearby\ngetNextMoveDirection()\nrandom direction
     Hunt --> MoveAction : move()
     RandomMove --> MoveAction : move()
-    MoveAction --> [*]
 }
 
 Moving --> Eating : eat()
 
 state Eating {
-    [*] --> CheckPrey
     CheckPrey --> EatPrey : adjacent prey found\nprey.die()\nenergy += HUNT_ENERGY_GAIN
     CheckPrey --> NoPrey : no adjacent prey
-    EatPrey --> [*]
-    NoPrey --> [*]
 }
 
 Eating --> Reproducing : energy >= REPRODUCTION_ENERGY_THRESHOLD / reproduce()
@@ -31,5 +24,4 @@ Reproducing --> Idle : done reproducing
 ' Death is checked only after the whole cycle (after returning to Idle)
 Idle --> Dead : at end of turn\n(energy <= 0 or age >= maxAge)
 
-Dead --> [*]
 @enduml
