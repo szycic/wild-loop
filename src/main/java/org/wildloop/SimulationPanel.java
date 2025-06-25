@@ -24,11 +24,11 @@ import java.util.ArrayList;
  */
 public class SimulationPanel extends JPanel {
     /** Default size of a simulation world */
-    private static final int DEFAULT_WORLD_SIZE = SimulationConfig.getValue("default.world.size");
+    private static final int DEFAULT_WORLD_SIZE = SimulationConfig.getIntValue("default.world.size");
     /** Default initial prey count */
-    private static final int DEFAULT_PREY_COUNT = SimulationConfig.getValue("default.prey.count");
+    private static final int DEFAULT_PREY_COUNT = SimulationConfig.getIntValue("default.prey.count");
     /** Default initial predator count */
-    private static final int DEFAULT_PREDATOR_COUNT = SimulationConfig.getValue("default.predator.count");
+    private static final int DEFAULT_PREDATOR_COUNT = SimulationConfig.getIntValue("default.predator.count");
 
     /** Reference to the main application, used for communication between components */
     private final StartApp startApp;
@@ -436,7 +436,7 @@ public class SimulationPanel extends JPanel {
             for (Animal animal : new ArrayList<>(world.getAnimals())) {
                 world.removeAnimal(animal); // remove all existing animals
             }
-            world.resetWorld(); // reset turn counter
+            world.reset(); // reset turn counter
         }
 
         initializeGrid(world != null ? world.getWidth() : 20); // initialize GUI grid
@@ -479,7 +479,7 @@ public class SimulationPanel extends JPanel {
                 } else if (currentAnimal instanceof Predator) {
                     gridLabels[i][j].setBackground(Color.RED);
                 } else if (currentAnimal instanceof Prey) {
-                    gridLabels[i][j].setBackground(Color.BLUE);
+                    gridLabels[i][j].setBackground(Color.GREEN);
                 } else {
                     gridLabels[i][j].setBackground(Color.WHITE);
                 }
@@ -504,7 +504,7 @@ public class SimulationPanel extends JPanel {
             label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.RED);
         } else if (animal instanceof Prey) {
             label.setText("O"); // Prey
-            label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.BLUE);
+            label.setBackground(animal == selectedAnimal ? animalInfoPanel.getHighlightColor() : Color.GREEN);
         }
     }
 }

@@ -172,7 +172,7 @@ public class World {
     /**
      * Resets the simulation world.
      */
-    public void resetWorld() {
+    public void reset() {
         this.grid = new Animal[getWidth()][getHeight()];
         this.animals = new ArrayList<>();
         this.turn = 1;

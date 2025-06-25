@@ -9,11 +9,11 @@ package org.wildloop;
  */
 public class Predator extends Animal {
     /** Maximum age of predator after which it dies */
-    protected static final int MAX_AGE = SimulationConfig.getValue("predator.max.age");
+    protected static final int MAX_AGE = SimulationConfig.getIntValue("predator.max.age");
     /** Maximum range at which a predator can detect prey */
-    protected static final int HUNT_RANGE = SimulationConfig.getValue("predator.hunt.range");
+    protected static final int HUNT_RANGE = SimulationConfig.getIntValue("predator.hunt.range");
     /** Amount of energy gained by predator after eating prey */
-    protected static final int HUNT_ENERGY_GAIN = SimulationConfig.getValue("predator.hunt.energy.gain");
+    protected static final int HUNT_ENERGY_GAIN = SimulationConfig.getIntValue("predator.hunt.energy.gain");
 
     /**
      * A static counter used to generate unique identifiers for prey instances.
@@ -51,7 +51,7 @@ public class Predator extends Animal {
      */
     @Override
     protected Direction getNextMoveDirection() {
-        if (getEnergy() < MAX_ENERGY - HUNT_ENERGY_GAIN) {
+        if (getEnergy() <= MAX_ENERGY - HUNT_ENERGY_GAIN) {
             Prey nearestPrey = findNearestPrey();
             if (nearestPrey != null) {
                 Event.log(EventType.HUNT, world, this, nearestPrey);

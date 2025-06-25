@@ -32,10 +32,16 @@ public class SimulationConfig {
      *
      * @param key key for which the value should be retrieved
      * @return integer value corresponding to the given key
+     * @throws IllegalArgumentException if the key does not exist in the properties
      * @throws IllegalArgumentException if the value for the given key cannot be converted to an integer
      */
-    public static int getValue(String key) {
+    public static int getIntValue(String key) {
         String value = properties.getProperty(key);
+        
+        if (value == null) {
+            throw new IllegalArgumentException("Invalid configuration key: " + key);
+        }
+        
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {

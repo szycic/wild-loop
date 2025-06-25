@@ -10,17 +10,17 @@ package org.wildloop;
  */
 public abstract class Animal {
     /** Maximum energy level */
-    protected static final int MAX_ENERGY = SimulationConfig.getValue("animal.max.energy");
+    protected static final int MAX_ENERGY = SimulationConfig.getIntValue("animal.max.energy");
     /** Default energy level for new animals */
-    protected static final int DEFAULT_ENERGY = SimulationConfig.getValue("animal.default.energy");
+    protected static final int DEFAULT_ENERGY = SimulationConfig.getIntValue("animal.default.energy");
     /** Energy cost of a single move */
-    protected static final int MOVE_ENERGY_COST = SimulationConfig.getValue("animal.move.energy.cost");
+    protected static final int MOVE_ENERGY_COST = SimulationConfig.getIntValue("animal.move.energy.cost");
     /** Energy threshold required for reproduction */
-    protected static final int REPRODUCTION_ENERGY_THRESHOLD = SimulationConfig.getValue("animal.reproduction.energy.threshold");
+    protected static final int REPRODUCTION_ENERGY_THRESHOLD = SimulationConfig.getIntValue("animal.reproduction.energy.threshold");
     /** Energy cost of reproduction */
-    protected static final int REPRODUCTION_ENERGY_COST = SimulationConfig.getValue("animal.reproduction.energy.cost");
+    protected static final int REPRODUCTION_ENERGY_COST = SimulationConfig.getIntValue("animal.reproduction.energy.cost");
     /** Initial energy of offspring */
-    protected static final int OFFSPRING_ENERGY = SimulationConfig.getValue("animal.offspring.energy");
+    protected static final int OFFSPRING_ENERGY = SimulationConfig.getIntValue("animal.offspring.energy");
 
     /** Current position of the animal in the world */
     private Position position;

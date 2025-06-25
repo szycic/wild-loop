@@ -57,7 +57,7 @@ public class StartApp extends JFrame {
         // Add application icon
         try {
             // Load image from file
-            java.net.URL imageURL = getClass().getResource("/wildloop-logo.jpg");
+            java.net.URL imageURL = getClass().getResource("/wildloop-logo.png");
             if (imageURL != null) {
                 Image image = new ImageIcon(imageURL).getImage();
                 setIconImage(image); // Set window icon only
@@ -140,19 +140,19 @@ public class StartApp extends JFrame {
 
         JLabel sizeLabel = new JLabel("World size:"); // label for world size
         sizeLabel.setFont(buttonFont);
-        sizeField = new JTextField(Integer.toString(SimulationConfig.getValue("default.world.size"))); // set default world size value
+        sizeField = new JTextField(Integer.toString(SimulationConfig.getIntValue("default.world.size"))); // set default world size value
         sizeField.setFont(new Font("Arial", Font.BOLD, 24));
         sizeField.setHorizontalAlignment(JTextField.CENTER);
 
         JLabel preyLabel = new JLabel("Prey count:"); // label for prey count
         preyLabel.setFont(buttonFont);
-        preyField = new JTextField(Integer.toString(SimulationConfig.getValue("default.prey.count"))); // set the default prey count
+        preyField = new JTextField(Integer.toString(SimulationConfig.getIntValue("default.prey.count"))); // set the default prey count
         preyField.setFont(new Font("Arial", Font.BOLD, 24));
         preyField.setHorizontalAlignment(JTextField.CENTER);
 
         JLabel predatorLabel = new JLabel("Predator count:"); // label for predator count
         predatorLabel.setFont(buttonFont);
-        predatorField = new JTextField(Integer.toString(SimulationConfig.getValue("default.predator.count"))); // set the default predator count
+        predatorField = new JTextField(Integer.toString(SimulationConfig.getIntValue("default.predator.count"))); // set the default predator count
         predatorField.setFont(new Font("Arial", Font.BOLD, 24));
         predatorField.setHorizontalAlignment(JTextField.CENTER);
 

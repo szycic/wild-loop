@@ -9,11 +9,11 @@ package org.wildloop;
  */
 public class Prey extends Animal {
     /** Maximum age of prey after which it dies */
-    protected static final int MAX_AGE = SimulationConfig.getValue("prey.max.age");
+    protected static final int MAX_AGE = SimulationConfig.getIntValue("prey.max.age");
     /** Maximum range at which prey can detect predator */
-    protected static final int FLEE_RANGE = SimulationConfig.getValue("prey.flee.range");
+    protected static final int FLEE_RANGE = SimulationConfig.getIntValue("prey.flee.range");
     /** Amount of energy gained by prey while grazing */
-    protected static final int GRAZE_ENERGY_GAIN = SimulationConfig.getValue("prey.graze.energy.gain");
+    protected static final int GRAZE_ENERGY_GAIN = SimulationConfig.getIntValue("prey.graze.energy.gain");
 
     /**
      * A static counter used to generate unique identifiers for prey instances.

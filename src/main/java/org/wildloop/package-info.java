@@ -33,12 +33,12 @@
  * in Swing's Event Dispatch Thread (EDT) using {@link javax.swing.SwingUtilities#invokeLater(Runnable)}.
  * <h3>System Requirements</h3>
  * <ul>
- *   <li>Java 24 or newer</li>
+ *   <li>Java 21 or newer</li>
  *   <li>Graphical environment supporting Swing</li>
  * </ul>
  *
  * @author Szymon Cichy, Tomasz Druszcz, Jan Osmęda
- * @version 0.6.5
+ * @version 0.7.0
  * @see org.wildloop.StartApp
  * @see org.wildloop.SimulationPanel
  * @see org.wildloop.InfoPanel

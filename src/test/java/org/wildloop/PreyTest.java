@@ -30,23 +30,20 @@ public class PreyTest {
     }
 
     @Test
-    void testPreyEnergyGain() {
+    void testPreyEating() {
         prey.setEnergy(Prey.DEFAULT_ENERGY - Prey.GRAZE_ENERGY_GAIN); // Set energy to just below max
         assertEquals(Prey.DEFAULT_ENERGY - Prey.GRAZE_ENERGY_GAIN, prey.getEnergy()); // Ensure energy is below default
         prey.eat(); // Simulate grazing to gain energy
         assertEquals(Prey.DEFAULT_ENERGY, prey.getEnergy()); // Check if energy is restored to default after grazing
     }
 
-//    @Test
-//    void testPreyFleeing() {
-//        // Create a predator and place it near the prey
-//        Predator predator = new Predator(world, new Position(6, 5));
-//
-//        // Check if prey flees from the predator
-//        Direction fleeDirection = prey.getNextMoveDirection();
-//        assertNotNull(fleeDirection);
-//        assertEquals(Direction.WEST, fleeDirection);
-//    }
+    @Test
+    void testPreyFleeing() {
+        new Predator(world, new Position(6, 5)); // Create a predator near the prey
+        Direction fleeDirection = prey.getNextMoveDirection(); // Get the direction in which prey should flee
+        assertNotNull(fleeDirection); // Ensure flee direction is not null
+        assertEquals(Direction.WEST, fleeDirection); // Assuming the prey flees west from the predator's east position
+    }
 
     @Test
     void testPreyDeath() {
@@ -57,22 +54,23 @@ public class PreyTest {
 
     @Test
     void testPreyReproduction() {
-        prey.setEnergy(Animal.REPRODUCTION_ENERGY_THRESHOLD); // Set energy to the threshold for reproduction
+        prey.setEnergy(Prey.REPRODUCTION_ENERGY_THRESHOLD); // Set energy to the threshold for reproduction
         int initialEnergy = prey.getEnergy(); // Store initial energy before reproduction
 
         prey.reproduce(); // Simulate reproduction
 
-        assertEquals(initialEnergy - Animal.REPRODUCTION_ENERGY_COST, prey.getEnergy()); // Check if energy is reduced correctly
+        assertEquals(initialEnergy - Prey.REPRODUCTION_ENERGY_COST, prey.getEnergy()); // Check if energy is reduced correctly
+        assertEquals(2, world.getAnimals().stream().filter(a -> a instanceof Prey && a.getId().startsWith("PREY-")).count()); // Ensure not more than one prey is created
     }
 
     @Test
     void testPreyReproductionWithEnergyBelowThreshold() {
-        prey.setEnergy(Animal.REPRODUCTION_ENERGY_THRESHOLD - 1); // Set energy below reproduction threshold
+        prey.setEnergy(Prey.REPRODUCTION_ENERGY_THRESHOLD - 1); // Set energy below reproduction threshold
         int initialEnergy = prey.getEnergy(); // Store initial energy before reproduction
 
         prey.reproduce(); // Attempt reproduction
 
         assertEquals(initialEnergy, prey.getEnergy()); // Ensure energy remains unchanged
-        assertTrue(world.getAnimals().stream().filter(a -> a instanceof Prey && a.getId().startsWith("PREY-")).count() <= 1); // Ensure not more than one prey is created
+        assertEquals(1, world.getAnimals().stream().filter(a -> a instanceof Prey && a.getId().startsWith("PREY-")).count()); // Ensure not more than one prey is created
     }
 }

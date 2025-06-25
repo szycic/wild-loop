@@ -19,8 +19,8 @@ public record Position(int x, int y) {
      * @return direction leading the shortest path to the target
      */
     public Direction directionTo(Position target) {
-        int dx = Integer.compare(target.x() - this.x, 0);
-        int dy = Integer.compare(target.y() - this.y, 0);
+        int dx = target.x() - this.x;
+        int dy = target.y() - this.y;
 
         if (Math.abs(dx) > Math.abs(dy)) {
             return dx > 0 ? Direction.EAST : Direction.WEST;
@@ -37,8 +37,8 @@ public record Position(int x, int y) {
      * @return direction leading from the source to the current position
      */
     public Direction directionFrom(Position target) {
-        int dx = Integer.compare(this.x - target.x(), 0);
-        int dy = Integer.compare(this.y - target.y(), 0);
+        int dx = target.x() - this.x;
+        int dy = target.y() - this.y;
 
         if (Math.abs(dx) > Math.abs(dy)) {
             return dx > 0 ? Direction.WEST : Direction.EAST;
