@@ -1,0 +1,61 @@
+@startuml
+title Object Diagram
+
+object "startApp : StartApp" as startApp
+
+object "simulationPanel : SimulationPanel" as simulationPanel {
+  world : World
+  isPaused : boolean = false
+}
+
+object "world : World" as world {
+  grid : Animal[][]
+  animals : List<Animal>
+  turns : int = 10
+}
+
+object "pred1 : Predator" as pred1 {
+  position : Position = (2, 3)
+  energy : int = 50
+  age : int = 3
+  maxAge : int = 15
+}
+
+object "prey1 : Prey" as prey1 {
+  position : Position = (4, 5)
+  energy : int = 40
+  age : int = 2
+  maxAge : int = 10
+}
+
+object "prey2 : Prey" as prey2 {
+  position : Position = (1, 2)
+  energy : int = 30
+  age : int = 1
+  maxAge : int = 8
+}
+
+object "position1 : Position" as position1 {
+  x : int = 2
+  y : int = 3
+}
+object "position2 : Position" as position2 {
+  x : int = 4
+  y : int = 5
+}
+object "position3 : Position" as position3 {
+  x : int = 1
+  y : int = 2
+}
+
+startApp -- simulationPanel : contains
+simulationPanel -- world : manages
+world "contains" -- pred1
+world "contains" -- prey1
+world "contains" -- prey2
+
+pred1 -- position1
+prey1 -- position2
+prey2 -- position3
+
+@enduml

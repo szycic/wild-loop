@@ -1,0 +1,241 @@
+@startuml
+title Class Diagram
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Animal {
+  + Animal(World, Position): 
+  # DEFAULT_ENERGY: int
+  # MAX_ENERGY: int
+  # MOVE_ENERGY_COST: int
+  # OFFSPRING_ENERGY: int
+  # REPRODUCTION_ENERGY_COST: int
+  # REPRODUCTION_ENERGY_THRESHOLD: int
+  - age: int
+  - dead: boolean
+  - energy: int
+  - id: String
+  - maxAge: int
+  - position: Position
+  # world: World
+  # createOffspring(Position): Animal
+  + die(): void
+  # eat(): void
+  - findEmptyAdjacentCell(): Position?
+  # generateUniqueId(): String
+  + getAge(): int
+  + getEnergy(): int
+  + getId(): String
+  + getMaxAge(): int
+  # getNextMoveDirection(): Direction
+  + getPosition(): Position
+  + incrementAge(): void
+  + isDead(): boolean
+  ~ move(): void
+  ~ reproduce(): void
+  + setEnergy(int): void
+  + setPosition(Position): void
+  + update(): void
+}
+enum Direction << enumeration >> {
+  - Direction(int, int): 
+  + EAST: 
+  + NORTH: 
+  + SOUTH: 
+  + WEST: 
+  - dx: int
+  - dy: int
+  + getDx(): int
+  + getDy(): int
+  + getRandom(): Direction
+  + valueOf(String): Direction
+  + values(): Direction[]
+}
+class Event {
+  - Event(EventType, World, Object[]): 
+  - params: Object[]
+  - timestamp: Instant
+  - type: EventType
+  - world: World
+  + log(EventType, World, Object[]): void
+  + toString(): String
+}
+class EventLogger {
+  + EventLogger(): 
+  - listeners: List<Consumer<Event>>
+  ~ publish(Event): void
+  + subscribe(Consumer<Event>): void
+  + unsubscribe(Consumer<Event>): void
+}
+enum EventType << enumeration >> {
+  - EventType(String, Class<?>[]): 
+  + DIE_AGE: 
+  + DIE_EATEN: 
+  + DIE_ENERGY: 
+  + EAT_GRASS: 
+  + EAT_PREY: 
+  + FLEE: 
+  + HUNT: 
+  + MOVE: 
+  + REPRODUCE: 
+  + SIMULATION_END: 
+  + SIMULATION_PAUSE: 
+  + SIMULATION_RESUME: 
+  + SIMULATION_START: 
+  + SIMULATION_TURN: 
+  + SPAWN: 
+  - format: String
+  - params: Class<?>[]
+  + getDescription(Object[]): String
+  + validate(Object[]): void
+  + valueOf(String): EventType
+  + values(): EventType[]
+}
+class InfoPanel {
+  + InfoPanel(): 
+  - highlightColor: Color
+  - infoLabel: JLabel
+  - selectedAnimal: Animal
+  + getHighlightColor(): Color
+  + setSelectedAnimal(Animal): void
+  + showAnimalDead(): void
+  + updateInfo(): void
+}
+class LogExporter {
+  + LogExporter(): 
+  - LATEST_LOG_FILE_NAME: String
+  - LOG_DIRECTORY: String
+  - LOG_FILE_EXTENSION: String
+  - currentWorldId: String
+  - logWriter: BufferedWriter
+  - archiveLog(): void
+  + closeLog(): void
+  - createLogDirectory(): void
+  + openLog(String): void
+}
+class Main {
+  + Main(): 
+  + main(String[]): void
+}
+entity Position << record >> {
+  + Position(int, int): 
+  - x: int
+  - y: int
+  + directionFrom(Position): Direction
+  + directionTo(Position): Direction
+  + distanceTo(Position): int
+  + newPosition(Direction): Position
+  + toString(): String
+  + x(): int
+  + y(): int
+}
+class Predator {
+  + Predator(World, Position): 
+  # HUNT_ENERGY_GAIN: int
+  # HUNT_RANGE: int
+  # MAX_AGE: int
+  - idCounter: long
+  # createOffspring(Position): Animal
+  # eat(): void
+  - findNearestPrey(): Prey
+  # generateUniqueId(): String
+  # getNextMoveDirection(): Direction
+}
+class Prey {
+  + Prey(World, Position): 
+  # FLEE_RANGE: int
+  # GRAZE_ENERGY_GAIN: int
+  # MAX_AGE: int
+  - idCounter: long
+  # createOffspring(Position): Animal
+  # eat(): void
+  - findNearestPredator(): Predator
+  # generateUniqueId(): String
+  # getNextMoveDirection(): Direction
+}
+class SimulationConfig {
+  + SimulationConfig(): 
+  - properties: Properties
+  + getIntValue(String): int
+}
+class SimulationPanel {
+  + SimulationPanel(StartApp): 
+  - DEFAULT_PREDATOR_COUNT: int
+  - DEFAULT_PREY_COUNT: int
+  - DEFAULT_WORLD_SIZE: int
+  - animalInfoPanel: InfoPanel
+  - gridLabels: JLabel[][]
+  - isPaused: boolean
+  - pauseButton: JButton
+  - selectedAnimal: Animal
+  - startApp: StartApp
+  - statsLabel: JLabel
+  - timer: Timer
+  - world: World
+  - getRandomEmptyPosition(World): Position?
+  - handleAnimalClick(int, int): void
+  - initializeGrid(int): void
+  + resetSimulation(): void
+  + setSimulationParameters(int, int, int): void
+  + startSimulation(): void
+  - stopSimulation(): void
+  - togglePause(): void
+  - updateCellAppearance(int, int, Animal): void
+  - updateGrid(): void
+  - updateStats(): void
+}
+class StartApp {
+  + StartApp(): 
+  - cardLayout: CardLayout
+  - mainPanel: JPanel
+  - predatorField: JTextField
+  - preyField: JTextField
+  - simulationPanel: SimulationPanel
+  - sizeField: JTextField
+  - createMenuPanel(): JPanel
+  - createSettingsPanel(): JPanel
+  + showMenu(): void
+}
+class World {
+  + World(int, int): 
+  - animals: List<Animal>
+  - grid: Animal[][]
+  - id: String
+  - turn: int
+  + addAnimal(Animal): void
+  + getAnimals(): List<Animal>
+  + getGrid(): Animal[][]
+  + getHeight(): int
+  + getId(): String
+  + getTurn(): int
+  + getWidth(): int
+  + isCellEmpty(Position): boolean
+  + isValidPosition(Position): boolean
+  + removeAnimal(Animal): void
+  + reset(): void
+  + tick(): void
+}
+
+Animal           "1" *-[#595959,plain]-> "position\n1" Position         
+Animal           "1" *-[#595959,plain]-> "world\n1" World            
+Event            "1" *-[#595959,plain]-> "type\n1" EventType        
+Event            "1" *-[#595959,plain]-> "world\n1" World            
+InfoPanel        "1" *-[#595959,plain]-> "selectedAnimal\n1" Animal           
+Predator          -[#000082,plain]-^  Animal           
+Prey              -[#000082,plain]-^  Animal           
+SimulationPanel  "1" *-[#595959,plain]-> "selectedAnimal\n1" Animal           
+SimulationPanel  "1" *-[#595959,plain]-> "animalInfoPanel\n1" InfoPanel        
+SimulationPanel   -[#595959,dashed]->  InfoPanel        : "«create»"
+SimulationPanel   -[#595959,dashed]->  Position         : "«create»"
+SimulationPanel   -[#595959,dashed]->  Predator         : "«create»"
+SimulationPanel   -[#595959,dashed]->  Prey             : "«create»"
+SimulationPanel  "1" *-[#595959,plain]-> "startApp\n1" StartApp         
+SimulationPanel   -[#595959,dashed]->  World            : "«create»"
+SimulationPanel  "1" *-[#595959,plain]-> "world\n1" World            
+StartApp         "1" *-[#595959,plain]-> "simulationPanel\n1" SimulationPanel  
+StartApp          -[#595959,dashed]->  SimulationPanel  : "«create»"
+World            "1" *-[#595959,plain]-> "grid\n*" Animal           
+World             -[#595959,dashed]->  Animal           : "«create»"
+@enduml
