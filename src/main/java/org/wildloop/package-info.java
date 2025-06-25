@@ -5,6 +5,7 @@
  * in a controlled environment. Repository of the project can be found at <a href="https://github.com/szycic/wild-loop" target="_blank">GitHub</a>.
  * <h3>Main Components</h3>
  * <ul>
+ *   <li>{@link org.wildloop.Main} - Entry point of the application, initializes the main window and outputs logs to the console</li>
  *   <li>{@link org.wildloop.StartApp} - Main application window managing the user interface</li>
  *   <li>{@link org.wildloop.SimulationPanel} - Panel responsible for displaying and controlling simulation</li>
  *   <li>{@link org.wildloop.InfoPanel} - Panel displaying information about selected animals</li>
@@ -39,6 +40,7 @@
  *
  * @author Szymon Cichy, Tomasz Druszcz, Jan Osmęda
  * @version 1.2.1
+ * @see org.wildloop.Main
  * @see org.wildloop.StartApp
  * @see org.wildloop.SimulationPanel
  * @see org.wildloop.InfoPanel
