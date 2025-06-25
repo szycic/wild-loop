@@ -30,9 +30,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
-          path: |
-            target/surefire-reports/
-            target/reports/
+          path: target/surefire-reports/
+
+      - name: Upload Surefire HTML test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-html-reports
+          path: target/reports/
 
       - name: Publish test summary
         run: |
