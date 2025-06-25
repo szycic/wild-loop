@@ -33,12 +33,20 @@ public enum Direction {
         this.dy = dy;
     }
 
-    /** @return x component of displacement vector for this direction */
+    /**
+     * Returns the x component of the displacement vector for this direction.
+     *
+     * @return x component of displacement vector
+     */
     public int getDx() {
         return dx;
     }
 
-    /** @return y component of displacement vector for this direction */
+    /**
+     * Returns the y component of the displacement vector for this direction.
+     *
+     * @return y component of displacement vector
+     */
     public int getDy() {
         return dy;
     }
