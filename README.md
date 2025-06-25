@@ -71,7 +71,7 @@ This project was designed to help practice:
 
 ## Example
 
-Below is a schematic example of the simulation grid (actual visualisation may vary):
+Below is a schematic example of the simulation grid (actual visualisation is a little different):
 
 ```
 . . P . . O .
