@@ -41,6 +41,8 @@ public class SimulationPanel extends JPanel {
     private final JButton pauseButton;
     /** Flag indicating if simulation is currently paused */
     private boolean isPaused = false;
+    /** Flag indicating if simulation is currently running */
+    private boolean isRunning = false;
     /** Panel for displaying animal info */
     private final InfoPanel animalInfoPanel;
     /** Currently selected animal */
@@ -102,7 +104,7 @@ public class SimulationPanel extends JPanel {
         JButton backButton = new JButton("Back to menu"); // button to return to a menu
         backButton.setFont(new Font("Arial", Font.BOLD, 20));
         backButton.addActionListener(e -> {
-            stopSimulation(); // stop simulation
+            if (isRunning) stopSimulation(); // stop simulation if running
             startApp.showMenu(); // method showing a menu panel
         });
 
@@ -135,6 +137,7 @@ public class SimulationPanel extends JPanel {
      * Pause state is tracked by {@code isPaused} field.
      */
     private void togglePause() {
+        if (!isRunning) return; // if simulation is not running, do nothing
         isPaused = !isPaused; // negate current pause state
         if (isPaused) { // check if isPaused == true
             timer.stop(); // stop simulation
@@ -162,6 +165,7 @@ public class SimulationPanel extends JPanel {
             timer.stop(); // if timer exists then stop it
         }
         isPaused = false; // restore flag to default value
+        isRunning = false; // restore running flag to default value
         Event.log(EventType.SIMULATION_END, world); // log simulation end event
         LogExporter.closeLog(); // close a log file
     }
@@ -224,6 +228,7 @@ public class SimulationPanel extends JPanel {
         }
 
         isPaused = false; // restart flag to default value
+        isRunning = true; // set running flag to true
         pauseButton.setText("Pause"); // set button text to "pause"
         pauseButton.setFont(new Font("Arial", Font.BOLD, 20));
 
