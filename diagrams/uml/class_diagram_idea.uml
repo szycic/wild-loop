@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>/home/szymon/Projects/wild-loop/src/main/java</OriginalElement>
+  <nodes>
+    <node x="172.45105527638202" y="1299.1538090452261">org.wildloop.Prey</node>
+    <node x="447.6152964824122" y="183.6643618090452">org.wildloop.Event</node>
+    <node x="-104.25" y="183.6643618090452">org.wildloop.Animal</node>
+    <node x="971.4805929648244" y="463.6491015075378">org.wildloop.LogExporter</node>
+    <node x="-1440.363778894472" y="731.0">org.wildloop.InfoPanel</node>
+    <node x="-541.1152964824122" y="619.0">org.wildloop.Direction</node>
+    <node x="-574.1152964824122" y="183.6643618090452">org.wildloop.Position</node>
+    <node x="-2024.0003015075367" y="731.0">org.wildloop.SimulationPanel</node>
+    <node x="-1479.7101210050243" y="-117.27804301507499">org.wildloop.SimulationConfig</node>
+    <node x="-1044.9805929648246" y="183.6643618090452">org.wildloop.World</node>
+    <node x="950.4805929648244" y="183.6643618090452">org.wildloop.EventLogger</node>
+    <node x="470.1152964824122" y="531.4090854271358">org.wildloop.EventType</node>
+    <node x="-312.6590854271358" y="1299.1538090452261">org.wildloop.Predator</node>
+    <node x="-1760.5709925628137" y="-117.27804301507499">org.wildloop.Main</node>
+    <node x="-1676.7310150753765" y="183.6643618090452">org.wildloop.StartApp</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.World" relationship="TO_ONE">
+      <point x="3.0150753673297004E-4" y="-374.0" />
+      <point x="-1823.5" y="159.0" />
+      <point x="-888.481" y="159.0" />
+      <point x="-4.070351753853174E-4" y="-262.0003618090452" />
+    </edge>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.Prey" relationship="CREATE">
+      <point x="0.0" y="374.0" />
+      <point x="-1823.5003015075367" y="1644.6538090452261" />
+      <point x="330.451055276382" y="1644.6538090452261" />
+      <point x="0.0" y="164.0" />
+    </edge>
+    <edge source="org.wildloop.Animal" target="org.wildloop.World" relationship="TO_ONE">
+      <point x="0.0" y="-472.0003618090452" />
+      <point x="92.75" y="159.0" />
+      <point x="-888.481" y="159.0" />
+      <point x="-4.070351753853174E-4" y="-262.0003618090452" />
+    </edge>
+    <edge source="org.wildloop.Predator" target="org.wildloop.Animal" relationship="GENERALIZATION">
+      <point x="8.542713578663097E-5" y="-163.99980904522613" />
+      <point x="-154.659" y="1248.0" />
+      <point x="92.75" y="1248.0" />
+      <point x="0.0" y="471.9996381909548" />
+    </edge>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.Predator" relationship="CREATE">
+      <point x="200.5" y="358.1538090452261" />
+      <point x="-158.0" y="0.0" />
+    </edge>
+    <edge source="org.wildloop.World" target="org.wildloop.Animal" relationship="CREATE">
+      <point x="156.5" y="155.8356381909548" />
+      <point x="-197.0" y="-54.164361809045204" />
+    </edge>
+    <edge source="org.wildloop.Event" target="org.wildloop.World" relationship="TO_ONE">
+      <point x="-2.96482412181831E-4" y="-122.00036180904522" />
+      <point x="620.115" y="159.0" />
+      <point x="-888.481" y="159.0" />
+      <point x="-4.070351753853174E-4" y="-262.0003618090452" />
+    </edge>
+    <edge source="org.wildloop.StartApp" target="org.wildloop.SimulationPanel" relationship="CREATE">
+      <point x="-137.76928643216024" y="164.0" />
+      <point x="163.0" y="-374.0" />
+    </edge>
+    <edge source="org.wildloop.Event" target="org.wildloop.EventType" relationship="TO_ONE">
+      <point x="0.0" y="122.0" />
+      <point x="0.0" y="-332.0" />
+    </edge>
+    <edge source="org.wildloop.Prey" target="org.wildloop.Animal" relationship="GENERALIZATION">
+      <point x="-5.527638199964713E-5" y="-163.99980904522613" />
+      <point x="330.451" y="1248.0" />
+      <point x="92.75" y="1248.0" />
+      <point x="0.0" y="471.9996381909548" />
+    </edge>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.Animal" relationship="TO_ONE">
+      <point x="200.50030150753673" y="0.5" />
+      <point x="-864.0" y="1105.5" />
+      <point x="-864.0" y="1086.0" />
+      <point x="-244.615" y="1086.0" />
+      <point x="-244.615" y="655.664" />
+      <point x="-197.0" y="-3.618090452164324E-4" />
+    </edge>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.InfoPanel" relationship="TO_ONE">
+      <point x="200.5" y="-238.0" />
+      <point x="-153.0" y="0.0" />
+    </edge>
+    <edge source="org.wildloop.InfoPanel" target="org.wildloop.Animal" relationship="TO_ONE">
+      <point x="-2.2110552799858851E-4" y="136.0" />
+      <point x="-1287.364" y="1086.0" />
+      <point x="-244.615" y="1086.0" />
+      <point x="-244.615" y="655.664" />
+      <point x="-197.0" y="-3.618090452164324E-4" />
+    </edge>
+    <edge source="org.wildloop.Animal" target="org.wildloop.Position" relationship="TO_ONE">
+      <point x="-197.0" y="-308.0" />
+      <point x="156.0" y="0.0" />
+    </edge>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.Position" relationship="CREATE">
+      <point x="-14.999698492463267" y="-374.0" />
+      <point x="-1838.5" y="144.0" />
+      <point x="-418.1152964824122" y="144.0" />
+      <point x="0.0" y="-164.0" />
+    </edge>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.InfoPanel" relationship="CREATE">
+      <point x="200.5" y="-223.0" />
+      <point x="-153.0" y="15.0" />
+    </edge>
+    <edge source="org.wildloop.StartApp" target="org.wildloop.SimulationPanel" relationship="TO_ONE">
+      <point x="-107.76928643216024" y="164.0" />
+      <point x="193.0" y="-374.0" />
+    </edge>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.StartApp" relationship="TO_ONE">
+      <point x="178.0" y="-374.0" />
+      <point x="-122.76928643216024" y="164.0" />
+    </edge>
+    <edge source="org.wildloop.World" target="org.wildloop.Animal" relationship="TO_MANY">
+      <point x="-4.070351753853174E-4" y="261.9996381909548" />
+      <point x="-888.481" y="1086.0" />
+      <point x="-244.615" y="1086.0" />
+      <point x="-244.615" y="655.664" />
+      <point x="-197.0" y="-3.618090452164324E-4" />
+    </edge>
+    <edge source="org.wildloop.SimulationPanel" target="org.wildloop.World" relationship="CREATE">
+      <point x="200.5" y="15.5" />
+      <point x="-849.0" y="1120.5" />
+      <point x="39.48059296482461" y="262.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.3459653317393904" showDependencies="true" x="-407.29768486523926" y="744.4576710435379" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

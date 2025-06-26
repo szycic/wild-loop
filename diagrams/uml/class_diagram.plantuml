@@ -168,6 +168,7 @@ class SimulationPanel {
   - animalInfoPanel: InfoPanel
   - gridLabels: JLabel[][]
   - isPaused: boolean
+  - isRunning: boolean
   - pauseButton: JButton
   - selectedAnimal: Animal
   - startApp: StartApp
@@ -232,10 +233,10 @@ SimulationPanel   -[#595959,dashed]->  Position         : "«create»"
 SimulationPanel   -[#595959,dashed]->  Predator         : "«create»"
 SimulationPanel   -[#595959,dashed]->  Prey             : "«create»"
 SimulationPanel  "1" *-[#595959,plain]-> "startApp\n1" StartApp         
-SimulationPanel   -[#595959,dashed]->  World            : "«create»"
 SimulationPanel  "1" *-[#595959,plain]-> "world\n1" World            
+SimulationPanel   -[#595959,dashed]->  World            : "«create»"
 StartApp         "1" *-[#595959,plain]-> "simulationPanel\n1" SimulationPanel  
 StartApp          -[#595959,dashed]->  SimulationPanel  : "«create»"
-World            "1" *-[#595959,plain]-> "grid\n*" Animal           
 World             -[#595959,dashed]->  Animal           : "«create»"
+World            "1" *-[#595959,plain]-> "grid\n*" Animal           
 @enduml
