@@ -1,11 +1,16 @@
 package org.wildloop;
 
-import java.io.InputStream;
+import java.io.*;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
- * Manages configuration settings for the simulation.
- * Reads properties from the {@code simulation.properties} configuration file.
+ * Loads configuration from the {@code simulation.properties} file.
+ * <p>
+ * A static initialization block is used to load the configuration at class load time.
+ * <p>
+ * If running from a JAR, it copies the properties file to the working directory if it does not already exist,
+ * allowing to modify configuration settings without altering the JAR.
  *
  * @see StartApp
  * @see SimulationPanel
@@ -14,15 +19,52 @@ import java.util.Properties;
  * @see Predator
  */
 public class SimulationConfig {
+    private static final String FILE_NAME = "simulation.properties";
     /** Object storing loaded configuration parameters */
     private static final Properties properties = new Properties();
 
-    // Static initialization block - loads parameters from the simulation.properties file
+    // Static initialization block
     static {
-        try (InputStream input = SimulationConfig.class.getClassLoader().getResourceAsStream("simulation.properties")) {
-            properties.load(input);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to load simulation.properties file", e);
+        boolean runningFromJar = Objects.requireNonNull(SimulationConfig.class.getResource("SimulationConfig.class")).toString().startsWith("jar:");
+
+        if (runningFromJar) {
+            File localFile = new File(FILE_NAME);
+
+            // Check if the local file exists, if not, create it by copying from resources
+            if (!localFile.exists()) {
+                try (
+                        InputStream input = SimulationConfig.class.getClassLoader().getResourceAsStream(FILE_NAME);
+                        OutputStream output = new FileOutputStream(localFile)
+                ) {
+                    if (input == null) {
+                        throw new RuntimeException("Resource " + FILE_NAME + " not found");
+                    }
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = input.read(buffer)) > 0) {
+                        output.write(buffer, 0, len);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to create local copy of " + FILE_NAME, e);
+                }
+            }
+
+            // Load properties from the local file
+            try (InputStream input = new FileInputStream(localFile)) {
+                properties.load(input);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to load " + FILE_NAME + " file", e);
+            }
+        } else {
+            // Load properties directly from the classpath
+            try (InputStream input = SimulationConfig.class.getClassLoader().getResourceAsStream(FILE_NAME)) {
+                if (input == null) {
+                    throw new RuntimeException("Resource " + FILE_NAME + " not found");
+                }
+                properties.load(input);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to load " + FILE_NAME + " file", e);
+            }
         }
     }
 

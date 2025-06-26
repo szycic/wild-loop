@@ -39,7 +39,7 @@
  * </ul>
  *
  * @author Szymon Cichy, Tomasz Druszcz, Jan Osmęda
- * @version 1.2.5
+ * @version 1.3.0
  * @see org.wildloop.Main
  * @see org.wildloop.StartApp
  * @see org.wildloop.SimulationPanel
